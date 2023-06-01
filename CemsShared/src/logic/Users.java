@@ -11,7 +11,7 @@ public class Users implements Serializable {
 	private String  password;
 	private int isLogged ;
 	private int role ;
-	
+
 	public Users (int id, String firstName, String lastName, String userName, String password, int isLogged, int role) {
 		super();
 		this.id = id;
@@ -74,7 +74,7 @@ public class Users implements Serializable {
 	public int getId() {
 		return id;
 	}
-	
-	
+
+
 
 }

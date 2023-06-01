@@ -11,14 +11,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import logic.LoggedUsers;
-import logic.Users;
 import server.EchoServer;
 
 public class ServerStartScreenController implements Initializable   {
-	
+
 	private EchoServer server;
-	
-	
+
+
 	@FXML
 	private Button startBtn ;
 	@FXML
@@ -35,7 +34,7 @@ public class ServerStartScreenController implements Initializable   {
 	private TableColumn<LoggedUsers, Integer> role;
 	@FXML
     private TableView<LoggedUsers> table;
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
     	id.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -44,13 +43,13 @@ public class ServerStartScreenController implements Initializable   {
     	userName.setCellValueFactory(new PropertyValueFactory<>("userName"));
     	role.setCellValueFactory(new PropertyValueFactory<>("role"));
 	}
-	
+
 	public void UpadteOnlineUsers(ArrayList<LoggedUsers> usersArray) {
 		table.getItems().clear();
 		table.getItems().addAll(usersArray);
-		
+
 	}
-	
+
 	@FXML
 	public void startServer() {
 	    try {
@@ -68,39 +67,39 @@ public class ServerStartScreenController implements Initializable   {
 	public void setServer(EchoServer server) {
 		this.server = server;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

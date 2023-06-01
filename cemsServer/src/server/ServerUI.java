@@ -9,7 +9,8 @@ import javafx.stage.Stage;
 
 public class ServerUI extends Application {
 
-    public void start(Stage primaryStage) {
+    @Override
+	public void start(Stage primaryStage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ServerStartScreen.fxml"));
             Parent root = loader.load();

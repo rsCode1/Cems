@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class LogInInfo implements Serializable  {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;// to avoid warnings
 	private String userName;
@@ -20,5 +20,5 @@ public class LogInInfo implements Serializable  {
 	public String getPassword() {
 		return password;
 	}
-	
+
 }

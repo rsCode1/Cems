@@ -2,7 +2,7 @@ package server;
 // This file contains material supporting section 3.7 of the textbook:
 
 // "Object Oriented Software Engineering" and is issued under the open-source
-// license found at www.lloseng.com 
+// license found at www.lloseng.com
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,7 +16,8 @@ import logic.LogInInfo;
 import logic.LoggedUsers;
 import logic.Request;
 import logic.Users;
-import ocsf.server.*;
+import ocsf.server.AbstractServer;
+import ocsf.server.ConnectionToClient;
 
 public class EchoServer extends AbstractServer {
 	private ServerStartScreenController serverScreenController;
@@ -31,6 +32,7 @@ public class EchoServer extends AbstractServer {
 		this.serverScreenController = controller2;
 	}
 
+	@Override
 	public void handleMessageFromClient//
 	(Object msg, ConnectionToClient client)
 
@@ -80,7 +82,7 @@ public class EchoServer extends AbstractServer {
 	// in server
 	private void addUserToLoggedTable(Connection conn) throws SQLException {
 		// arraylist to hold info about all currently logged in users
-		ArrayList<LoggedUsers> LoggedUsersArray = new ArrayList<LoggedUsers>();
+		ArrayList<LoggedUsers> LoggedUsersArray = new ArrayList<>();
 
 		// select relevant informatiom from DB to display in table
 		Statement stmt2 = conn.createStatement();
@@ -117,8 +119,8 @@ public class EchoServer extends AbstractServer {
 		String command = String.format("SELECT * FROM users" + " WHERE userName='%s' AND password ='%s'",
 				login.getUserName(), login.getPassword());
 		ResultSet rs = stmt.executeQuery(command);
-		if (rs.next() == false)
-			return ((Users) null);
+		if (!rs.next())
+			return (null);
 		return new Users(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6),
 				rs.getInt(7));
 	}
@@ -127,6 +129,7 @@ public class EchoServer extends AbstractServer {
 	 * This method overrides the one in the superclass. Called when the server
 	 * starts listening for connections.
 	 */
+	@Override
 	protected void serverStarted() {
 		System.out.println("Server listening for connections on port " + getPort());
 	}
@@ -135,6 +138,7 @@ public class EchoServer extends AbstractServer {
 	 * This method overrides the one in the superclass. Called when the server stops
 	 * listening for connections.
 	 */
+	@Override
 	protected void serverStopped() {
 		System.out.println("Server has stopped listening for connections.");
 	}
