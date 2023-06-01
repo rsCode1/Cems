@@ -2,14 +2,14 @@ package logic;
 
 import java.io.Serializable;
 
-public class LoggedUsers implements Serializable  {
+public class LoggedUsers implements Serializable {
 
-	private  int id;
+	private int id;
 	private String firstName;
 	private String lastName;
-	private String  userName;
-	private int role ;
-	
+	private String userName;
+	private int role;
+
 	public LoggedUsers(int id, String firstName, String lastName, String userName, int role) {
 		super();
 		this.id = id;
@@ -43,7 +43,7 @@ public class LoggedUsers implements Serializable  {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	
+
 	public int getRole() {
 		return role;
 	}
@@ -55,7 +55,5 @@ public class LoggedUsers implements Serializable  {
 	public int getId() {
 		return id;
 	}
-	
-	
 
 }

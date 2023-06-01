@@ -8,10 +8,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class ServerUI extends Application {
-	
-	
 
-	public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ServerStartScreen.fxml"));
             Parent root = loader.load();
@@ -21,7 +19,7 @@ public class ServerUI extends Application {
             server.setController(controller);
             primaryStage.setScene(new Scene(root));
             primaryStage.show();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
