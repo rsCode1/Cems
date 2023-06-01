@@ -58,8 +58,8 @@ public class EchoServer extends AbstractServer {
 
 	private void checkUserLogin(LogInInfo loginInfo, ConnectionToClient client) {
 		try {
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/lab3db?serverTimezone=IST", "root",
-					"123456");
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
 			System.out.println("SQL connection succeed");
 			Users user = getUserInfo(loginInfo, conn);
 			if (user == null) {
