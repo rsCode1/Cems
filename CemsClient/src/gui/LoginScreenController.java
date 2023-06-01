@@ -20,6 +20,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import logic.LogInInfo;
+import logic.Request;
 import logic.Users;
 
 public class LoginScreenController {
@@ -37,7 +38,7 @@ public class LoginScreenController {
 	@FXML
 	private Pane pane;
 
-	public void setClient(ChatClient client,LoginScreenController controller) {
+	public void setClient(ChatClient client, LoginScreenController controller) {
 		this.client = client;
 		this.client.setController(controller); // also set the controller on the client
 	}
@@ -48,7 +49,7 @@ public class LoginScreenController {
 		try {
 			client.openConnection();
 			if (client.isConnected()) {
-				client.sendToServer(loginData);
+				client.sendToServer(new Request("LOGIN", loginData));
 			} else {
 				System.out.println("Not connected to server.");
 			}
@@ -56,44 +57,44 @@ public class LoginScreenController {
 			e.printStackTrace();
 		}
 	}
+
 	public void ShowUserWelcomeScreen(Users user) throws IOException {
-	    Platform.runLater(() -> {
-	        String Studentpath = "/gui/StudentPage.fxml";
-	        String Lacturertpath = "/gui/FirstPage.fxml";
-	        String HDpath = "/gui/HDPage.fxml";
+		Platform.runLater(() -> {
+			String Studentpath = "/gui/StudentPage.fxml";
+			String Lacturertpath = "/gui/FirstPage.fxml";
+			String HDpath = "/gui/HDPage.fxml";
 
-	        if (user == null) {
-	            // show error text
+			if (user == null) {
+				// show error text
 
-	            loginStatus.setText("Username or password is incorrect, please try again!");
-	        } else {
-	            FXMLLoader loader = null;
-	            loginStatus.setText("");
+				loginStatus.setText("Username or password is incorrect, please try again!");
+			} else {
+				FXMLLoader loader = null;
+				loginStatus.setText("");
 
-	            if (user.getRole() == 0) {
-	                loader = new FXMLLoader(getClass().getResource(Studentpath));
-	            }
-	            if (user.getRole() == 1) {
-	                loader = new FXMLLoader(getClass().getResource(Lacturertpath));
-	            }
-	            if (user.getRole() == 2) {
-	                loader = new FXMLLoader(getClass().getResource(HDpath));
-	            }
+				if (user.getRole() == 0) {
+					loader = new FXMLLoader(getClass().getResource(Studentpath));
+				}
+				if (user.getRole() == 1) {
+					loader = new FXMLLoader(getClass().getResource(Lacturertpath));
+				}
+				if (user.getRole() == 2) {
+					loader = new FXMLLoader(getClass().getResource(HDpath));
+				}
 
-	            Parent root;
-	            try {
-	                root = loader.load();
-	                Stage window = (Stage) getLoginBtn().getScene().getWindow();
-	                window.setScene(new Scene(root));
-	                window.show();
-	            } catch (IOException e) {
-	                // TODO Auto-generated catch block
-	                e.printStackTrace();
-	            }
-	        }
-	    });
+				Parent root;
+				try {
+					root = loader.load();
+					Stage window = (Stage) getLoginBtn().getScene().getWindow();
+					window.setScene(new Scene(root));
+					window.show();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 	}
-
 
 	public LoginScreenController getController() {
 		return this;

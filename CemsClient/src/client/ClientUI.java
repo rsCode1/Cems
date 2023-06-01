@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 public class ClientUI extends Application {
     public void start(Stage primaryStage) {
         try {
-        	FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ConnectToServerScreen.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ConnectToServerScreen.fxml"));
             Parent root = loader.load();
             ConnectToServerScreenController controller = loader.getController();
             primaryStage.setScene(new Scene(root));
