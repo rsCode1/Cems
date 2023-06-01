@@ -14,11 +14,12 @@ import java.util.ArrayList;
 import gui.ServerStartScreenController;
 import logic.LogInInfo;
 import logic.LoggedUsers;
+import logic.Request;
 import logic.Users;
 import ocsf.server.*;
 
 public class EchoServer extends AbstractServer {
-	private ServerStartScreenController controller;
+	private ServerStartScreenController serverScreenController;
 
 	final public static int DEFAULT_PORT = 5555;
 
@@ -27,7 +28,7 @@ public class EchoServer extends AbstractServer {
 	}
 
 	public void setController(ServerStartScreenController controller2) {
-		this.controller = controller2;
+		this.serverScreenController = controller2;
 	}
 
 	public void handleMessageFromClient//
@@ -42,57 +43,82 @@ public class EchoServer extends AbstractServer {
 			/* handle the error */
 			System.out.println("Driver definition failed");
 		}
+		if (msg instanceof Request) {
+			Request request = (Request) msg;
 
+			switch (request.getRequestType()) {
+				case "LOGIN":
+					checkUserLogin((LogInInfo) request.getRequestParam(), client);
+					break;
+
+				// Add more case statements for other request types
+			}
+		}
+	}
+
+	private void checkUserLogin(LogInInfo loginInfo, ConnectionToClient client) {
 		try {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/lab3db?serverTimezone=IST", "root",
 					"123456");
 			System.out.println("SQL connection succeed");
-			if (msg instanceof LogInInfo && msg != null) {
-
-				LogInInfo msg2 = ((LogInInfo) msg);
-				Users user = getUserInfo(msg2, conn);
-				Statement stmt = conn.createStatement();
-				if (user == null) {
-					client.sendToClient((Users)null);
-					return;
-				}
-
-				ArrayList<LoggedUsers> LoggedUsersArray = new ArrayList<LoggedUsers>();
-
-				Statement stmt2 = conn.createStatement();
-				String command = "SELECT id,firstName,userName,LastName,role FROM users " + "WHERE islogged=1 ";
-				ResultSet rs = stmt2.executeQuery(command);
-				while (rs.next()) {
-					Integer id = rs.getInt(1);
-					String firstName = rs.getString(2);
-					String lastName = rs.getString(3);
-					String userName = rs.getString(4);
-					int role = rs.getInt(5);
-
-					LoggedUsers usr = new LoggedUsers(id, firstName, lastName, userName, role);
-					LoggedUsersArray.add(usr);
-				}
-
-				controller.UpadteOnlineUsers(LoggedUsersArray);
-				client.sendToClient(user);
+			Users user = getUserInfo(loginInfo, conn);
+			if (user == null) {
+				client.sendToClient((Users) null);
+				return;
 			}
+			updateUserLoggedIn(loginInfo, conn);
+			addUserToLoggedTable(conn);
+			client.sendToClient(user);
+
 		} catch (Exception ex) {
 			/* handle the error */
 			ex.printStackTrace();
 		}
-
 	}
 
-	private Users getUserInfo(LogInInfo login, Connection conn) throws SQLException {
+	// function to add all the users that are logged in to the logged to the table
+	// in server
+	private void addUserToLoggedTable(Connection conn) throws SQLException {
+		// arraylist to hold info about all currently logged in users
+		ArrayList<LoggedUsers> LoggedUsersArray = new ArrayList<LoggedUsers>();
+
+		// select relevant informatiom from DB to display in table
+		Statement stmt2 = conn.createStatement();
+		String command = "SELECT id,firstName,LastName,userName,role FROM users " + "WHERE islogged=1 ";
+		ResultSet rs = stmt2.executeQuery(command);
+		while (rs.next()) {
+			// get fields from resultSet
+			Integer id = rs.getInt("id");
+			String firstName = rs.getString("firstName");
+			String lastName = rs.getString("LastName");
+			String userName = rs.getString("userName");
+			int role = rs.getInt("role");
+
+			LoggedUsers loggedUser = new LoggedUsers(id, firstName, lastName, userName, role);
+
+			LoggedUsersArray.add(loggedUser);
+		}
+		// add the user to the logged in table through with controller function
+		// 'UpadteOnlineUsers'
+		serverScreenController.UpadteOnlineUsers(LoggedUsersArray);
+	}
+
+	// update the user as logged in DB , based on its username and password
+	private void updateUserLoggedIn(LogInInfo login, Connection conn) throws SQLException {
 		Statement stmt = conn.createStatement();
 		stmt.executeUpdate(String.format("UPDATE users SET isLogged=1 WHERE userName='%s' AND password ='%s'",
 				login.getUserName(), login.getPassword()));
+	}
 
+	// return user info from DB, based on its username and password
+	private Users getUserInfo(LogInInfo login, Connection conn) throws SQLException {
+		// select user with username and password
+		Statement stmt = conn.createStatement();
 		String command = String.format("SELECT * FROM users" + " WHERE userName='%s' AND password ='%s'",
 				login.getUserName(), login.getPassword());
 		ResultSet rs = stmt.executeQuery(command);
 		if (rs.next() == false)
-			return ((Users)null);
+			return ((Users) null);
 		return new Users(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6),
 				rs.getInt(7));
 	}
@@ -122,6 +148,7 @@ public class EchoServer extends AbstractServer {
 	 * @param args[0] The port number to listen on. Defaults to 5555 if no argument
 	 *                is entered.
 	 */
+
 	public static void main(String[] args) {
 		int port = 0; // Port to listen on
 
