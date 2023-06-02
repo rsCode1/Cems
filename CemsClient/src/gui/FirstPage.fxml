@@ -44,7 +44,7 @@
             <Font name="Calibri" size="41.0" />
          </font>
       </Label>
-      <Button layoutX="14.0" layoutY="682.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="108.0" style="-fx-background-color: #FAA0A0;" text="Log-out">
+      <Button fx:id="logOutBtn" layoutX="14.0" layoutY="682.0" mnemonicParsing="false" onAction="#logOut" prefHeight="35.0" prefWidth="108.0" style="-fx-background-color: #FAA0A0;" text="Log-out">
          <effect>
             <InnerShadow>
                <color>

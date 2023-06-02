@@ -52,6 +52,10 @@ public class EchoServer extends AbstractServer {
 				case "LOGIN":
 					checkUserLogin((LogInInfo) request.getRequestParam(), client);
 					break;
+				case "LOGOUT":
+					logOut((LogInInfo) request.getRequestParam(), client);
+					break;
+					
 
 				// Add more case statements for other request types
 			}
@@ -124,6 +128,27 @@ public class EchoServer extends AbstractServer {
 		return new Users(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6),
 				rs.getInt(7));
 	}
+	
+	
+	private void logOut(LogInInfo login, ConnectionToClient client) {
+		
+		try 
+		(Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+				"Aa123456");
+				Statement stmt = conn.createStatement()) {
+			stmt.executeUpdate(String.format("UPDATE users SET isLogged=0 WHERE userName='%s' AND password ='%s'",
+					login.getUserName(), login.getPassword()));
+			addUserToLoggedTable(conn);
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
 
 	/**
 	 * This method overrides the one in the superclass. Called when the server

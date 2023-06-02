@@ -86,6 +86,11 @@ public class LoginScreenController {
 				try {
 					root = loader.load();
 					Stage window = (Stage) getLoginBtn().getScene().getWindow();
+					FirstPageController lecturerController=null;
+					if (user.getRole() == 1) {
+						lecturerController = loader.getController();
+						lecturerController.setLecturerAndClient(user, client);
+					}
 					window.setScene(new Scene(root));
 					window.show();
 				} catch (IOException e) {
