@@ -8,6 +8,7 @@ package client;
 
 import client.*;
 import gui.ConnectToServerScreenController;
+import gui.HDController;
 import gui.LoginScreenController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +18,7 @@ import javafx.stage.Stage;
 import logic.Users;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import ocsf.client.*;
 
@@ -25,9 +27,7 @@ public class ChatClient extends AbstractClient
 
 {
 	private LoginScreenController loginScreecontroller;
-
-
-
+  private HDController hdController;
 	private String ip="";
 	private int portServer;
   //Instance variables **********************************************
@@ -49,8 +49,13 @@ public class ChatClient extends AbstractClient
    */
   public void handleMessageFromServer(Object msg) 
   {
-	
-   if (msg instanceof Users || msg==null) {
+    
+      if (msg instanceof ArrayList<?>){
+           hdController. ApproveRequestTime( msg);
+      }
+    
+    
+  if(msg instanceof Users || msg==null) {
           Users user = (Users) msg;
           System.out.println(user);
           try {
@@ -63,14 +68,8 @@ public class ChatClient extends AbstractClient
       } else {
           System.out.println("Received message of type: " + msg.getClass());
       }
+    }
   
-
-	  
-
-
-
-
-  }
 
 	public void setController(LoginScreenController controller) {
 	    this.loginScreecontroller = controller;
@@ -97,4 +96,5 @@ public int getPortServer() {
 	return portServer;
 }
 }
+
 //End of ChatClient class
