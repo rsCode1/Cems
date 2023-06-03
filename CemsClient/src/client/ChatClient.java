@@ -4,8 +4,6 @@
 
 package client;
 
-
-
 import client.*;
 import gui.ConnectToServerScreenController;
 import gui.LoginScreenController;
@@ -20,81 +18,69 @@ import java.io.*;
 import java.util.List;
 import ocsf.client.*;
 
- 
 public class ChatClient extends AbstractClient
 
 {
-	private LoginScreenController loginScreecontroller;
+  private LoginScreenController loginScreecontroller;
 
+  private String ip = "";
+  private int portServer;
+  // Instance variables **********************************************
 
-
-	private String ip="";
-	private int portServer;
-  //Instance variables **********************************************
-  
-  public ChatClient(String host, int port, Object clientUI) 
-    throws IOException 
-  {
-	  super(host, port); 
-	  ip=host;
-	  this.portServer=port;
+  public ChatClient(String host, int port, Object clientUI)
+      throws IOException {
+    super(host, port);
+    ip = host;
+    this.portServer = port;
   }
+  // this is new line
+  // Instance methods ************************************************
 
-  //Instance methods ************************************************
-    
   /**
    * This method handles all data that comes in from the server.
    *
    * @param msg The message from the server.
    */
-  public void handleMessageFromServer(Object msg) 
-  {
-	
-   if (msg instanceof Users || msg==null) {
-          Users user = (Users) msg;
-          System.out.println(user);
-          try {
-			loginScreecontroller.ShowUserWelcomeScreen(user);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-          System.out.println(user.getRole());
-      } else {
-          System.out.println("Received message of type: " + msg.getClass());
+  public void handleMessageFromServer(Object msg) {
+
+    if (msg instanceof Users || msg == null) {
+      Users user = (Users) msg;
+      System.out.println(user);
+      try {
+        loginScreecontroller.ShowUserWelcomeScreen(user);
+      } catch (IOException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
       }
-  
-
-	  
-
-
-
+      System.out.println(user.getRole());
+    } else {
+      System.out.println("Received message of type: " + msg.getClass());
+    }
 
   }
 
-	public void setController(LoginScreenController controller) {
-	    this.loginScreecontroller = controller;
-	}
+  public void setController(LoginScreenController controller) {
+    this.loginScreecontroller = controller;
+  }
+
   /**
    * This method terminates the client.
    */
-  public void quit()
-  {
+  public void quit() {
 
-    try
-    {
+    try {
       closeConnection();
+    } catch (IOException e) {
     }
-    catch(IOException e) {}
     System.exit(0);
   }
 
-public String getIp() {
-	return ip;
-}
+  public String getIp() {
+    return ip;
+  }
 
-public int getPortServer() {
-	return portServer;
+  public int getPortServer() {
+    return portServer;
+  }
 }
-}
-//End of ChatClient class
+// End of ChatClient class
