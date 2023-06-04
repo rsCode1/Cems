@@ -16,10 +16,12 @@ import logic.LogInInfo;
 import logic.LoggedUsers;
 import logic.Users;
 import ocsf.server.*;
+import logic.RequestTime;
+import ocsf.client.*;
 
 public class EchoServer extends AbstractServer {
 	private ServerStartScreenController controller;
-
+	private RequestTime request;
 	final public static int DEFAULT_PORT = 5555;
 
 	public EchoServer(int port) {
@@ -30,7 +32,7 @@ public class EchoServer extends AbstractServer {
 		this.controller = controller2;
 	}
 
-	public void handleMessageFromClient//
+	public void handleMessageFromClient
 	(Object msg, ConnectionToClient client)
 
 	{
@@ -73,13 +75,15 @@ public class EchoServer extends AbstractServer {
 					LoggedUsersArray.add(usr);
 				}
 
-				controller.UpadteOnlineUsers(LoggedUsersArray);
+				controller.UpdateOnlineUsers(LoggedUsersArray);
 				client.sendToClient(user);
+				
 			}
 		} catch (Exception ex) {
 			/* handle the error */
 			ex.printStackTrace();
 		}
+		
 
 	}
 
@@ -95,6 +99,26 @@ public class EchoServer extends AbstractServer {
 			return ((Users)null);
 		return new Users(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6),
 				rs.getInt(7));
+	}
+	private void getRequestTimeInfo(Connection conn) throws SQLException {
+		ArrayList<RequestTime> requestList=new ArrayList<RequestTime>();
+		Statement stmt = conn.createStatement();
+		String command=String.format("SELECT * FROM request");
+		ResultSet rs = stmt.executeQuery(command);
+		while (rs.next()){
+			int IDRequest=rs.getInt(1);
+			String CourseName=rs.getString(2);
+			String RequestBy=rs.getString(3);
+		String reason=rs.getString(4);
+		int extraTime=rs.getInt(5);
+		RequestTime request=new RequestTime(IDRequest,CourseName,RequestBy,extraTime,reason);
+		requestList.add(request);
+		
+	}
+		
+		
+		
+	
 	}
 
 	/**

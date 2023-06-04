@@ -45,7 +45,7 @@ public class ServerStartScreenController implements Initializable   {
     	role.setCellValueFactory(new PropertyValueFactory<>("role"));
 	}
 	
-	public void UpadteOnlineUsers(ArrayList<LoggedUsers> usersArray) {
+	public void UpdateOnlineUsers(ArrayList<LoggedUsers> usersArray) {
 		table.getItems().clear();
 		table.getItems().addAll(usersArray);
 		
@@ -68,39 +68,5 @@ public class ServerStartScreenController implements Initializable   {
 	public void setServer(EchoServer server) {
 		this.server = server;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

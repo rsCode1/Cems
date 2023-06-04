@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="CemsClient/src"/>
+	<classpathentry kind="src" path="cemsServer/src"/>
+	<classpathentry kind="src" path="CemsShared/src"/>
+	<classpathentry kind="src" path="OCSF/src"/>
+	<classpathentry kind="lib" path="CemsClient/lib/charm-glisten-6.2.3.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="cemsServer/lib/mysql-connector-java-8.0.13.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="CemsClient/bin"/>
+</classpath>
