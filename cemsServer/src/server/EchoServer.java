@@ -132,13 +132,15 @@ public class EchoServer extends AbstractServer {
 	
 	private void logOut(LogInInfo login, ConnectionToClient client) {
 		
-		try 
-		(Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
-				"Aa123456");
-				Statement stmt = conn.createStatement()) {
-			stmt.executeUpdate(String.format("UPDATE users SET isLogged=0 WHERE userName='%s' AND password ='%s'",
-					login.getUserName(), login.getPassword()));
-			addUserToLoggedTable(conn);
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+					Statement stmt = conn.createStatement();
+				stmt.executeUpdate(String.format("UPDATE users SET isLogged=0 WHERE userName='%s' AND password ='%s'",
+						login.getUserName(), login.getPassword()));
+				addUserToLoggedTable(conn);
+		
+
 			
 			
 		} catch (SQLException e) {
