@@ -13,15 +13,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import logic.LoggedUsers;
 import server.EchoServer;
 
-public class ServerStartScreenController implements Initializable   {
+public class ServerStartScreenController implements Initializable {
 
 	private EchoServer server;
 
-
 	@FXML
-	private Button startBtn ;
+	private Button startBtn;
 	@FXML
-	private Button exitBtn ;
+	private Button exitBtn;
 	@FXML
 	private TableColumn<LoggedUsers, Integer> id;
 	@FXML
@@ -33,18 +32,18 @@ public class ServerStartScreenController implements Initializable   {
 	@FXML
 	private TableColumn<LoggedUsers, Integer> role;
 	@FXML
-    private TableView<LoggedUsers> table;
+	private TableView<LoggedUsers> table;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-    	id.setCellValueFactory(new PropertyValueFactory<>("id"));
-    	firstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-    	lastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-    	userName.setCellValueFactory(new PropertyValueFactory<>("userName"));
-    	role.setCellValueFactory(new PropertyValueFactory<>("role"));
+		id.setCellValueFactory(new PropertyValueFactory<>("id"));
+		firstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+		lastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+		userName.setCellValueFactory(new PropertyValueFactory<>("userName"));
+		role.setCellValueFactory(new PropertyValueFactory<>("role"));
 	}
 
-	public void UpadteOnlineUsers(ArrayList<LoggedUsers> usersArray) {
+	public void UpdateOnlineUsers(ArrayList<LoggedUsers> usersArray) {
 		table.getItems().clear();
 		table.getItems().addAll(usersArray);
 
@@ -52,54 +51,19 @@ public class ServerStartScreenController implements Initializable   {
 
 	@FXML
 	public void startServer() {
-	    try {
-	        if (server != null) {
-	            server.listen(); //Start listening for connections
-	        } else {
-	            System.out.println("ERROR - Server is not initialized!");
-	        }
-	    } catch (Exception ex) {
-	        System.out.println("ERROR - Could not listen for clients!");
-	    }
+		try {
+			if (server != null) {
+				server.listen(); // Start listening for connections
+			} else {
+				System.out.println("ERROR - Server is not initialized!");
+			}
+		} catch (Exception ex) {
+			System.out.println("ERROR - Could not listen for clients!");
+		}
 	}
-
 
 	public void setServer(EchoServer server) {
 		this.server = server;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

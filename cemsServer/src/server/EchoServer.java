@@ -16,12 +16,13 @@ import logic.LogInInfo;
 import logic.LoggedUsers;
 import logic.Request;
 import logic.Users;
-import ocsf.server.AbstractServer;
-import ocsf.server.ConnectionToClient;
+import ocsf.server.*;
+import logic.RequestTime;
+import ocsf.client.*;
 
 public class EchoServer extends AbstractServer {
-	private ServerStartScreenController serverScreenController;
-
+	private ServerStartScreenController controller;
+	private RequestTime request;
 	final public static int DEFAULT_PORT = 5555;
 
 	public EchoServer(int port) {
@@ -32,9 +33,7 @@ public class EchoServer extends AbstractServer {
 		this.serverScreenController = controller2;
 	}
 
-	@Override
-	public void handleMessageFromClient//
-	(Object msg, ConnectionToClient client)
+	public void handleMessageFromClient(Object msg, ConnectionToClient client)
 
 	{
 
@@ -55,9 +54,34 @@ public class EchoServer extends AbstractServer {
 				case "LOGOUT":
 					logOut((LogInInfo) request.getRequestParam(), client);
 					break;
-					
 
-				// Add more case statements for other request types
+					LogInInfo msg2 = ((LogInInfo) msg);
+					Users user = getUserInfo(msg2, conn);
+					Statement stmt = conn.createStatement();
+					if (user == null) {
+						client.sendToClient((Users) null);
+						return;
+					}
+
+					ArrayList<LoggedUsers> LoggedUsersArray = new ArrayList<LoggedUsers>();
+
+					Statement stmt2 = conn.createStatement();
+					String command = "SELECT id,firstName,userName,LastName,role FROM users " + "WHERE islogged=1 ";
+					ResultSet rs = stmt2.executeQuery(command);
+					while (rs.next()) {
+						Integer id = rs.getInt(1);
+						String firstName = rs.getString(2);
+						String lastName = rs.getString(3);
+						String userName = rs.getString(4);
+						int role = rs.getInt(5);
+
+						LoggedUsers usr = new LoggedUsers(id, firstName, lastName, userName, role);
+						LoggedUsersArray.add(usr);
+					}
+
+					controller.UpdateOnlineUsers(LoggedUsersArray);
+					client.sendToClient(user);
+
 			}
 		}
 	}
@@ -80,6 +104,7 @@ public class EchoServer extends AbstractServer {
 			/* handle the error */
 			ex.printStackTrace();
 		}
+
 	}
 
 	// function to add all the users that are logged in to the logged to the table
@@ -128,29 +153,24 @@ public class EchoServer extends AbstractServer {
 		return new Users(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6),
 				rs.getInt(7));
 	}
-	
-	
-	private void logOut(LogInInfo login, ConnectionToClient client) {
-		
-		try {
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
-					"Aa123456");
-					Statement stmt = conn.createStatement();
-				stmt.executeUpdate(String.format("UPDATE users SET isLogged=0 WHERE userName='%s' AND password ='%s'",
-						login.getUserName(), login.getPassword()));
-				addUserToLoggedTable(conn);
-		
 
-			
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	private void getRequestTimeInfo(Connection conn) throws SQLException {
+		ArrayList<RequestTime> requestList = new ArrayList<RequestTime>();
+		Statement stmt = conn.createStatement();
+		String command = String.format("SELECT * FROM request");
+		ResultSet rs = stmt.executeQuery(command);
+		while (rs.next()) {
+			int IDRequest = rs.getInt(1);
+			String CourseName = rs.getString(2);
+			String RequestBy = rs.getString(3);
+			String reason = rs.getString(4);
+			int extraTime = rs.getInt(5);
+			RequestTime request = new RequestTime(IDRequest, CourseName, RequestBy, extraTime, reason);
+			requestList.add(request);
+
 		}
-		
+
 	}
-	
-	
 
 	/**
 	 * This method overrides the one in the superclass. Called when the server

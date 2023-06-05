@@ -6,6 +6,7 @@ package client;
 
 import client.*;
 import gui.ConnectToServerScreenController;
+import gui.HDController;
 import gui.LoginScreenController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -15,23 +16,25 @@ import javafx.stage.Stage;
 import logic.Users;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import ocsf.client.*;
 
 public class ChatClient extends AbstractClient
 
 {
-  private LoginScreenController loginScreecontroller;
-
-  private String ip = "";
-  private int portServer;
-  // Instance variables **********************************************
-
-  public ChatClient(String host, int port, Object clientUI)
-      throws IOException {
-    super(host, port);
-    ip = host;
-    this.portServer = port;
+	private LoginScreenController loginScreecontroller;
+  private HDController hdController;
+	private String ip="";
+	private int portServer;
+  //Instance variables **********************************************
+  
+  public ChatClient(String host, int port, Object clientUI) 
+    throws IOException 
+  {
+	  super(host, port); 
+	  ip=host;
+	  this.portServer=port;
   }
   // this is new line
   // Instance methods ************************************************
@@ -41,28 +44,33 @@ public class ChatClient extends AbstractClient
    *
    * @param msg The message from the server.
    */
-  public void handleMessageFromServer(Object msg) {
-
-    if (msg instanceof Users || msg == null) {
-      Users user = (Users) msg;
-      System.out.println(user);
-      try {
-        loginScreecontroller.ShowUserWelcomeScreen(user);
-      } catch (IOException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
+  public void handleMessageFromServer(Object msg) 
+  {
+    
+      if (msg instanceof ArrayList<?>){
+           hdController. ApproveRequestTime( msg);
       }
-      System.out.println(user.getRole());
-    } else {
-      System.out.println("Received message of type: " + msg.getClass());
+    
+    
+  if(msg instanceof Users || msg==null) {
+          Users user = (Users) msg;
+          System.out.println(user);
+          try {
+			loginScreecontroller.ShowUserWelcomeScreen(user);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+          System.out.println(user.getRole());
+      } else {
+          System.out.println("Received message of type: " + msg.getClass());
+      }
     }
+  
 
-  }
-
-  public void setController(LoginScreenController controller) {
-    this.loginScreecontroller = controller;
-  }
-
+	public void setController(LoginScreenController controller) {
+	    this.loginScreecontroller = controller;
+	}
   /**
    * This method terminates the client.
    */
@@ -83,4 +91,6 @@ public class ChatClient extends AbstractClient
     return portServer;
   }
 }
-// End of ChatClient class
+}
+
+//End of ChatClient class
