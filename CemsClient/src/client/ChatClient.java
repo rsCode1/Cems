@@ -4,24 +4,21 @@
 
 package client;
 
-import client.*;
-import gui.ConnectToServerScreenController;
+import gui.HDController;
 import gui.LoginScreenController;
-import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import logic.Request;
+import logic.RequestTime;
 import logic.Users;
 
 import java.io.*;
-import java.util.List;
+import java.util.ArrayList;
 import ocsf.client.*;
 
 public class ChatClient extends AbstractClient
 
 {
   private LoginScreenController loginScreecontroller;
+  private HDController hdController;
 
   private String ip = "";
   private int portServer;
@@ -55,12 +52,36 @@ public class ChatClient extends AbstractClient
       System.out.println(user.getRole());
     } else {
       System.out.println("Received message of type: " + msg.getClass());
+      
     }
+    if (msg instanceof ArrayList<?>) {
+      hdController.UpdateRequestTime((ArrayList<RequestTime>) msg);
+      for (RequestTime rt :(ArrayList<RequestTime>)msg) {
+    	  System.out.println("111"+rt.toString());
+    	  
+    	  
+      }
+    }
+    if (msg instanceof Request) {
+      Request rq = (Request) msg;
+      switch(rq.getRequestType()){
+        case "Who Requested Extra Time":
+        System.out.println((String)rq.getRequestParam());
+        hdController.showpPopupApprove((String)rq.getRequestParam());
+          
 
-  }
+        break;
+      }
 
+      }
+
+    }
   public void setController(LoginScreenController controller) {
     this.loginScreecontroller = controller;
+  }
+
+  public void setController(HDController controller) {
+    this.hdController = controller;
   }
 
   /**

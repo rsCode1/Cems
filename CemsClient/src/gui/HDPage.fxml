@@ -12,55 +12,56 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="611.0" prefWidth="941.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.HDController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="617.0" prefWidth="942.0" styleClass="background" stylesheets="@../../../CemsShared/src/Styles/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.HDController">
    <children>
-      <Label layoutX="309.0" layoutY="14.0" prefHeight="48.0" prefWidth="212.0" text="Welcome Dvora" AnchorPane.leftAnchor="331.0" AnchorPane.rightAnchor="331.0" AnchorPane.topAnchor="14.0">
+      <Label layoutX="261.0" layoutY="15.0" prefHeight="48.0" prefWidth="386.0" text="Welcome Head Of Departmant" AnchorPane.leftAnchor="261.0" AnchorPane.rightAnchor="295.0" AnchorPane.topAnchor="15.0">
          <font>
             <Font name="Arial Bold" size="24.0" />
          </font>
       </Label>
       <Text layoutX="46.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="370.6708984375" />
-      <MenuButton layoutX="653.0" layoutY="23.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="170.0" text="Notifications">
+      <MenuButton layoutX="716.0" layoutY="23.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="170.0" text="Notifications">
         <items>
           <MenuItem mnemonicParsing="false" text="Action 1" />
           <MenuItem mnemonicParsing="false" text="Action 2" />
         </items>
       </MenuButton>
-      <Button layoutX="46.0" layoutY="23.0" mnemonicParsing="false" text="Log Out" />
-      <Text layoutX="151.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date :25/5/23" wrappingWidth="159.6708984375" />
-      <TabPane layoutX="8.0" layoutY="83.0" prefHeight="509.0" prefWidth="850.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="19.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="83.0">
+      <TabPane layoutX="12.0" layoutY="56.0" prefHeight="509.0" prefWidth="730.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="56.0">
         <tabs>
           <Tab text="Extra Time Requests">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="515.0" prefWidth="920.0">
                      <children>
                         <Text layoutX="266.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Extra Time Requests (Click to show Reason) :" wrappingWidth="318.39997440576553">
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font>
                         </Text>
-                        <TableView layoutX="158.0" layoutY="48.0" prefHeight="175.0" prefWidth="521.0">
+                        <TableView fx:id="requestTable" layoutX="23.0" layoutY="48.0" prefHeight="269.0" prefWidth="866.0">
                           <columns>
-                            <TableColumn prefWidth="35.0" text="#" />
-                            <TableColumn prefWidth="119.0" text="Course Name" />
-                              <TableColumn prefWidth="165.5999755859375" text="Requested By:" />
-                              <TableColumn prefWidth="199.20001220703125" text="Extra Time" />
+                            <TableColumn fx:id="IDColumn" prefWidth="81.0" text="request ID" />
+                            <TableColumn fx:id="ExamIdColumn" prefWidth="76.0" text="exam ID" />
+                              <TableColumn fx:id="RequestedByColumn" prefWidth="140.0" text="Requested By:" />
+                              <TableColumn fx:id="ExtraTimeColumn" prefWidth="99.0" text="Extra Time" />
+                              <TableColumn fx:id="ReasonColumn" prefWidth="470.0" text="Reason" />
                           </columns>
                         </TableView>
-                        <Text layoutX="385.0" layoutY="263.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reason:" wrappingWidth="66.3427734375">
+                        <Button fx:id="ApproveBTN" layoutX="775.0" layoutY="343.0" mnemonicParsing="false" onAction="#ApproveRequestTime" prefHeight="31.0" prefWidth="114.0" styleClass="ApprovedButton" text="Approve" />
+                        <Button fx:id="rejectBTN" layoutX="641.0" layoutY="344.0" mnemonicParsing="false" onAction="#RejectRequestTime" prefHeight="31.0" prefWidth="125.0" styleClass="declineButton" text="Reject" />
+                        <Button fx:id="LogOutBTN" layoutX="23.0" layoutY="431.0" mnemonicParsing="false" onAction="#ToLogOut" styleClass="declineButton" text="Log Out" />
+                        <Button fx:id="refreshButton" layoutX="23.0" layoutY="348.0" mnemonicParsing="false" onAction="#refreshTable" text="Refresh Table" />
+                        <TextField fx:id="RequestExamIDText" layoutX="450.0" layoutY="351.0" promptText="enter exam id...." />
+                        <Label layoutX="240.0" layoutY="349.0" text="enter exam id to approve:">
                            <font>
-                              <Font size="16.0" />
+                              <Font size="17.0" />
                            </font>
-                        </Text>
-                        <TextArea editable="false" layoutX="161.0" layoutY="278.0" prefHeight="73.0" prefWidth="515.0" />
-                        <Button layoutX="470.0" layoutY="397.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="114.0" text="Approve" />
-                        <Button layoutX="223.0" layoutY="397.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="125.0" text="Reject" />
+                        </Label>
+                        <Label fx:id="testlbl" layoutX="387.0" layoutY="396.0" text="Label" />
                      </children>
                   </AnchorPane>
             </content>
@@ -71,16 +72,16 @@
                      <children>
                         <ListView layoutX="14.0" layoutY="40.0" prefHeight="372.0" prefWidth="232.0" />
                         <Text layoutX="24.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please Select Lecturer from list :" wrappingWidth="212.39999999999986" />
-                        <Button layoutX="47.0" layoutY="424.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="136.0" text="Show Statistics" />
+                        <Button fx:id="ShowStatisticsBTN" layoutX="47.0" layoutY="424.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="136.0" text="Show Statistics" />
                         <Label layoutX="452.0" layoutY="24.0" prefHeight="31.0" prefWidth="206.0" text="Score Distribution">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
                         </Label>
                         <Text layoutX="320.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GPA" wrappingWidth="40.2933349609375" />
-                        <TextField layoutX="351.0" layoutY="87.0" prefHeight="26.0" prefWidth="122.0" />
+                        <TextField fx:id="GPA_LECtextArea" layoutX="351.0" layoutY="87.0" prefHeight="26.0" prefWidth="122.0" />
                         <Text layoutX="567.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Median" />
-                        <TextField layoutX="619.0" layoutY="87.0" prefHeight="26.0" prefWidth="118.0" />
+                        <TextField fx:id="Median_LECTextArea" layoutX="619.0" layoutY="87.0" prefHeight="26.0" prefWidth="118.0" />
                         <BarChart layoutX="276.0" layoutY="130.0" prefHeight="326.0" prefWidth="593.0">
                           <xAxis>
                             <CategoryAxis side="BOTTOM" />
@@ -102,12 +103,15 @@
                               <Font name="System Bold" size="15.0" />
                            </font>
                         </Text>
-                        <Button layoutX="34.0" layoutY="235.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="182.0" text="Show Student Statistics " AnchorPane.leftAnchor="34.0" />
+                        <Button fx:id="ShoeBTN" layoutX="28.0" layoutY="270.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="244.0" text="Show Student Statistics " AnchorPane.leftAnchor="28.0">
+                           <font>
+                              <Font size="8.0" />
+                           </font></Button>
                         <Text layoutX="296.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GPA" wrappingWidth="40.2933349609375" />
-                        <TextField layoutX="336.0" layoutY="95.0" prefHeight="26.0" prefWidth="122.0" />
+                        <TextField fx:id="GPA_STUtextArea" layoutX="336.0" layoutY="95.0" prefHeight="26.0" prefWidth="122.0" />
                         <Text layoutX="515.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Median" />
-                        <TextField layoutX="582.0" layoutY="95.0" prefHeight="26.0" prefWidth="118.0" />
-                        <TextField layoutX="36.0" layoutY="162.0" prefHeight="31.0" prefWidth="178.0" AnchorPane.leftAnchor="36.0" />
+                        <TextField fx:id="median_STUtextArea" layoutX="582.0" layoutY="95.0" prefHeight="26.0" prefWidth="118.0" />
+                        <TextField fx:id="ID_STUtextArea" layoutX="36.0" layoutY="162.0" prefHeight="31.0" prefWidth="178.0" AnchorPane.leftAnchor="36.0" />
                         <Text layoutX="14.0" layoutY="183.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID:" AnchorPane.leftAnchor="14.0" />
                         <Label layoutX="309.0" layoutY="21.0" prefHeight="31.0" prefWidth="206.0" text="Score Distribution">
                            <font>
@@ -137,17 +141,17 @@
                               <Font name="System Bold" size="15.0" />
                            </font>
                         </Text>
-                        <Button layoutX="45.0" layoutY="235.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="170.0" text="Show Course Statistics" AnchorPane.leftAnchor="45.0" />
+                        <Button fx:id="ShoeBTN" layoutX="45.0" layoutY="235.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="170.0" text="Show Course Statistics" AnchorPane.leftAnchor="45.0" />
                         <Label layoutX="303.0" layoutY="21.0" prefHeight="31.0" prefWidth="206.0" text="Score Distribution">
                            <font>
                               <Font name="System Bold" size="23.0" />
                            </font>
                         </Label>
                         <Text layoutX="310.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GPA" wrappingWidth="40.2933349609375" />
-                        <TextField layoutX="351.0" layoutY="98.0" prefHeight="26.0" prefWidth="122.0" />
+                        <TextField fx:id="GPA_GradestextArea" layoutX="351.0" layoutY="98.0" prefHeight="26.0" prefWidth="122.0" />
                         <Text layoutX="523.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Median" />
-                        <TextField layoutX="593.0" layoutY="98.0" prefHeight="26.0" prefWidth="118.0" />
-                        <TextField layoutX="45.0" layoutY="164.0" prefHeight="31.0" prefWidth="170.0" AnchorPane.leftAnchor="45.0" />
+                        <TextField fx:id="median_GradesTextArea" layoutX="593.0" layoutY="98.0" prefHeight="26.0" prefWidth="118.0" />
+                        <TextField fx:id="ID_GradetextArea" layoutX="45.0" layoutY="164.0" prefHeight="31.0" prefWidth="170.0" AnchorPane.leftAnchor="45.0" />
                         <Text layoutX="14.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ID:" wrappingWidth="20.50927734375" AnchorPane.leftAnchor="14.0" />
                         <Text layoutX="599.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Course Name:" wrappingWidth="121.96630859375" />
                         <TextField layoutX="711.0" layoutY="29.0" prefHeight="31.0" prefWidth="160.0" />

@@ -1,11 +1,14 @@
 package server;
 // This file contains material supporting section 3.7 of the textbook:
 
+import java.io.IOException;
+
 // "Object Oriented Software Engineering" and is issued under the open-source
 // license found at www.lloseng.com
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,6 +18,7 @@ import gui.ServerStartScreenController;
 import logic.LogInInfo;
 import logic.LoggedUsers;
 import logic.Request;
+import logic.RequestTime;
 import logic.Users;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
@@ -27,8 +31,6 @@ public class EchoServer extends AbstractServer {
 	public EchoServer(int port) {
 		super(port);
 	}
-
-
 
 	public void setController(ServerStartScreenController controller2) {
 		this.serverScreenController = controller2;
@@ -57,7 +59,17 @@ public class EchoServer extends AbstractServer {
 				case "LOGOUT":
 					logOut((LogInInfo) request.getRequestParam(), client);
 					break;
+
+				case "GET-EXTRA-TIME-REQUEST":
+					getRequestTimeInfo(null, client);
+					break;
+				case "SearchExam":
 					
+					System.out.println("search exam");
+					searchExam((Request) request.getRequestParam(), client);
+					break;
+				case "GET-ALL-EXAMS":
+					break;
 
 				// Add more case statements for other request types
 			}
@@ -130,29 +142,100 @@ public class EchoServer extends AbstractServer {
 		return new Users(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6),
 				rs.getInt(7));
 	}
-	
-	
-	private void logOut(LogInInfo login, ConnectionToClient client) {
+
+	private void searchExam(Request rq, ConnectionToClient client) {
+		String examID = (String) rq.getRequestParam();
+		String status = rq.getRequestType();// approve or reject
 		
+
+		try {
+			// Update the time of the exam
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			Statement stmt = conn.createStatement();
+			String command = String.format("SELECT * FROM requests WHERE examID = %s", examID);
+			ResultSet rs = stmt.executeQuery(command);
+			switch (status) {
+				case "APPROVE":
+
+					while (rs.next()) {
+						int extraTime = rs.getInt("ExtraTime");
+						String requestedBy = rs.getString("RequestedBy");
+
+						Statement st = conn.createStatement();
+						int updateStmt = st.executeUpdate(String
+								.format("UPDATE exams SET time = time + %d WHERE examID = %s", extraTime, examID));
+						Statement statment = conn.createStatement();
+						int rowsAffected = statment
+								.executeUpdate(String.format("DELETE FROM requests WHERE examID=%s", examID));
+
+						Request request = new Request("Who Requested Extra Time", requestedBy);
+						client.sendToClient(request);
+
+					}
+					break;
+				case "REJECT":
+					while (rs.next()) {
+						Statement st = conn.createStatement();
+						int rowsAffected = st
+								.executeUpdate(String.format("DELETE FROM requests WHERE examID=%s", examID));
+
+					}
+
+			}
+
+
+			// Close the resources
+			rs.close();
+			stmt.close();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	private void getRequestTimeInfo(RequestTime requestTime, ConnectionToClient client) {
+
 		try {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
 					"Aa123456");
-					Statement stmt = conn.createStatement();
-				stmt.executeUpdate(String.format("UPDATE users SET isLogged=0 WHERE userName='%s' AND password ='%s'",
-						login.getUserName(), login.getPassword()));
-				addUserToLoggedTable(conn);
-		
+			ArrayList<RequestTime> requestList = new ArrayList<RequestTime>();
+			Statement stmt = conn.createStatement();
+			String command = String.format("SELECT * FROM cems.requests");
+			ResultSet rs = stmt.executeQuery(command);
+			while (rs.next()) {
+				String IDRequest = rs.getString(1);
+				String CourseName = rs.getString(2);
+				String RequestBy = rs.getString(3);
+				String reason = rs.getString(4);
+				int extraTime = rs.getInt(5);
+				RequestTime request = new RequestTime(IDRequest, CourseName, RequestBy, extraTime, reason);
+				requestList.add(request);
 
-			
-			
+			}
+			client.sendToClient(requestList);
+		} catch (Exception ex) {
+			/* handle the error */
+			ex.printStackTrace();
+		}
+	}
+
+	private void logOut(LogInInfo login, ConnectionToClient client) {
+
+		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+				"Aa123456");
+				Statement stmt = conn.createStatement()) {
+			stmt.executeUpdate(String.format("UPDATE users SET isLogged=0 WHERE userName='%s' AND password ='%s'",
+					login.getUserName(), login.getPassword()));
+			addUserToLoggedTable(conn);
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
-	
 
 	/**
 	 * This method overrides the one in the superclass. Called when the server
@@ -172,7 +255,7 @@ public class EchoServer extends AbstractServer {
 		System.out.println("Server has stopped listening for connections.");
 	}
 
-	// Class methods ***************************************************
+	// Class methods *****************
 
 	/**
 	 * This method is responsible for the creation of the server instance (there is
@@ -199,5 +282,6 @@ public class EchoServer extends AbstractServer {
 			System.out.println("ERROR - Could not listen for clients!");
 		}
 	}
+
 }
 // End of EchoServer class
