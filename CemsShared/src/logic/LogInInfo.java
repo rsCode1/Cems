@@ -1,5 +1,5 @@
 package logic;
-
+//
 import java.io.Serializable;
 
 public class LogInInfo implements Serializable  {
