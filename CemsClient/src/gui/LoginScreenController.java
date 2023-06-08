@@ -86,7 +86,7 @@ public class LoginScreenController {
 				try {
 					root = loader.load();
 					Stage window = (Stage) getLoginBtn().getScene().getWindow();
-					FirstPageController lecturerController=null;
+					LecturerPageController lecturerController=null;
 					if (user.getRole() == 1) {
 						lecturerController = loader.getController();
 						lecturerController.setLecturerAndClient(user, client);

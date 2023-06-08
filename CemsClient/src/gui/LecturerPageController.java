@@ -17,7 +17,7 @@ import logic.LogInInfo;
 import logic.Request;
 import logic.Users;
 
-public class FirstPageController {
+public class LecturerPageController {
 	private Users lecturer;
 	private ChatClient client;
 
@@ -34,13 +34,17 @@ public class FirstPageController {
 
     @FXML
     void initialize() {
-        assert createQuestionForm != null : "fx:id=\"createQuestionForm\" was not injected: check your FXML file 'FirstPage.fxml'.";
+        assert createQuestionForm != null : "fx:id=\"createQuestionForm\" was not injected: check your FXML file 'LecturerPage.fxml'.";
 
     }
     public void setLecturerAndClient(Users lecturer,ChatClient client) {
     	this.lecturer=lecturer;
     	this.client=client;
     }
+//    @FXML
+//    public void writeQuestionbtn(ActionEvent event) {
+//    	
+//    }
     
 	@FXML
 	public void logOut(ActionEvent event) {
