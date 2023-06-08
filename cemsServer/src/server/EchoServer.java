@@ -14,7 +14,12 @@ import java.util.ArrayList;
 import gui.ServerStartScreenController;
 import logic.LogInInfo;
 import logic.LoggedUsers;
+import logic.Question;
 import logic.Request;
+import logic.StudentInTest;
+import logic.Test;
+import logic.TestApplyInfo;
+import logic.TestCode;
 import logic.Users;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
@@ -57,8 +62,15 @@ public class EchoServer extends AbstractServer {
 				case "LOGOUT":
 					logOut((LogInInfo) request.getRequestParam(), client);
 					break;
-					
-
+				case "GetExam" :
+					getExam( (TestCode) request.getRequestParam(),client);
+					break;
+				case "StartTest" :
+					startTest( (TestApplyInfo) request.getRequestParam(),client);
+					break;
+				case "SubmitExam" :
+					submitTest( (StudentInTest) request.getRequestParam(),client);
+					break;
 				// Add more case statements for other request types
 			}
 		}
@@ -83,6 +95,150 @@ public class EchoServer extends AbstractServer {
 			ex.printStackTrace();
 		}
 	}
+	//if applying info is correct the function gets requested Test from data base and sends it to Client
+		private void getExam(TestCode t,ConnectionToClient client){
+			int testid;
+			try {
+				Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root","Aa123456");
+				testid=ApplyingInfoExisted(conn,t);
+				if(testid != -1) {
+					Test test = getTest(conn,testid);
+						if (test!=null) {
+							Question[] qLst= getTestQuestions(conn,testid,test.getQuesSize());
+								if(qLst != null ) {
+									test.setQLst(qLst);
+									////client.sendtoclient
+								}
+								else {
+									System.out.println("Questions not Found!!! ");
+								}
+						}
+						else {
+							System.out.println("Test code not Found!!! ");
+						}
+			    } 
+				else {
+					System.out.println("Test not Found!!! ");
+				}
+			
+			}
+			catch (SQLException e) {e.printStackTrace();} 
+			
+			
+		}
+		
+		private  boolean startTest( TestApplyInfo testApplyInfo, ConnectionToClient client) {
+			Statement stmt;
+			boolean ret=false;
+			try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root","Aa123456");
+			String studentId1= '"' + String.valueOf(testApplyInfo.getId())+'"';
+			String  code1= '"' + String.valueOf(testApplyInfo.getCode())+'"';
+			String str = "SELECT * FROM cems.students_applying_for_test_list list Where " +  "list.code=" + code1 + "AND list.stdID=" +studentId1 +";";
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(str);
+	 		if (rs.next()) 
+	 		////client.sendtoclient
+	 			ret=true;
+	 		rs.close();
+	 		return ret;
+			}
+			catch (SQLException e) {e.printStackTrace();}
+			return ret;////client.sendtoclient
+		}
+		//returns Question list if testid Existed in DataBase else null
+		private  Question[] getTestQuestions(Connection conn,int testid,int Size) {
+			Question[] qLst=new Question[Size];
+			boolean f= false;
+			Statement stmt;
+			try {
+				String id= '"' + String.valueOf(testid) +'"';
+				String str = "SELECT  q.*,tq.score FROM test t, questions q , test_question tq Where t.idTest=tq.idTest AND q.idquestion=tq.idquestion";
+				str= str+ " AND t.idTest = " + id + ";";
+				stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(str);
+				int i=0;
+		 		while (rs.next()) {
+		 			String [] ansArr= new String[4];
+		 			ansArr[0]=rs.getString(3);
+		 			ansArr[1]=rs.getString(4);
+		 			ansArr[2]=rs.getString(5);
+		 			ansArr[3]=rs.getString(6);
+		 			qLst[i]= new Question(rs.getString(2),ansArr,rs.getInt(9),rs.getInt(1));
+		 			i++;
+		 			f=true;
+				}
+	 		rs.close();
+	 		if(f) {
+	 		return qLst;
+	 		}
+	 		return null;
+			}
+			catch (SQLException e) {e.printStackTrace();}
+			return null;
+		
+			
+		}
+		public void submitTest(StudentInTest studentInTest,ConnectionToClient client) {
+			Statement stmt;
+			String str;
+			String studentId= '"' + String.valueOf(studentInTest.getStudentId()) +'"';
+			String testId= '"' + String.valueOf(studentInTest.getTestId()) +'"';
+			String courseName= '"' + String.valueOf(studentInTest.getCourseName()) +'"';
+			try {
+				Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root","Aa123456");
+				stmt = conn.createStatement();
+				for(int i=0 ; i<studentInTest.getQesSize();i++ ) {
+					String answer= '"' + String.valueOf(studentInTest.getAnswer(i)) +'"';
+					String quesId= '"' + String.valueOf(studentInTest.getQuesIdArr()[i]) +'"';
+				    str = "INSERT INTO `cems`.`studentintest` (`studentId`, `testId`,`answer`, `courseName`, `quesId`) " ;
+				    str+="VALUES (" + studentId + ',' +testId + ',' + answer + ',' + courseName+ ',' + quesId + ");" ;
+				    stmt.executeUpdate(str);
+				    str="";
+					}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+
+		//gets test Data from DataBase and puts it in Test Object and returns it;
+		private Test getTest(Connection conn,int testid) {
+			Test test=null;
+			Statement stmt;
+			try {
+			String id1= '"' + String.valueOf(testid) +'"';
+			String str = "SELECT * FROM cems.test Where idTest = " + id1 + ";";
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(str);
+	 		if (rs.next()) {
+	 			test= new Test(rs.getString(7),rs.getInt(2),rs.getString(4),rs.getInt(3),rs.getInt(1));
+			}
+	 		rs.close();
+	 		return test;
+			}
+			catch (SQLException e) {e.printStackTrace();}
+			return test;
+		}
+		//Checks if Test Applying info is existed in Database in Student Applying list 
+		//returns test Id if it does Exist, else -1
+		private int ApplyingInfoExisted(Connection conn,TestCode t) {
+			Statement stmt;
+			int testid=-1;
+			try {
+			String code1= '"' + String.valueOf(t.getCode())+'"';
+			String str = "SELECT * FROM cems.students_applying_for_test_list list Where " +  "list.code=" + code1 + ";";
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(str);
+	 		if (rs.next()) 
+	 			testid= rs.getInt(2);
+	 		rs.close();
+	 		return testid;
+			}
+			catch (SQLException e) {e.printStackTrace();}
+			return testid;
+		}
 
 	// function to add all the users that are logged in to the logged to the table
 	// in server

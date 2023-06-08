@@ -6,12 +6,15 @@ package client;
 
 import client.*;
 import gui.ConnectToServerScreenController;
+import gui.InExamController;
 import gui.LoginScreenController;
+import gui.TakeExamController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import logic.Test;
 import logic.Users;
 
 import java.io.*;
@@ -22,6 +25,7 @@ public class ChatClient extends AbstractClient
 
 {
   private LoginScreenController loginScreecontroller;
+  private TakeExamController takeExamController;
 
   private String ip = "";
   private int portServer;
@@ -41,22 +45,34 @@ public class ChatClient extends AbstractClient
    *
    * @param msg The message from the server.
    */
-  public void handleMessageFromServer(Object msg) {
-
-    if (msg instanceof Users || msg == null) {
-      Users user = (Users) msg;
-      System.out.println(user);
-      try {
-        loginScreecontroller.ShowUserWelcomeScreen(user);
-      } catch (IOException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
+  public void handleMessageFromServer(Object msg) 
+  {
+	
+   if (msg instanceof Users || msg==null) {
+          Users user = (Users) msg;
+          System.out.println(user);
+          try {
+			loginScreecontroller.ShowUserWelcomeScreen(user);
+			loginScreecontroller.setUser(user);;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+          System.out.println(user.getRole());
+      } 
+  else if(msg instanceof Test ) {
+	  Test test= (Test) msg ;
+	  try {
+		  takeExamController. ShowStudentTestScreen(test);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	  
+  }
+   else {
+          System.out.println("Received message of type: " + msg.getClass());
       }
-      System.out.println(user.getRole());
-    } else {
-      System.out.println("Received message of type: " + msg.getClass());
-    }
-
   }
 
   public void setController(LoginScreenController controller) {
@@ -83,4 +99,4 @@ public class ChatClient extends AbstractClient
     return portServer;
   }
 }
-// End of ChatClient class
+// End of ChatClient class
