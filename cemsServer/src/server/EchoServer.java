@@ -70,9 +70,9 @@ public class EchoServer extends AbstractServer {
 				break;
 			case "GET-ALL-EXAMS":
 				break;
-			case "SendLectuerID":
+			/*case "SendLectuerID":
 				importID((Request) request.getRequestParam(), client);
-				break;
+				break;*/
 
 			// Add more case statements for other request types
 			}
