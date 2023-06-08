@@ -17,91 +17,91 @@ import ocsf.client.*;
 public class ChatClient extends AbstractClient
 
 {
-  private LoginScreenController loginScreecontroller;
-  private HDController hdController;
+	private LoginScreenController loginScreecontroller;
+	private HDController hdController;
 
-  private String ip = "";
-  private int portServer;
-  // Instance variables **********************************************
+	private String ip = "";
+	private int portServer;
+	// Instance variables **********************************************
 
-  public ChatClient(String host, int port, Object clientUI)
-      throws IOException {
-    super(host, port);
-    ip = host;
-    this.portServer = port;
-  }
-  // this is new line
-  // Instance methods ************************************************
+	public ChatClient(String host, int port, Object clientUI) throws IOException {
+		super(host, port);
+		ip = host;
+		this.portServer = port;
+	}
+	// this is new line
+	// Instance methods ************************************************
 
-  /**
-   * This method handles all data that comes in from the server.
-   *
-   * @param msg The message from the server.
-   */
-  public void handleMessageFromServer(Object msg) {
+	/**
+	 * This method handles all data that comes in from the server.
+	 *
+	 * @param msg The message from the server.
+	 */
+	public void handleMessageFromServer(Object msg) {
 
-    if (msg instanceof Users || msg == null) {
-      Users user = (Users) msg;
-      System.out.println(user);
-      try {
-        loginScreecontroller.ShowUserWelcomeScreen(user);
-      } catch (IOException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-      System.out.println(user.getRole());
-    } else {
-      System.out.println("Received message of type: " + msg.getClass());
-      
-    }
-    if (msg instanceof ArrayList<?>) {
-      hdController.UpdateRequestTime((ArrayList<RequestTime>) msg);
-      for (RequestTime rt :(ArrayList<RequestTime>)msg) {
-    	  System.out.println("111"+rt.toString());
-    	  
-    	  
-      }
-    }
-    if (msg instanceof Request) {
-      Request rq = (Request) msg;
-      switch(rq.getRequestType()){
-        case "Who Requested Extra Time":
-        System.out.println((String)rq.getRequestParam());
-        hdController.showpPopupApprove((String)rq.getRequestParam());
-          
+		if (msg instanceof Users || msg == null) {
+			Users user = (Users) msg;
+			System.out.println(user);
+			try {
+				loginScreecontroller.ShowUserWelcomeScreen(user);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println(user.getRole());
+		} else {
+			System.out.println("Received message of type: " + msg.getClass());
 
-        break;
-      }
+		}
+		if (msg instanceof ArrayList<?>) {
+			hdController.UpdateRequestTime((ArrayList<RequestTime>) msg);
+			for (RequestTime rt : (ArrayList<RequestTime>) msg) {
+				System.out.println("111" + rt.toString());
 
-      }
+			}
+		}
+		if (msg instanceof Request) {
+			Request rq = (Request) msg;
+			switch (rq.getRequestType()) {
+			case "Who Requested Extra Time":
+				System.out.println((String) rq.getRequestParam());
+				hdController.showpPopupApprove((String) rq.getRequestParam());
 
-    }
-  public void setController(LoginScreenController controller) {
-    this.loginScreecontroller = controller;
-  }
+				break;
+			}
 
-  public void setController(HDController controller) {
-    this.hdController = controller;
-  }
+		}
+		//if(msg instanceof )
+		hdcontroller
 
-  /**
-   * This method terminates the client.
-   */
-  public void quit() {
+	}
 
-    try {
-      closeConnection();
-    } catch (IOException e) {
-    }
-    System.exit(0);
-  }
+	public void setController(LoginScreenController controller) {
+		this.loginScreecontroller = controller;
+	}
 
-  public String getIp() {
-    return ip;
-  }
+	public void setController(HDController controller) {
+		this.hdController = controller;
+	}
 
-  public int getPortServer() {
-    return portServer;
-  }
+	/**
+	 * This method terminates the client.
+	 */
+	public void quit() {
+
+		try {
+			closeConnection();
+		} catch (IOException e) {
+		}
+		System.exit(0);
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public int getPortServer() {
+		return portServer;
+	}
 }
 // End of ChatClient class

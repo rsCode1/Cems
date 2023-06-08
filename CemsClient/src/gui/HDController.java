@@ -86,6 +86,8 @@ public class HDController implements Initializable {
 	private TextField GPA_LECtextArea;
 
 	@FXML
+	private TextField LectuerID;
+	@FXML
 	private TextField Median_LECTextArea;
 
 	@FXML
@@ -108,6 +110,8 @@ public class HDController implements Initializable {
 
 	@FXML
 	private TextField ID_GradetextArea;
+	@FXML
+	private TextField EnterLectuerName;
 
 	@FXML
 	private TableColumn<RequestTime, String> IDColumn;
@@ -331,5 +335,18 @@ public class HDController implements Initializable {
 		});
 
 	}
+	public void ImportLectuerGradeStatistics(){
+		try {
+			//send lecturer ID to the sever
+			client.sendToServer(new Request("SendLectuerID", LectuerID.getText()));
+			 
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	
+	}
+	
 
 }
