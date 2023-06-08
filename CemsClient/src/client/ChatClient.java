@@ -72,7 +72,7 @@ public class ChatClient extends AbstractClient
 
 		}
 		//if(msg instanceof )
-		hdcontroller
+	
 
 	}
 
