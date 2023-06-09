@@ -1,6 +1,8 @@
 package logic;
 
-public class Test {
+import java.io.Serializable;
+
+public class Test implements Serializable{
 	private Question[] qLst ;
 	private String courseName;
 	private int testId;

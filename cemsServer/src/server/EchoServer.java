@@ -1,6 +1,8 @@
 package server;
 // This file contains material supporting section 3.7 of the textbook:
 
+import java.io.IOException;
+
 // "Object Oriented Software Engineering" and is issued under the open-source
 // license found at www.lloseng.com
 
@@ -107,18 +109,41 @@ public class EchoServer extends AbstractServer {
 							Question[] qLst= getTestQuestions(conn,testid,test.getQuesSize());
 								if(qLst != null ) {
 									test.setQLst(qLst);
-									////client.sendtoclient
+									try {
+										client.sendToClient(test);
+									} catch (IOException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
 								}
 								else {
 									System.out.println("Questions not Found!!! ");
+									try {
+										client.sendToClient((Test)null);
+									} catch (IOException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
 								}
 						}
 						else {
 							System.out.println("Test code not Found!!! ");
+							try {
+								client.sendToClient((Test)null);
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
 			    } 
 				else {
 					System.out.println("Test not Found!!! ");
+					try {
+						client.sendToClient((Test)null);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			
 			}

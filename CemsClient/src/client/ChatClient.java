@@ -61,11 +61,15 @@ public class ChatClient extends AbstractClient
           System.out.println(user.getRole());
       } 
   else if(msg instanceof Test ) {
+	  System.out.println("I arruved at h.m.f.s");
 	  Test test= (Test) msg ;
 	  try {
-		  takeExamController. ShowStudentTestScreen(test);
+		  System.out.println("I arruved at h.m.f.s2");
+		  takeExamController.ShowStudentTestScreen(test);
+		  System.out.println("I arruved at h.m.f.s2");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			System.out.println("catch in chat client catch");
 			e.printStackTrace();
 		}
 	  
@@ -78,6 +82,9 @@ public class ChatClient extends AbstractClient
   public void setController(LoginScreenController controller) {
     this.loginScreecontroller = controller;
   }
+  public void setTakeExamController(TakeExamController controller) {
+	    this.takeExamController = controller;
+	  }
 
   /**
    * This method terminates the client.

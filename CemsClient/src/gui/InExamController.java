@@ -25,8 +25,8 @@ public class InExamController {
 
 
 	
-	public void setTest(){
-		Test str1 = new Test("Algebra",120,"Hi",4,123456);
+	public void setTest(Test test){
+		/*Test str1 = new Test("Algebra",120,"Hi",4,123456);
 		String[] str3 = new String[4];
 		str3[0]="Answer1....";
 		str3[1]="Answer2....";
@@ -37,8 +37,9 @@ public class InExamController {
 		str2[1]=new Question("Question2....", str3,10 ,1);
 		str2[2]=new Question("Question3....", str3,20,1 );
 		str2[3]=new Question("Question4....", str3,30 ,1);
-		str1.setQLst(str2);
-		this.test=str1;
+		str1.setQLst(str2);*/
+		this.test=test;
+
 	}
 	
 	

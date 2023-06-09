@@ -71,6 +71,8 @@ public class StudentPageController {
     		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/TakeExam.fxml"));
     		Parent root = loader.load();
     		Stage stage = new Stage();
+    		TakeExamController takeExamController = loader.getController();
+    		takeExamController.setStudentAndClient(student, client,takeExamController);
     		stage.setScene(new Scene(root));
     		stage.show();
     		} 

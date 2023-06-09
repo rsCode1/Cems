@@ -1,6 +1,8 @@
 package logic;
 
-public class Question {
+import java.io.Serializable;
+
+public class Question implements Serializable{
 	
 	private String qTxt;
 	private String [] ansTxt = new String[4];

@@ -18,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import logic.LogInInfo;
+import logic.Question;
 import logic.Request;
 import logic.StudentInTest;
 import logic.Test;
@@ -28,10 +29,13 @@ import logic.Users;
 public class TakeExamController {
 	private ChatClient client;
 	private Users student;
-	
-	public void setStudentAndClient(Users Student,ChatClient client) {
+	private TestCode testCode;
+	private Test test;
+	private Question[] qLst;
+	public void setStudentAndClient(Users Student,ChatClient client,TakeExamController controller) {
     	this.student=Student;
     	this.client=client;
+    	this.client.setTakeExamController(controller);
     }
 	 @FXML
 	    private Text errMes1;
@@ -75,17 +79,18 @@ public class TakeExamController {
     	String code = codeTxt.getText() ;
     	if ( CheckApplyingInfo(code)) {
     		TestCode testCode = new TestCode(Integer.valueOf(code));
-    		/*try {
+    		try {
     			client.openConnection();
     			if (client.isConnected()) {
-    				client.sendToServer(new Request("GetTest", testApplyInfo));
+    				client.sendToServer(new Request("GetExam", testCode));
+    				System.out.println("connected to server.");
     			} else {
     				System.out.println("Not connected to server.");
     			}
     		} catch (IOException e) {
     			e.printStackTrace();
-    		}*/
-    		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/InExam.fxml")); // specify the path to the new fxml file
+    		}
+    		/*FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/InExam.fxml")); // specify the path to the new fxml file
     		Parent root;
 			try {
 				root = loader.load();
@@ -102,7 +107,7 @@ public class TakeExamController {
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-			}
+			}*/
     	}
     	
     	
@@ -112,28 +117,31 @@ public class TakeExamController {
     }
     
     public void ShowStudentTestScreen(Test test) throws IOException {
+    	System.out.println("I arruved at show student test");
     	Platform.runLater(() -> {
 			if (test == null) {
 				// show error text
-				errMes1.setText("Id or Code is wrong!, please try again!"); } 
+				errMes1.setText("Code is wrong!, please try again!"); } 
 			
 			else {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/InExam.fxml"));
-			errMes1.setText("");
-			Parent root;
-			try {
-			
-				root = loader.load();
-				Stage window = (Stage) startBtn.getScene().getWindow();
-				InExamController inExamController=loader.getController();
-				inExamController.setStudentAndClient(student ,client);
-				inExamController.setTest();
-				
-			    }
-			catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			    }
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/InExam.fxml")); // specify the path to the new fxml file
+	    		Parent root;
+				try {
+					root = loader.load();
+					Stage window = (Stage) getstartBtn().getScene().getWindow();
+				    InExamController controller = loader.getController();
+				    //controller.setClient(this.client,controller);
+				    // Get the Stage information
+				    controller.setTest(test);
+				    controller.setStudentAndClient(student, client);
+				    controller.setStudentInTest();
+				    controller.setFirstPage();
+				    window.setScene(new Scene(root));
+					window.show();
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
 			
     	    }
 		});
