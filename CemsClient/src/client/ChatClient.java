@@ -66,14 +66,10 @@ public class ChatClient extends AbstractClient
 			case "Who Requested Extra Time":
 				System.out.println((String) rq.getRequestParam());
 				hdController.showpPopupApprove((String) rq.getRequestParam());
-
 				break;
 			}
-
 		}
 		//if(msg instanceof )
-	
-
 	}
 
 	public void setController(LoginScreenController controller) {

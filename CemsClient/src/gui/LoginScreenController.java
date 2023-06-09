@@ -65,7 +65,6 @@ public class LoginScreenController {
 
 			if (user == null) {
 				// show error text
-
 				loginStatus.setText("Username or password is incorrect, please try again!");
 			} else {
 				FXMLLoader loader = null;
@@ -78,10 +77,8 @@ public class LoginScreenController {
 					loader = new FXMLLoader(getClass().getResource(Lacturertpath));
 				}
 				if (user.getRole() == 2) {
-					loader = new FXMLLoader(getClass().getResource(HDpath));
-					
+					loader = new FXMLLoader(getClass().getResource(HDpath));	
 				}
-
 				Parent root;
 				try {
 					root = loader.load();

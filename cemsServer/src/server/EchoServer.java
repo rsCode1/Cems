@@ -68,11 +68,9 @@ public class EchoServer extends AbstractServer {
 				System.out.println("search exam");
 				searchExam((Request) request.getRequestParam(), client);
 				break;
-			case "GET-ALL-EXAMS":
-				break;
-			/*case "SendLectuerID":
+			case "SendLectuerID":
 				importID((Request) request.getRequestParam(), client);
-				break;*/
+				break;
 
 			// Add more case statements for other request types
 			}
@@ -205,14 +203,13 @@ public class EchoServer extends AbstractServer {
 			String command = String.format("SELECT * FROM cems.requests");
 			ResultSet rs = stmt.executeQuery(command);
 			while (rs.next()) {
-				String IDRequest = rs.getString(1);
-				String CourseName = rs.getString(2);
+				String examID = rs.getString(1);
+				String IDRequest = rs.getString(2);
 				String RequestBy = rs.getString(3);
 				String reason = rs.getString(4);
 				int extraTime = rs.getInt(5);
-				RequestTime request = new RequestTime(IDRequest, CourseName, RequestBy, extraTime, reason);
+				RequestTime request = new RequestTime(examID, IDRequest, RequestBy, extraTime, reason);
 				requestList.add(request);
-
 			}
 			client.sendToClient(requestList);
 		} catch (Exception ex) {
@@ -233,10 +230,9 @@ public class EchoServer extends AbstractServer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
-
-	private void importID(String ID) {
+	private void importID(Request requestID, ConnectionToClient client) {
+		String ID = (String) requestID.getRequestParam();
 		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
 				"Aa123456"); Statement stmt = conn.createStatement()) {
 			String command = String.format("SELECT * FROM cems.users");
@@ -248,31 +244,24 @@ public class EchoServer extends AbstractServer {
 				String lastName = rs.getString("LastName");
 				String userName = rs.getString("userName");
 				int role = rs.getInt("role");
-				// RequestTime request = new RequestTime(IDRequest, CourseName, RequestBy,
-				// extraTime, reason);
+				// RequestTime request = new RequestTime(IDRequest, CourseName, RequestBy,extraTime, reason);
 				// requestList.add(request);
-
 				if (role == 0) { // if its student
-					 command = String.format("SELECT * FROM cems.users");
-					ResultSet rs2 = stmt.executeQuery(command); //send studentdata to the client
-					//add class for student data?
-					
-			
-				}
-				if (role == 1) { // if its lectuer
-					 command = String.format("SELECT * FROM cems.users");
-					ResultSet rs2 = stmt.executeQuery(command);//send studentdata to the client
+					 command = String.format("SELECT * FROM Grades WHERE studentID="+ID);
+					ResultSet rs2 = stmt.executeQuery(command); //send student data to the client
 					//add class for student data?
 				}
-				
+				if (role == 1) { // if its lecture
+					 command = String.format("SELECT *  FROM Grades WHERE courseID="+ID);
+					ResultSet rs2 = stmt.executeQuery(command);//send lecture to the client
+					//add class for student data?
+				}
 			}
 			// client.sendToClient(requestList);
-
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 	/**

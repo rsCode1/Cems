@@ -284,8 +284,8 @@ public class HDController implements Initializable {
 	}
 
 	public void showpPopupApprove(String username) {
+		
 		System.out.println("in popupApprove");
-
 		Platform.runLater(() -> {
 			Stage popupStage = new Stage();
 			popupStage.setTitle("Pop-up Window");
@@ -298,20 +298,16 @@ public class HDController implements Initializable {
 			messageLabel.setAlignment(Pos.TOP_CENTER);
 			messageLabel.setPadding(new Insets(10));
 			Button closeButton = new Button("Close");
-
 			closeButton.setAlignment(Pos.CENTER);
 			closeButton.setOnAction(e -> popupStage.close());
-
 			popupContent.getChildren().addAll(messageLabel, closeButton);
 			Scene popupScene = new Scene(popupContent);
 			popupStage.setScene(popupScene);
 			popupStage.show();
 		});
-
 	}
 
 	public void showpPopupReject(String username) {
-
 		Platform.runLater(() -> {
 			Stage popupStage = new Stage();
 			popupStage.setTitle("Pop-up Window");
@@ -324,22 +320,18 @@ public class HDController implements Initializable {
 			messageLabel.setAlignment(Pos.TOP_CENTER);
 			messageLabel.setPadding(new Insets(10));
 			Button closeButton = new Button("Close");
-
 			closeButton.setAlignment(Pos.CENTER);
 			closeButton.setOnAction(e -> popupStage.close());
-
 			popupContent.getChildren().addAll(messageLabel, closeButton);
 			Scene popupScene = new Scene(popupContent);
 			popupStage.setScene(popupScene);
 			popupStage.show();
 		});
-
 	}
 	public void ImportLectuerGradeStatistics(){
 		try {
 			//send lecturer ID to the sever
-			client.sendToServer(new Request("SendLectuerID", LectuerID.getText()));
-			 
+			client.sendToServer(new Request("SendLectuerID", LectuerID.getText()));			 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

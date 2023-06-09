@@ -3,8 +3,8 @@ package logic;
 import java.io.Serializable;
 
 public class RequestTime implements Serializable{
-    private String requestID;
-    private String examID;
+	  private String examID;
+	private String requestID;
     private String requestedBy;
     private String reason;
     private int extraTime;
