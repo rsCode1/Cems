@@ -6,6 +6,7 @@ package client;
 
 import gui.HDController;
 import gui.LoginScreenController;
+import logic.Grades;
 import logic.Request;
 import logic.RequestTime;
 import logic.Users;
@@ -69,7 +70,10 @@ public class ChatClient extends AbstractClient
 				break;
 			}
 		}
-		//if(msg instanceof )
+		if(msg instanceof Grades) {
+			Grades grade=(Grades)msg;
+			hdController.ImportLectuerGradeStatistics((Grades) grade);
+		}
 	}
 
 	public void setController(LoginScreenController controller) {

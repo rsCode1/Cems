@@ -17,6 +17,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -30,6 +32,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import logic.Exam;
+import logic.Grades;
 import logic.LogInInfo;
 import logic.Request;
 import logic.RequestTime;
@@ -123,6 +126,8 @@ public class HDController implements Initializable {
 	private TableColumn<RequestTime, Integer> ExtraTimeColumn;
 	@FXML
 	private TableColumn<RequestTime, String> ReasonColumn;
+	@FXML
+	private BarChart<String, Number> barChart;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -284,7 +289,7 @@ public class HDController implements Initializable {
 	}
 
 	public void showpPopupApprove(String username) {
-		
+
 		System.out.println("in popupApprove");
 		Platform.runLater(() -> {
 			Stage popupStage = new Stage();
@@ -328,17 +333,28 @@ public class HDController implements Initializable {
 			popupStage.show();
 		});
 	}
-	public void ImportLectuerGradeStatistics(){
+	
+	public void ShowGradeStatistics(ActionEvent event) {
 		try {
-			//send lecturer ID to the sever
-			client.sendToServer(new Request("SendLectuerID", LectuerID.getText()));			 
+			// send lecturer ID to the sever
+			client.sendToServer(new Request("SendLectuerID", LectuerID.getText()));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-	
 	}
-	
+	public void ImportLectuerGradeStatistics(Grades grades) {
+		
+		Grades gr=grades;
+		// Create data series
+		XYChart.Series<String, Number> series = new XYChart.Series<>();
+		series.getData().add(new XYChart.Data<>(gr.getCourseName() , gr.getGrade()));
+		series.getData().add(new XYChart.Data<>("Category 2", 20));
+		series.getData().add(new XYChart.Data<>("Category 3", 15));
+		series.getData().add(new XYChart.Data<>("Category 4", 5));
+		// Add series to BarChart
+		barChart.getData().add(series);
+
+	}
 
 }

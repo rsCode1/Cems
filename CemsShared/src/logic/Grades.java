@@ -5,6 +5,7 @@ public class Grades {
 	String studentID;
 	String testSubject;
 	String courseName;
+	int grade;
 	
 	public String getExamID() {
 		return examID;
@@ -14,6 +15,12 @@ public class Grades {
 	}
 	public String getStudentID() {
 		return studentID;
+	}
+	public int getGrade() {
+		return grade;
+	}
+	public void setGrade(int grade) {
+		this.grade = grade;
 	}
 	public void setStudentID(String studentID) {
 		this.studentID = studentID;
