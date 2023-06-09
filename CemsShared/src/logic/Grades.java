@@ -9,8 +9,14 @@ public class Grades implements Serializable  {
 	String courseID;
 	int grade;
 	int dataOf;//student=0,lectuer=1,course=2
-
+	String lectuerID;
 	
+	public String getLectuerID() {
+		return lectuerID;
+	}
+	public void setLectuerID(String lectuerID) {
+		this.lectuerID = lectuerID;
+	}
 	public String getExamID() {
 		return examID;
 	}
@@ -36,14 +42,15 @@ public class Grades implements Serializable  {
 	public int getGrade() {
 		return grade;
 	}
-	public Grades(String examID, String studentID, String courseID, int grade,int dataOf) {
+	public Grades(String examID, String studentID, String courseID, int grade,int dataOf,String lectuerID) {
 		super();
 		this.examID = examID;
 		this.studentID = studentID;
 		this.courseID = courseID;
 		this.grade = grade;
 		this.dataOf=dataOf;
-	}
+		this.lectuerID=lectuerID;
+		}
 	public void setGrade(int grade) {
 		this.grade = grade;
 	}

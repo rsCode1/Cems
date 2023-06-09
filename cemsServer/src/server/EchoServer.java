@@ -247,7 +247,7 @@ public class EchoServer extends AbstractServer {
 		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
 				"Aa123456"); 
 				Statement stmt = conn.createStatement()) {
-			String command = String.format("SELECT * FROM cems.users");
+			String command = String.format("SELECT * FROM cems.users WHERE id="+gID);
 			ResultSet rs = stmt.executeQuery(command);
 			if (rs.next()) {
 				// get fields from resultSet
@@ -268,19 +268,51 @@ public class EchoServer extends AbstractServer {
 						String courseID1 = rs2.getString("courseID");
 						int grade1 = rs2.getInt("grade");
 						int dataof = rs2.getInt("dataOf");
-						grades.add(new Grades(exemID1, studentID1,courseID1,grade1,dataof));
+						String lectuerID=rs2.getString("lectuerID");
+						grades.add(new Grades(exemID1, studentID1,courseID1,grade1,dataof,lectuerID));
 				
 					}
 					client.sendToClient(grades);
 					}
 				
 				if (role == 1) { // if its lecture
-					 command = String.format("SELECT *  FROM grades WHERE courseID="+gID);
+					 command = String.format("SELECT * FROM grades WHERE lectureID="+gID);
 					ResultSet rs2 = stmt.executeQuery(command);//send lecture to the client
-					//add class for student data?
+					////
+					while(rs2.next()) {
+						// get fields from resultSet
+						String exemID1= rs2.getString("examID");
+						String studentID1 = rs2.getString("studentID");
+						String courseID1 = rs2.getString("courseID");
+						int grade1 = rs2.getInt("grade");
+						int dataof = rs2.getInt("dataOf");
+						String lectuerID=rs2.getString("lectuerID");
+						grades.add(new Grades(exemID1, studentID1,courseID1,grade1,dataof,lectuerID));
+					}
+					
+					client.sendToClient(grades);
+					}
+				
 				}
 				
-			}
+				else {//if its course
+					 command = String.format("SELECT *  FROM grades WHERE courseID="+gID);
+					ResultSet rs2 = stmt.executeQuery(command);//send lecture to the client
+					while(rs2.next()) {
+						// get fields from resultSet
+						String exemID1= rs2.getString("examID");
+						String studentID1 = rs2.getString("studentID");
+						String courseID1 = rs2.getString("courseID");
+						int grade1 = rs2.getInt("grade");
+						int dataof = rs2.getInt("dataOf");
+						String lectuerID=rs2.getString("lectuerID");
+						grades.add(new Grades(exemID1, studentID1,courseID1,grade1,dataof,lectuerID));
+					}
+					
+					client.sendToClient(grades);
+					}
+				
+			
 			// client.sendToClient(requestList);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

@@ -352,7 +352,7 @@ public class HDController implements Initializable {
 		try {
 			client.openConnection();
 			if (client.isConnected()) {
-				client.sendToServer(new Request("SendLectuerID", LectuerID.getText()));
+				client.sendToServer(new Request("SendID", LectuerID.getText()));
 				try {
 					Thread.sleep(2000);
 				} catch (InterruptedException e) {
