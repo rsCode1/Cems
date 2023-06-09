@@ -240,6 +240,7 @@ public class EchoServer extends AbstractServer {
 	}
 
 	private void importID(String gID, ConnectionToClient client) throws IOException {
+		ArrayList<Grades> grades= new ArrayList<>();
 		System.out.println("THE ID IS");
 		//String ID = (String) gID.getRequestParam();
 		System.out.println(gID.toString());
@@ -260,16 +261,19 @@ public class EchoServer extends AbstractServer {
 				if (role == 0) { // if its student
 					 command = String.format("SELECT * FROM cems.grades WHERE studentID="+gID);
 					ResultSet rs2 = stmt.executeQuery(command); //send student data to the client
-					if (rs2.next()) {
+					while(rs2.next()) {
 						// get fields from resultSet
 						String exemID1= rs2.getString("examID");
 						String studentID1 = rs2.getString("studentID");
 						String courseID1 = rs2.getString("courseID");
 						int grade1 = rs2.getInt("grade");
-						int data = rs2.getInt("dataOf");
-						
-					client.sendToClient(new Grades(exemID1, studentID1,courseID1,grade1,data));
-					}}
+						int dataof = rs2.getInt("dataOf");
+						grades.add(new Grades(exemID1, studentID1,courseID1,grade1,dataof));
+				
+					}
+					client.sendToClient(grades);
+					}
+				
 				if (role == 1) { // if its lecture
 					 command = String.format("SELECT *  FROM grades WHERE courseID="+gID);
 					ResultSet rs2 = stmt.executeQuery(command);//send lecture to the client

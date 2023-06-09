@@ -83,7 +83,6 @@ public class ChatClient extends AbstractClient
 			Request rq = (Request) msg;
 			switch (rq.getRequestType()) {
 			case "Who Requested Extra Time":
-				System.out.println((String) rq.getRequestParam());
 				hdController.showpPopupApprove((String) rq.getRequestParam());
 				break;
 			}

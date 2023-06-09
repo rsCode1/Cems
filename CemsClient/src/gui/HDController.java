@@ -347,14 +347,26 @@ public class HDController implements Initializable {
 	}
 	
 	public void ShowGradeStatistics(ActionEvent event) {
+	
+		
 		try {
-			// send lecturer ID to the sever
-			System.out.println(LectuerID.getText());
-			client.sendToServer(new Request("SendLectuerID", LectuerID.getText()));
+			client.openConnection();
+			if (client.isConnected()) {
+				client.sendToServer(new Request("SendLectuerID", LectuerID.getText()));
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else {
+				System.out.println("Not connected to server.");
+			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	
+	
 	}
 	public void ImportLectueGradeStatistics(ArrayList<Grades> msg){
 		XYChart.Series<String, Number> series = new XYChart.Series<>();
