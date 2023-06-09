@@ -55,10 +55,28 @@ public class ChatClient extends AbstractClient
 
 		}
 		if (msg instanceof ArrayList<?>) {
+		
+			if(	((ArrayList) msg).get(0)instanceof RequestTime) {
 			hdController.UpdateRequestTime((ArrayList<RequestTime>) msg);
 			for (RequestTime rt : (ArrayList<RequestTime>) msg) {
 				System.out.println("111" + rt.toString());
 
+			}
+			}
+			if(	((ArrayList) msg).get(0) instanceof Grades) {
+				System.out.println("BEFOR");
+				Grades grade=(Grades)msg;
+				if(grade.getDataOf()==0) {
+				hdController.ImportLectueGradeStatistics((ArrayList<Grades>) msg);
+				System.out.println("AFTER");
+			}
+				if(grade.getDataOf()==1) {
+					hdController.ImportStudentGradeStatistics((ArrayList<Grades>) msg);
+				}
+				if(grade.getDataOf()==2) {
+					hdController.ImportCourseGradeStatistics((ArrayList<Grades>) msg);
+				
+				}
 			}
 		}
 		if (msg instanceof Request) {
@@ -70,10 +88,7 @@ public class ChatClient extends AbstractClient
 				break;
 			}
 		}
-		if(msg instanceof Grades) {
-			Grades grade=(Grades)msg;
-			hdController.ImportLectuerGradeStatistics((Grades) grade);
-		}
+		
 	}
 
 	public void setController(LoginScreenController controller) {

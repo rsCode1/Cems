@@ -83,18 +83,24 @@ public class HDController implements Initializable {
 	}
 
 	@FXML
-	private Button ShowStatisticsBTN;
+	private Button ShowStudentBTN;
 
 	@FXML
 	private TextField GPA_LECtextArea;
-
+	@FXML
+	private TextField	StudentName;
+	@FXML
+	private TextField	LectuerName;
+	
 	@FXML
 	private TextField LectuerID;
 	@FXML
 	private TextField Median_LECTextArea;
 
 	@FXML
-	private Button ShoeBTN;
+	private Button ShowLectuerBTN;
+	@FXML
+	private Button ShowCourseBTN;
 
 	@FXML
 	private TextField GPA_STUtextArea;
@@ -115,6 +121,8 @@ public class HDController implements Initializable {
 	private TextField ID_GradetextArea;
 	@FXML
 	private TextField EnterLectuerName;
+	@FXML
+	private TextField CourseName;
 
 	@FXML
 	private TableColumn<RequestTime, String> IDColumn;
@@ -127,7 +135,11 @@ public class HDController implements Initializable {
 	@FXML
 	private TableColumn<RequestTime, String> ReasonColumn;
 	@FXML
-	private BarChart<String, Number> barChart;
+	private BarChart<String, Number> barChartLec;
+	@FXML
+	private BarChart<String, Number> barChartStud;
+	@FXML
+	private BarChart<String, Number> barChartCourse;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -337,24 +349,81 @@ public class HDController implements Initializable {
 	public void ShowGradeStatistics(ActionEvent event) {
 		try {
 			// send lecturer ID to the sever
+			System.out.println(LectuerID.getText());
 			client.sendToServer(new Request("SendLectuerID", LectuerID.getText()));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	public void ImportLectuerGradeStatistics(Grades grades) {
-		
-		Grades gr=grades;
-		// Create data series
+	public void ImportLectueGradeStatistics(ArrayList<Grades> msg){
 		XYChart.Series<String, Number> series = new XYChart.Series<>();
-		series.getData().add(new XYChart.Data<>(gr.getCourseName() , gr.getGrade()));
-		series.getData().add(new XYChart.Data<>("Category 2", 20));
-		series.getData().add(new XYChart.Data<>("Category 3", 15));
-		series.getData().add(new XYChart.Data<>("Category 4", 5));
+		// Create data series
+		for( Grades grade: msg) {
+			int i=0;
+	
+		series.getData().add(new XYChart.Data<>("" , msg.get(i).getGrade()));
+		}
+		LectuerName.setText(msg.get(0).getCourseName());//show course name
+		GPA_LECtextArea.setText(String.valueOf(calcAVG(msg)));//show the avarge
+		Median_LECTextArea.setText(String.valueOf(calcMedian(msg)));//shoe median
 		// Add series to BarChart
-		barChart.getData().add(series);
+		barChartLec.getData().add(series);
+		
+	}
+	public void ImportStudentGradeStatistics(ArrayList<Grades> msg) {
+		XYChart.Series<String, Number> series = new XYChart.Series<>();	
+		for( Grades grade: msg) {
+			int i=0;
+	
+		series.getData().add(new XYChart.Data<>("" , msg.get(i).getGrade()));
+		}
+		StudentName.setText(msg.get(0).getCourseName());//show course name
+		GPA_STUtextArea.setText(String.valueOf(calcAVG(msg)));//show the avarge
+		median_STUtextArea.setText(String.valueOf(calcMedian(msg)));//shoe median
+		// Add series to BarChart
+		barChartStud.getData().add(series);
+		
 
 	}
+	public void ImportCourseGradeStatistics(ArrayList<Grades> msg) {
+		XYChart.Series<String, Number> series = new XYChart.Series<>();
+		for( Grades grade: msg) {
+			int i=0;
+		
+		series.getData().add(new XYChart.Data<>("exam"+i+1 , msg.get(i).getGrade()));
+		}
+		CourseName.setText(msg.get(0).getCourseName());//show course name
+		GPA_GradestextArea.setText(String.valueOf(calcAVG(msg)));//show the avarge
+		median_GradesTextArea.setText(String.valueOf(calcMedian(msg)));//shoe median
+		// Add series to BarChart
+		barChartCourse.getData().add(series);
+
+	}
+	public double calcAVG(ArrayList<Grades> msg) {
+		int sum=0;
+	    for (Grades number : msg) {
+            sum += number.getGrade();
+        }
+	    double avg=sum/msg.size();
+		return avg;
+	}
+	public double calcMedian(ArrayList <Grades> grades) {
+		double median;
+        int medianIndex =  grades.size() / 2;
+
+        if (grades.size() % 2 == 0) {
+            int medianValue1 = grades.get(medianIndex - 1).getGrade();
+            int medianValue2 = grades.get(medianIndex).getGrade();
+            median = (medianValue1 + medianValue2) / 2.0;
+        } else {
+            median = grades.get(medianIndex).getGrade();
+        }
+        return median;
+		
+	
+		
+	}
+	
 
 }

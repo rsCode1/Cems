@@ -1,11 +1,15 @@
 package logic;
 
-public class Grades {
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class Grades implements Serializable  {
 	String examID;
 	String studentID;
-	String testSubject;
-	String courseName;
+	String courseID;
 	int grade;
+	int dataOf;//student=0,lectuer=1,course=2
+
 	
 	public String getExamID() {
 		return examID;
@@ -16,8 +20,29 @@ public class Grades {
 	public String getStudentID() {
 		return studentID;
 	}
+	
+	public String getCourseID() {
+		return courseID;
+	}
+	public void setCourseID(String courseID) {
+		this.courseID = courseID;
+	}
+	public int getDataOf() {
+		return dataOf;
+	}
+	public void setDataOf(int dataOf) {
+		this.dataOf = dataOf;
+	}
 	public int getGrade() {
 		return grade;
+	}
+	public Grades(String examID, String studentID, String courseID, int grade,int dataOf) {
+		super();
+		this.examID = examID;
+		this.studentID = studentID;
+		this.courseID = courseID;
+		this.grade = grade;
+		this.dataOf=dataOf;
 	}
 	public void setGrade(int grade) {
 		this.grade = grade;
@@ -25,18 +50,19 @@ public class Grades {
 	public void setStudentID(String studentID) {
 		this.studentID = studentID;
 	}
-	public String getTestSubject() {
-		return testSubject;
-	}
-	public void setTestSubject(String testSubject) {
-		this.testSubject = testSubject;
-	}
+	
 	public String getCourseName() {
-		return courseName;
+		return courseID;
 	}
 	public void setCourseName(String courseName) {
-		this.courseName = courseName;
+		this.courseID = courseName;
 	}
+	@Override
+	public String toString() {
+		return "Grades [examID=" + examID + ", studentID=" + studentID + ", courseID=" + courseID + ", grade=" + grade
+				+ "]";
+	}
+	
 
 
 }

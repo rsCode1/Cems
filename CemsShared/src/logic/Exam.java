@@ -1,15 +1,15 @@
 package logic;
 
+import java.io.Serializable;
 
-
-public class Exam{
+public class Exam implements Serializable {
 String examID;
 String writtenBy;
 String testSubject;
 String courseName;
 String examNumber;
 int time;
-public Exam(){};
+
 public Exam(String examID, String writtenBy, String testSubject, String courseName, String examNumber){
     this.examID = testSubject+courseName+examNumber;//"020306"
     this.writtenBy = writtenBy;

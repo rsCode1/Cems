@@ -15,6 +15,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import gui.ServerStartScreenController;
+import logic.Grades;
 import logic.LogInInfo;
 import logic.LoggedUsers;
 import logic.Request;
@@ -65,11 +66,17 @@ public class EchoServer extends AbstractServer {
 				break;
 			case "SearchExam":
 
-				System.out.println("search exam");
 				searchExam((Request) request.getRequestParam(), client);
 				break;
 			case "SendLectuerID":
-				importID((Request) request.getRequestParam(), client);
+				System.out.println("sendID:" + request.getRequestParam());
+				try {
+					importID((String) request.getRequestParam(), client);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				System.out.println("sendID:" + request.getRequestParam());
 				break;
 
 			// Add more case statements for other request types
@@ -231,13 +238,17 @@ public class EchoServer extends AbstractServer {
 			e.printStackTrace();
 		}
 	}
-	private void importID(Request requestID, ConnectionToClient client) {
-		String ID = (String) requestID.getRequestParam();
+
+	private void importID(String gID, ConnectionToClient client) throws IOException {
+		System.out.println("THE ID IS");
+		//String ID = (String) gID.getRequestParam();
+		System.out.println(gID.toString());
 		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
-				"Aa123456"); Statement stmt = conn.createStatement()) {
+				"Aa123456"); 
+				Statement stmt = conn.createStatement()) {
 			String command = String.format("SELECT * FROM cems.users");
 			ResultSet rs = stmt.executeQuery(command);
-			while (rs.next()) {
+			if (rs.next()) {
 				// get fields from resultSet
 				Integer id = rs.getInt("id");
 				String firstName = rs.getString("firstName");
@@ -247,15 +258,24 @@ public class EchoServer extends AbstractServer {
 				// RequestTime request = new RequestTime(IDRequest, CourseName, RequestBy,extraTime, reason);
 				// requestList.add(request);
 				if (role == 0) { // if its student
-					 command = String.format("SELECT * FROM Grades WHERE studentID="+ID);
+					 command = String.format("SELECT * FROM cems.grades WHERE studentID="+gID);
 					ResultSet rs2 = stmt.executeQuery(command); //send student data to the client
-					//add class for student data?
-				}
+					if (rs2.next()) {
+						// get fields from resultSet
+						String exemID1= rs2.getString("examID");
+						String studentID1 = rs2.getString("studentID");
+						String courseID1 = rs2.getString("courseID");
+						int grade1 = rs2.getInt("grade");
+						int data = rs2.getInt("dataOf");
+						
+					client.sendToClient(new Grades(exemID1, studentID1,courseID1,grade1,data));
+					}}
 				if (role == 1) { // if its lecture
-					 command = String.format("SELECT *  FROM Grades WHERE courseID="+ID);
+					 command = String.format("SELECT *  FROM grades WHERE courseID="+gID);
 					ResultSet rs2 = stmt.executeQuery(command);//send lecture to the client
 					//add class for student data?
 				}
+				
 			}
 			// client.sendToClient(requestList);
 		} catch (SQLException e) {
