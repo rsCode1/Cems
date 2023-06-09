@@ -1,75 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.gluonhq.charm.glisten.control.TextField?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.paint.Color?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="416.0" prefWidth="699.0" style="-fx-background-color: #f5f5f5;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoginScreenController">
    <children>
-      <Button layoutX="66.0" layoutY="14.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="70.0" style="-fx-background-color: #2aa0a4;" text="About" textFill="#090000" />
-      <ImageView fitHeight="423.0" fitWidth="705.0" layoutY="-7.0">
-         <image>
-            <Image url="@LoginScreenBackground.jpg" />
-         </image>
-      </ImageView>
-      <Button fx:id="getLoginBtn" layoutX="334.0" layoutY="356.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="131.0" style="-fx-background-color: #2aa0a4;" text="Log-in" textFill="#090000" />
-      <Text fill="#037c6e" layoutX="298.0" layoutY="234.0" strokeType="OUTSIDE" strokeWidth="0.0" text="User login">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font></Text>
-      <TextField fx:id="getUserName" layoutX="289.0" layoutY="255.0" prefHeight="26.0" prefWidth="162.0" promptText="User name" style="-fx-background-color: #c0fcfd;">
-         <cursor>
-            <Cursor fx:constant="TEXT" />
-         </cursor>
-         <effect>
-            <DropShadow height="16.62" radius="17.7" spread="0.09" width="56.18">
-               <color>
-                  <Color red="0.08845029026269913" green="0.8684210777282715" blue="0.725426435470581" />
-               </color>
-            </DropShadow>
-         </effect></TextField>
-      <Button layoutX="246.0" layoutY="356.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="70.0" style="-fx-background-color: blue;" text="Sign-up" textFill="#090000" />
-      <PasswordField fx:id="getPassword" layoutX="289.0" layoutY="297.0" prefHeight="26.0" prefWidth="162.0" promptText="Password" style="-fx-background-color: #c0fcfd;">
-         <effect>
-            <DropShadow height="15.14" radius="18.060000000000002" width="59.1">
-               <color>
-                  <Color red="0.03673245757818222" green="0.8815789222717285" blue="0.7126096487045288" />
-               </color>
-            </DropShadow>
-         </effect>
-      </PasswordField>
-      <ImageView fitHeight="26.0" fitWidth="29.0" layoutX="255.0" layoutY="253.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@Sample_User_Icon.png" />
-         </image>
-         <effect>
-            <DropShadow height="10.84" radius="6.1675" spread="0.32" width="15.83">
-               <color>
-                  <Color red="0.046296294778585434" green="1.0" blue="0.904629647731781" />
-               </color>
-            </DropShadow>
-         </effect>
-      </ImageView>
-      <ImageView fitHeight="20.0" fitWidth="26.0" layoutX="258.0" layoutY="299.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@lock-icon-11.png" />
-         </image>
-         <effect>
-            <DropShadow spread="0.07">
-               <color>
-                  <Color red="0.021929824724793434" green="0.9473684430122375" blue="0.9010964632034302" />
-               </color>
-            </DropShadow>
-         </effect>
-      </ImageView>
-      <Button layoutX="561.0" layoutY="14.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="70.0" style="-fx-background-color: #2aa0a4;" text="about" textFill="#090000" />
+      <TextField fx:id="userName" layoutX="73.0" layoutY="104.0" />
+      <TextField fx:id="password" layoutX="73.0" layoutY="169.0" />
+      <Label fx:id="loginStatus" layoutX="303.0" layoutY="174.0" prefHeight="82.0" prefWidth="206.0" />
+      <Button fx:id="loginBtn" layoutX="326.0" layoutY="120.0" mnemonicParsing="false" onAction="#sendLoginDataToServer" text="login" />
+      <Label layoutX="131.0" layoutY="71.0" text="username" />
+      <Label layoutX="131.0" layoutY="141.0" text="password" />
    </children>
 </Pane>
