@@ -373,8 +373,8 @@ public class HDController implements Initializable {
 		// Create data series
 		for( Grades grade: msg) {
 			int i=0;
-	
 		series.getData().add(new XYChart.Data<>("" , msg.get(i).getGrade()));
+		i++;
 		}
 		LectuerName.setText(msg.get(0).getCourseName());//show course name
 		GPA_LECtextArea.setText(String.valueOf(calcAVG(msg)));//show the avarge
@@ -387,8 +387,8 @@ public class HDController implements Initializable {
 		XYChart.Series<String, Number> series = new XYChart.Series<>();	
 		for( Grades grade: msg) {
 			int i=0;
-	
 		series.getData().add(new XYChart.Data<>("" , msg.get(i).getGrade()));
+		i++;
 		}
 		StudentName.setText(msg.get(0).getCourseName());//show course name
 		GPA_STUtextArea.setText(String.valueOf(calcAVG(msg)));//show the avarge
@@ -404,6 +404,7 @@ public class HDController implements Initializable {
 			int i=0;
 		
 		series.getData().add(new XYChart.Data<>("exam"+i+1 , msg.get(i).getGrade()));
+		i++;
 		}
 		CourseName.setText(msg.get(0).getCourseName());//show course name
 		GPA_GradestextArea.setText(String.valueOf(calcAVG(msg)));//show the avarge
