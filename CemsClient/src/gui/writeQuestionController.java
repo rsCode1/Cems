@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import client.ChatClient;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,6 +16,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import logic.Question;
@@ -93,7 +95,11 @@ public class writeQuestionController {
 
     }
 
-
+    public void setClientAndLecturer(ChatClient client, Users lecturer) {
+        this.client = client;
+        this.lecturer = lecturer;
+    }
+    
     // sends the question to the server
     //uses the Question class from CemsShared
     //creates a Request object with the question and sends it to the server
@@ -131,15 +137,52 @@ public class writeQuestionController {
 
     }
 
-    @FXML
-    void btnSelectCourse(ActionEvent event) {
-        // add some courses to the comboBox
+
+    public void updateSubjectsComboBox(ArrayList<String> subjects) {
+        Platform.runLater(() -> {
+            ObservableList<String> list = FXCollections.observableArrayList(subjects);
+            professionsComboBox.setItems(list);
+        });
+    }
+    public void updateCoursesComboBox(ArrayList<String> courses) {
+        Platform.runLater(() -> {
+            ObservableList<String> list = FXCollections.observableArrayList(courses);
+            coursesComboBox.setItems(list);
+        });
 
     }
+    // @FXML
+    // public void btnSelectCourse(ActionEvent event) {
+    //     // add some courses to the comboBox depending on the subject currently selected
+    //     String subject = professionsComboBox.getValue();
+    //     if (subject.equals("Select Subject"))
+    //         return;
+    //     Request request = new Request("getCourses", subject);
+    //     try {
+    //         client.sendToServer(request);
+    //     }catch(Exception e) {
+    //         e.printStackTrace();
+    //     }
 
-    @FXML
-    void btnSelectProfession(ActionEvent event) {
-    }
+
+    // }
+
+
+
+
+
+    // @FXML
+    // public void btnSelectProfession(MouseDragEvent event) {
+    //     System.out.println("btnSelectProfession");
+    //     // add some subjects to the comboBox
+    //     Request request = new Request("getSubjects", null);
+    //     try {
+    //         client.sendToServer(request);
+    //     } catch (Exception e) {
+    //         // TODO Auto-generated catch block
+    //         e.printStackTrace();
+    //     }
+    // }
 
     @FXML
     public void initialize() {
@@ -148,52 +191,37 @@ radio2.setToggleGroup(correctAnswer);
 radio3.setToggleGroup(correctAnswer);
 radio4.setToggleGroup(correctAnswer);
 
-        
-ArrayList<String> subjects = new ArrayList<String>(
-        Arrays.asList(
-                "Math", 
-                "Physics", 
-                "Chemistry", 
-                "Biology", 
-                "History", 
-                "English", 
-                "Computer Science"
-        )
-);
-professionsComboBox.getItems().addAll(subjects);
 
-// add some courses to the comboBox
-ArrayList<String> courses = new ArrayList<String>(
-        Arrays.asList(
-                "Calculus 1", 
-                "Calculus 2", 
-                "Statistics", 
-                "Quantum Mechanics", 
-                "Electromagnetism", 
-                "Thermodynamics",
-                "Organic Chemistry", 
-                "Physical Chemistry", 
-                "Analytical Chemistry",
-                "Genetics", 
-                "Ecology", 
-                "Biochemistry",
-                "Ancient History", 
-                "Modern History", 
-                "World War II",
-                "Grammar", 
-                "Literature", 
-                "Composition",
-                "Algorithms", 
-                "Data Structures", 
-                "Operating Systems"
-        )
-);
-coursesComboBox.getItems().addAll(courses);
+professionsComboBox.setOnMouseClicked(event -> {
+    System.out.println("professionsComboBox");
+    // add some subjects to the comboBox
+    Request request = new Request("getSubjects", null);
+    try {
+        client.sendToServer(request);
+    } catch (Exception e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
+});
+
+coursesComboBox.setOnMouseClicked(event->{
+        // add some courses to the comboBox depending on the subject currently selected
+        String subject = professionsComboBox.getValue();
+        if (!subject.equals("Select Course") ){
+        Request request = new Request("getCourses", subject);
+        try {
+            client.sendToServer(request);
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+        }
+
+
+});
+
+
 
     }
 
-    public void setClientAndLecturer(ChatClient client, Users lecturer) {
-        this.client = client;
-        this.lecturer = lecturer;
-    }
+
 }

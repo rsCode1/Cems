@@ -7,21 +7,29 @@ package client;
 import client.*;
 import gui.ConnectToServerScreenController;
 import gui.LoginScreenController;
+import gui.writeQuestionController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import logic.LogInInfo;
+import logic.Response;
 import logic.Users;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.security.auth.Subject;
+
 import ocsf.client.*;
 
 public class ChatClient extends AbstractClient
 
 {
   private LoginScreenController loginScreecontroller;
+  private writeQuestionController writeQuestionController;
 
   private String ip = "";
   private int portServer;
@@ -43,24 +51,45 @@ public class ChatClient extends AbstractClient
    */
   public void handleMessageFromServer(Object msg) {
 
-    if (msg instanceof Users || msg == null) {
-      Users user = (Users) msg;
+    if (msg instanceof Response){
+      Response response = (Response) msg;
+      switch(response.getResponseType()){
+        case "LOGIN_success":
+            login((Users) response.getResponseParam());
+            break;
+        case "Subjects":
+          ArrayList <String> subjectsArr = (ArrayList<String>) response.getResponseParam();
+          writeQuestionController.updateSubjectsComboBox(subjectsArr);
+          System.out.println("hello");
+          break;
+      
+        case "Courses":
+          ArrayList <String> coursesArr = (ArrayList<String>) response.getResponseParam();
+          writeQuestionController.updateCoursesComboBox(coursesArr);
+          System.out.println("hello2");
+          break;
+    }
+    }
+
+  }
+  private void  login (Users user)  {
+
       System.out.println(user);
       try {
         loginScreecontroller.ShowUserWelcomeScreen(user);
-      } catch (IOException e) {
+      } catch (Exception e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
       }
       System.out.println(user.getRole());
-    } else {
-      System.out.println("Received message of type: " + msg.getClass());
-    }
-
+ 
   }
 
   public void setController(LoginScreenController controller) {
     this.loginScreecontroller = controller;
+  }
+    public void setController(writeQuestionController controller) {
+    this.writeQuestionController = controller;
   }
 
   /**

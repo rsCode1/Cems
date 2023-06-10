@@ -115,6 +115,7 @@ public class FirstPageController {
     // Get the new scene's controller and pass the ChatClient instance to it
     LoginScreenController controller = loader.getController();
     controller.setClient(this.client,controller);
+
     // Get the Stage information
     Stage window = (Stage) logOutBtn.getScene().getWindow();
     window.setScene(nextScene);
@@ -136,6 +137,7 @@ public void showCreateQuestionForm(ActionEvent event) {
 	// Get the new scene's controller and pass the ChatClient instance to it
 	writeQuestionController controller = loader.getController();
 	controller.setClientAndLecturer(this.client,lecturer);
+	client.setController(controller);
 	// Get the Stage information
 	Stage window = (Stage) writeQuestionBtn.getScene().getWindow();
 	window.setScene(nextScene);
