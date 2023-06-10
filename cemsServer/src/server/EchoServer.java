@@ -11,9 +11,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.swing.plaf.nimbus.State;
+
 import gui.ServerStartScreenController;
 import logic.LogInInfo;
 import logic.LoggedUsers;
+import logic.Question;
 import logic.Request;
 import logic.Users;
 import ocsf.server.AbstractServer;
@@ -57,12 +60,39 @@ public class EchoServer extends AbstractServer {
 				case "LOGOUT":
 					logOut((LogInInfo) request.getRequestParam(), client);
 					break;
+				case "writeQuestion":
+					writeQuestion((Question) request.getRequestParam(), client);
+					break;
 					
 
 				// Add more case statements for other request types
 			}
 		}
 	}
+
+	// save the question in the DB
+	// uses Question class from cemsShared
+
+	private void writeQuestion(Question question , ConnectionToClient client) {
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			System.out.println("SQL connection succeed");
+			int courseId = getCourseId(question.getCourse(), conn);
+			Statement stmt = conn.createStatement();
+			String command = "INSERT INTO questions (question_text,answer1,answer2,answer3,answer4,correct_answer,course_id) VALUES ('"
+					+ question.getQuestionDescription() + "','" + question.getAnswer1() + "','" + question.getAnswer2() + "','"
+					+ question.getAnswer3() + "','" + question.getAnswer4() + "','" + question.getCorrectAnswer()
+					+ "','" + courseId + "')";
+			stmt.executeUpdate(command);
+
+		}catch (Exception ex) {
+			/* handle the error */
+			ex.printStackTrace();
+		}
+	}
+
+
 
 	private void checkUserLogin(LogInInfo loginInfo, ConnectionToClient client) {
 		try {
@@ -82,6 +112,26 @@ public class EchoServer extends AbstractServer {
 			/* handle the error */
 			ex.printStackTrace();
 		}
+	}
+
+	private int getCourseId(String courseName, Connection conn)  {
+		Statement stmt;
+		String command;
+		ResultSet rs;
+		int courseId=-1;
+		try{
+		stmt = conn.createStatement();
+		command = String.format("SELECT course_id FROM courses WHERE course_name='%s'", courseName);
+		rs = stmt.executeQuery(command);
+		if (rs.next())
+			return rs.getInt("course_id");
+		}catch (Exception ex) {
+			/* handle the error */
+			ex.printStackTrace();
+		}
+		return courseId;
+
+
 	}
 
 	// function to add all the users that are logged in to the logged to the table
