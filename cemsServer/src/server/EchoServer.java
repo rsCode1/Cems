@@ -8,18 +8,24 @@ import java.io.IOException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.plaf.nimbus.State;
 
 import gui.ServerStartScreenController;
+import javafx.event.ActionEvent;
 import logic.Grades;
 import logic.LogInInfo;
 import logic.LoggedUsers;
+import logic.Question;
 import logic.Request;
 import logic.RequestTime;
+import logic.Response;
 import logic.Users;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
@@ -39,7 +45,7 @@ public class EchoServer extends AbstractServer {
 
 	@Override
 	public void handleMessageFromClient//
-	(Object msg, ConnectionToClient client)
+	(Object msg, ConnectionToClient client) throws SQLException
 
 	{
 
@@ -54,33 +60,692 @@ public class EchoServer extends AbstractServer {
 			Request request = (Request) msg;
 
 			switch (request.getRequestType()) {
-			case "LOGIN":
-				checkUserLogin((LogInInfo) request.getRequestParam(), client);
-				break;
-			case "LOGOUT":
-				logOut((LogInInfo) request.getRequestParam(), client);
-				break;
+				case "LOGIN":
+					checkUserLogin((LogInInfo) request.getRequestParam(), client);
+					break;
+				case "LOGOUT":
+					logOut((LogInInfo) request.getRequestParam(), client);
+					break;
+				case "writeQuestion":
+					writeQuestion((Question) request.getRequestParam(), client);
+					break;
+				case "getSubjects":
+					getSubjects(client);
+					break;
+				case "getCourses":
+					getCourses(client, (String) request.getRequestParam());
+					break;
+				case "SEARCH-STUDENT-BY-ID":
+					searchStudent((String) request.getRequestParam(), client);
+					break;
+				case "SearchExam":
+					searchExam((Request) request.getRequestParam(), client);
+					break;
+				case "GET-EXTRA-TIME-REQUEST":
+					System.out.println("test");
+					getRequestTimeInfo(null, client);
+					break;
+				case "SendCourseIDtenth":
+					try {
 
-			case "GET-EXTRA-TIME-REQUEST":
-				getRequestTimeInfo(null, client);
-				break;
-			case "SearchExam":
+						importCourseDatatenths((String) request.getRequestParam(), client);
+						System.out.println(
+								"in getcourseID in server got " + (String) request.getRequestParam().toString());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 
-				searchExam((Request) request.getRequestParam(), client);
-				break;
-			case "SendLectuerID":
-				System.out.println("sendID:" + request.getRequestParam());
-				try {
-					importID((String) request.getRequestParam(), client);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				System.out.println("sendID:" + request.getRequestParam());
-				break;
+					break;
+				case "SendStudentIDtenth":
+					try {
+
+						importStudentDataTenths((String) request.getRequestParam(), client);
+						System.out.println(
+								"in getcourseID in server got " + (String) request.getRequestParam().toString());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					break;
+				case "SendLectuerIDtenth":
+					try {
+
+						importLectuerDataTenths((String) request.getRequestParam(), client);
+						System.out.println(
+								"in getcourseID in server got " + (String) request.getRequestParam().toString());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					break;
+
+				case "SendCourseID":
+					try {
+
+						importCourseData((String) request.getRequestParam(), client);
+
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					break;
+
+				case "SendStudentID":
+
+					try {
+						importStudentData((String) request.getRequestParam(), client);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					break;
+				case "SendLectuerID":
+					System.out.println("sendID:" + request.getRequestParam());
+
+					try {
+						importLectuerData((String) request.getRequestParam(), client);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					break;
+				case "GetTwoStudentsGrades":
+					ImportTwoStudentsSGrades((ArrayList<String>) request.getRequestParam(), client);
+					break;
+				case "GetTwoLectureGrades":
+						ImportTwoLectuerGrades((ArrayList<String>) request.getRequestParam(), client);
+					break;
+				case "GetTwoCourseGrades":
+						ImportTwoCourseGrades((ArrayList<String>) request.getRequestParam(), client);
+					break;
+
+
+			}
 
 			// Add more case statements for other request types
+		}
+	}
+
+	private void ImportTwoStudentsSGrades(ArrayList<String> requestParam, ConnectionToClient client) {
+		ArrayList<Grades> firstIDGrades = new ArrayList<Grades>();
+		ArrayList<Grades> secondIDGrades = new ArrayList<Grades>();
+		ArrayList<ArrayList<Grades>> alldata=new ArrayList<ArrayList<Grades>>();
+		System.out.println("in echo server import2ids,first id: "+requestParam.get(0)+"second id: "+requestParam.get(1));
+		
+
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+
+			Statement stmt = conn.createStatement();
+			String command = String.format("SELECT * FROM cems.grades WHERE studentID=%s", requestParam.get(0));
+			ResultSet rs = stmt.executeQuery(command);
+			while (rs.next()) {
+				String examID = rs.getString("examID");
+				String studentID = rs.getString("studentID");
+				String courseID = rs.getString("courseID");
+				int grade = rs.getInt("grade");
+				String lecturerID = rs.getString("lectuerID");
+				Grades grades = new Grades(examID, studentID, courseID, grade, lecturerID);
+				firstIDGrades.add(grades);
+
 			}
+			Statement stmnt2 = conn.createStatement();
+			String command1 = String.format("SELECT * FROM cems.grades WHERE studentID=%s", requestParam.get(1));
+			ResultSet rs2 = stmnt2.executeQuery(command1);
+			while (rs2.next()) {
+				String examID = rs2.getString("examID");
+				String studentID = rs2.getString("studentID");
+				String courseID = rs2.getString("courseID");
+				int grade = rs2.getInt("grade");
+				String lecturerID = rs2.getString("lectuerID");
+				Grades grades2 = new Grades(examID, studentID, courseID, grade, lecturerID);
+				secondIDGrades.add(grades2);
+
+			}
+			alldata.add(firstIDGrades);
+			alldata.add(secondIDGrades);
+			
+
+			client.sendToClient(new Response("Get2IDSGradesStudent", alldata));
+		} catch (Exception ex) {
+			/* handle the error */
+			ex.printStackTrace();
+		}
+
+	}
+	private void ImportTwoCourseGrades(ArrayList<String> requestParam, ConnectionToClient client) {
+		ArrayList<Grades> firstIDGrades = new ArrayList<Grades>();
+		ArrayList<Grades> secondIDGrades = new ArrayList<Grades>();
+		ArrayList<ArrayList<Grades>> alldata=new ArrayList<ArrayList<Grades>>();
+		System.out.println("in echo server import2ids,first id: "+requestParam.get(0)+"second id: "+requestParam.get(1));
+		
+
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+
+			Statement stmt = conn.createStatement();
+			String command = String.format("SELECT * FROM cems.grades WHERE courseID=%s", requestParam.get(0));
+			ResultSet rs = stmt.executeQuery(command);
+			while (rs.next()) {
+				String examID = rs.getString("examID");
+				String studentID = rs.getString("studentID");
+				String courseID = rs.getString("courseID");
+				int grade = rs.getInt("grade");
+				String lecturerID = rs.getString("lectuerID");
+				Grades grades = new Grades(examID, studentID, courseID, grade, lecturerID);
+				firstIDGrades.add(grades);
+
+			}
+			Statement stmnt2 = conn.createStatement();
+			String command1 = String.format("SELECT * FROM cems.grades WHERE courseID=%s", requestParam.get(1));
+			ResultSet rs2 = stmnt2.executeQuery(command1);
+			while (rs2.next()) {
+				String examID = rs2.getString("examID");
+				String studentID = rs2.getString("studentID");
+				String courseID = rs2.getString("courseID");
+				int grade = rs2.getInt("grade");
+				String lecturerID = rs2.getString("lectuerID");
+				Grades grades2 = new Grades(examID, studentID, courseID, grade, lecturerID);
+				secondIDGrades.add(grades2);
+
+			}
+			alldata.add(firstIDGrades);
+			alldata.add(secondIDGrades);
+			
+
+			client.sendToClient(new Response("Get2IDSGradesCourse", alldata));
+		} catch (Exception ex) {
+			/* handle the error */
+			ex.printStackTrace();
+		}
+
+	}
+	private void ImportTwoLectuerGrades(ArrayList<String> requestParam, ConnectionToClient client) {
+		ArrayList<Grades> firstIDGrades = new ArrayList<Grades>();
+		ArrayList<Grades> secondIDGrades = new ArrayList<Grades>();
+		ArrayList<ArrayList<Grades>> alldata=new ArrayList<ArrayList<Grades>>();
+		System.out.println("in echo server import2ids,first id: "+requestParam.get(0)+"second id: "+requestParam.get(1));
+		
+
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+
+			Statement stmt = conn.createStatement();
+			String command = String.format("SELECT * FROM cems.grades WHERE lectuerID=%s", requestParam.get(0));
+			ResultSet rs = stmt.executeQuery(command);
+			while (rs.next()) {
+				String examID = rs.getString("examID");
+				String studentID = rs.getString("studentID");
+				String courseID = rs.getString("courseID");
+				int grade = rs.getInt("grade");
+				String lecturerID = rs.getString("lectuerID");
+				Grades grades = new Grades(examID, studentID, courseID, grade, lecturerID);
+				firstIDGrades.add(grades);
+
+			}
+			Statement stmnt2 = conn.createStatement();
+			String command1 = String.format("SELECT * FROM cems.grades WHERE lectuerID=%s", requestParam.get(1));
+			ResultSet rs2 = stmnt2.executeQuery(command1);
+			while (rs2.next()) {
+				String examID = rs2.getString("examID");
+				String studentID = rs2.getString("studentID");
+				String courseID = rs2.getString("courseID");
+				int grade = rs2.getInt("grade");
+				String lecturerID = rs2.getString("lectuerID");
+				Grades grades2 = new Grades(examID, studentID, courseID, grade, lecturerID);
+				secondIDGrades.add(grades2);
+
+			}
+			alldata.add(firstIDGrades);
+			alldata.add(secondIDGrades);
+			
+
+			client.sendToClient(new Response("Get2IDSGradesLectuer", alldata));
+		} catch (Exception ex) {
+			/* handle the error */
+			ex.printStackTrace();
+		}
+
+	}
+
+	private void getRequestTimeInfo(RequestTime requestTime, ConnectionToClient client) {
+		System.out.println("in request time");
+
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			ArrayList<RequestTime> requestList = new ArrayList<RequestTime>();
+			Statement stmt = conn.createStatement();
+			String command = String.format("SELECT * FROM cems.requests");
+			ResultSet rs = stmt.executeQuery(command);
+			while (rs.next()) {
+				String examID = rs.getString(1);
+				String IDRequest = rs.getString(2);
+				String RequestBy = rs.getString(3);
+				String reason = rs.getString(4);
+				int extraTime = rs.getInt(5);
+				RequestTime request = new RequestTime(examID, IDRequest, RequestBy, extraTime, reason);
+				requestList.add(request);
+
+			}
+			client.sendToClient(new Response("EXTRA_TIME_INFO", requestList));
+		} catch (Exception ex) {
+			/* handle the error */
+			ex.printStackTrace();
+		}
+	}
+
+	private void searchExam(Request rq, ConnectionToClient client) {
+		String examID = (String) rq.getRequestParam();
+		String status = rq.getRequestType();// approve or reject
+
+		try {
+			// Update the time of the exam
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			Statement stmt = conn.createStatement();
+			String command = String.format("SELECT * FROM requests WHERE examID = %s", examID);
+			ResultSet rs = stmt.executeQuery(command);
+			switch (status) {
+				case "APPROVE":
+
+					while (rs.next()) {
+						int extraTime = rs.getInt("ExtraTime");
+						String requestedBy = rs.getString("RequestedBy");
+
+						Statement st = conn.createStatement();
+						int updateStmt = st.executeUpdate(
+								String.format("UPDATE exams SET time = time + %d WHERE examID = %s", extraTime,
+										examID));
+						Statement statment = conn.createStatement();
+						int rowsAffected = statment
+								.executeUpdate(String.format("DELETE FROM requests WHERE examID=%s", examID));
+
+						Response response = new Response("Who Requested Extra Time", requestedBy);
+						client.sendToClient(response);
+
+					}
+					break;
+				case "REJECT":
+					while (rs.next()) {
+						Statement st = conn.createStatement();
+						int rowsAffected = st
+								.executeUpdate(String.format("DELETE FROM requests WHERE examID=%s", examID));
+
+					}
+
+			}
+
+			// Close the resources
+			rs.close();
+			stmt.close();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	private void searchStudent(String studentid, ConnectionToClient client) {
+		ArrayList<String> studentList = new ArrayList<String>();
+
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			Statement stmt = conn.createStatement();
+			String command = String.format("SELECT * FROM cems.studentdata WHERE sID= '%s' AND status='completed'",
+					studentid);
+			ResultSet rs = stmt.executeQuery(command);
+
+			while (rs.next()) {
+				studentList.add(rs.getString("grade"));
+				System.out.println(rs.getString("grade").toString());
+
+			}
+			try {
+				client.sendToClient(new Response("RETURN-STUDENT-GRADES", studentList));
+			} catch (IOException e) {
+
+				e.printStackTrace();
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	// same as getSubjects but for courses
+	private void getCourses(ConnectionToClient client, String subject) {
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			System.out.println("SQL connection succeed");
+			Statement stmt = conn.createStatement();
+			String command = "SELECT subject_id FROM subjects WHERE subject_name = '" + subject + "'";
+			ResultSet rs = stmt.executeQuery(command);
+			rs.next();
+			String subjectId = rs.getString("subject_id");
+			command = "SELECT course_name FROM courses WHERE subject_id = '" + subjectId + "'";
+			rs = stmt.executeQuery(command);
+			ArrayList<String> courses = new ArrayList<String>();
+			while (rs.next()) {
+				courses.add(rs.getString("course_name"));
+			}
+			Response response = new Response("Courses", courses);
+			client.sendToClient(response);
+		} catch (Exception ex) {
+			/* handle the error */
+			ex.printStackTrace();
+		}
+	}
+
+	private void importStudentData(String gID, ConnectionToClient client) throws IOException, SQLException {
+		ArrayList<Grades> grades = new ArrayList<>();
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			Statement stmt = conn.createStatement();
+
+			if (gID == null) {
+				String command = String.format("SELECT * FROM cems.grades");
+				ResultSet rs = stmt.executeQuery(command); // send student data to the client
+
+				while (rs.next()) {
+					// get fields from resultSet
+					String exemID1 = rs.getString("examID");
+					String studentID1 = rs.getString("studentID");
+					String courseID1 = rs.getString("courseID");
+					int grade1 = rs.getInt("grade");
+					String lecturerID1 = rs.getString("lectuerID");
+					grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lecturerID1));
+
+				}
+			} else {
+				String command = String.format("SELECT * FROM cems.grades WHERE studentID=" + gID);
+				ResultSet rs = stmt.executeQuery(command); // send student data to the client
+
+				while (rs.next()) {
+					// get fields from resultSet
+					String exemID1 = rs.getString("examID");
+					String studentID1 = rs.getString("studentID");
+					String courseID1 = rs.getString("courseID");
+					int grade1 = rs.getInt("grade");
+					String lecturerID1 = rs.getString("lectuerID");
+					grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lecturerID1));
+				}
+			}
+
+			client.sendToClient(new Response("ImportStudentData", grades));
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+	}
+
+	private void importStudentDataTenths(String gID, ConnectionToClient client) throws IOException, SQLException {
+		ArrayList<Grades> grades = new ArrayList<>();
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			Statement stmt = conn.createStatement();
+
+			if (gID == null) {
+				String command = String.format("SELECT * FROM cems.grades");
+				ResultSet rs = stmt.executeQuery(command); // send student data to the client
+
+				while (rs.next()) {
+					// get fields from resultSet
+					String exemID1 = rs.getString("examID");
+					String studentID1 = rs.getString("studentID");
+					String courseID1 = rs.getString("courseID");
+					int grade1 = rs.getInt("grade");
+					String lecturerID1 = rs.getString("lectuerID");
+					grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lecturerID1));
+
+				}
+			} else {
+				String command = String.format("SELECT * FROM cems.grades WHERE studentID=" + gID);
+				ResultSet rs = stmt.executeQuery(command); // send student data to the client
+
+				while (rs.next()) {
+					// get fields from resultSet
+					String exemID1 = rs.getString("examID");
+					String studentID1 = rs.getString("studentID");
+					String courseID1 = rs.getString("courseID");
+					int grade1 = rs.getInt("grade");
+					String lecturerID1 = rs.getString("lectuerID");
+					grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lecturerID1));
+				}
+			}
+
+			client.sendToClient(new Response("ImportStudentDataTenths", grades));
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+	}
+
+	private void importLectuerData(String gID, ConnectionToClient client) throws IOException, SQLException {
+		ArrayList<Grades> grades = new ArrayList<>();
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			Statement stmt = conn.createStatement();
+			if (gID == null) {
+				String command = String.format("SELECT * FROM cems.grades");
+				ResultSet rs = stmt.executeQuery(command); // send student data to the client
+
+				while (rs.next()) {
+					// get fields from resultSet
+					String exemID1 = rs.getString("examID");
+					String studentID1 = rs.getString("studentID");
+					String courseID1 = rs.getString("courseID");
+					int grade1 = rs.getInt("grade");
+					String lecturerID1 = rs.getString("lectuerID");
+					grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lecturerID1));
+
+				}
+			} else {
+				String command = String.format("SELECT * FROM grades WHERE lectuerID=" + gID);
+				ResultSet rs = stmt.executeQuery(command);// send lecture to the client
+				////
+				while (rs.next()) {
+					// get fields from resultSet
+					String exemID1 = rs.getString("examID");
+					String studentID1 = rs.getString("studentID");
+					String courseID1 = rs.getString("courseID");
+					int grade1 = rs.getInt("grade");
+					String lectuerID1 = rs.getString("lectuerID");
+					grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lectuerID1));
+				}
+			}
+
+			client.sendToClient(new Response("ImportLectuerData", grades));
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+	}
+
+	private void importLectuerDataTenths(String gID, ConnectionToClient client) throws IOException, SQLException {
+		ArrayList<Grades> grades = new ArrayList<>();
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			Statement stmt = conn.createStatement();
+			if (gID == null) {
+				String command = String.format("SELECT * FROM cems.grades");
+				ResultSet rs = stmt.executeQuery(command); // send student data to the client
+
+				while (rs.next()) {
+					// get fields from resultSet
+					String exemID1 = rs.getString("examID");
+					String studentID1 = rs.getString("studentID");
+					String courseID1 = rs.getString("courseID");
+					int grade1 = rs.getInt("grade");
+					String lecturerID1 = rs.getString("lectuerID");
+					grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lecturerID1));
+
+				}
+			} else {
+				String command = String.format("SELECT * FROM grades WHERE lectuerID=" + gID);
+				ResultSet rs = stmt.executeQuery(command);// send lecture to the client
+				////
+				while (rs.next()) {
+					// get fields from resultSet
+					String exemID1 = rs.getString("examID");
+					String studentID1 = rs.getString("studentID");
+					String courseID1 = rs.getString("courseID");
+					int grade1 = rs.getInt("grade");
+					String lectuerID1 = rs.getString("lectuerID");
+					grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lectuerID1));
+				}
+			}
+
+			client.sendToClient(new Response("ImportLectuerDataTenths", grades));
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+	}
+
+	private void importCourseData(String gID, ConnectionToClient client) throws IOException {
+
+		ArrayList<Grades> grades = new ArrayList<>();
+		Connection conn;
+		try {
+			conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			Statement stmt = conn.createStatement();
+			if (gID == null) {
+				String command = String.format("SELECT * FROM cems.grades");
+				ResultSet rs = stmt.executeQuery(command); // send student data to the client
+
+				while (rs.next()) {
+					// get fields from resultSet
+					String exemID1 = rs.getString("examID");
+					String studentID1 = rs.getString("studentID");
+					String courseID1 = rs.getString("courseID");
+					int grade1 = rs.getInt("grade");
+					String lecturerID1 = rs.getString("lectuerID");
+					grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lecturerID1));
+
+				}
+			} else {
+				String command = String.format("SELECT *  FROM grades WHERE courseID=" + gID);
+				ResultSet rs = stmt.executeQuery(command);// send lecture to the client
+				while (rs.next()) {
+					// get fields from resultSet
+					String exemID1 = rs.getString("examID");
+					String studentID1 = rs.getString("studentID");
+					String courseID1 = rs.getString("courseID");
+					int grade1 = rs.getInt("grade");
+					String lecturerID1 = rs.getString("lectuerID");
+					grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lecturerID1));
+
+				}
+			}
+
+			client.sendToClient(new Response("ImportCourseData", grades));
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	private void importCourseDatatenths(String gID, ConnectionToClient client) throws IOException {
+		System.out.println("in importcourseid " + gID);
+		ArrayList<Grades> grades = new ArrayList<>();
+
+		Connection conn;
+		try {
+			conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+
+			Statement stmt = conn.createStatement();
+			String command = String.format("SELECT *  FROM grades WHERE courseID=" + gID);
+			ResultSet rs = stmt.executeQuery(command);// send lecture to the client
+			while (rs.next()) {
+				// get fields from resultSet
+				String exemID1 = rs.getString("examID");
+				String studentID1 = rs.getString("studentID");
+				String courseID1 = rs.getString("courseID");
+				int grade1 = rs.getInt("grade");
+				String lecturerID1 = rs.getString("lectuerID");
+				grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lecturerID1));
+				System.out.println("11");
+			}
+
+			client.sendToClient(new Response("ImportCourseDatatenths", grades));
+			System.out.println("sent to client");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	private void getSubjects(ConnectionToClient client) {
+
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			System.out.println("SQL connection succeed");
+			Statement stmt = conn.createStatement();
+			String command = "SELECT subject_name FROM subjects";
+			ResultSet rs = stmt.executeQuery(command);
+			ArrayList<String> subjects = new ArrayList<String>();
+			while (rs.next()) {
+				subjects.add(rs.getString("subject_name"));
+			}
+			for (String subject : subjects) {
+				System.out.println(subject);
+			}
+			Response response = new Response("Subjects", subjects);
+			client.sendToClient(response);
+		} catch (Exception ex) {
+			/* handle the error */
+			ex.printStackTrace();
+		}
+	}
+
+	// save the question in the DB
+	// uses Question class from cemsShared
+
+	private void writeQuestion(Question question, ConnectionToClient client) {
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			System.out.println("SQL connection succeed");
+			int courseId = getCourseId(question.getCourse(), conn);
+			Statement stmt = conn.createStatement();
+			String command = "INSERT INTO questions (question_text,answer1,answer2,answer3,answer4,correct_answer,course_id) VALUES ('"
+					+ question.getQuestionDescription() + "','" + question.getAnswer1() + "','" + question.getAnswer2()
+					+ "','"
+					+ question.getAnswer3() + "','" + question.getAnswer4() + "','" + question.getCorrectAnswer()
+					+ "','" + courseId + "')";
+			stmt.executeUpdate(command);
+
+		} catch (Exception ex) {
+			/* handle the error */
+			ex.printStackTrace();
 		}
 	}
 
@@ -96,12 +761,32 @@ public class EchoServer extends AbstractServer {
 			}
 			updateUserLoggedIn(loginInfo, conn);
 			addUserToLoggedTable(conn);
-			client.sendToClient(user);
+			Response response = new Response("LOGIN_success", user);
+			client.sendToClient(response);
 
 		} catch (Exception ex) {
 			/* handle the error */
 			ex.printStackTrace();
 		}
+	}
+
+	private int getCourseId(String courseName, Connection conn) {
+		Statement stmt;
+		String command;
+		ResultSet rs;
+		int courseId = -1;
+		try {
+			stmt = conn.createStatement();
+			command = String.format("SELECT course_id FROM courses WHERE course_name='%s'", courseName);
+			rs = stmt.executeQuery(command);
+			if (rs.next())
+				return rs.getInt("course_id");
+		} catch (Exception ex) {
+			/* handle the error */
+			ex.printStackTrace();
+		}
+		return courseId;
+
 	}
 
 	// function to add all the users that are logged in to the logged to the table
@@ -151,84 +836,12 @@ public class EchoServer extends AbstractServer {
 				rs.getInt(7));
 	}
 
-	private void searchExam(Request rq, ConnectionToClient client) {
-		String examID = (String) rq.getRequestParam();
-		String status = rq.getRequestType();// approve or reject
-
-		try {
-			// Update the time of the exam
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
-					"Aa123456");
-			Statement stmt = conn.createStatement();
-			String command = String.format("SELECT * FROM requests WHERE examID = %s", examID);
-			ResultSet rs = stmt.executeQuery(command);
-			switch (status) {
-			case "APPROVE":
-
-				while (rs.next()) {
-					int extraTime = rs.getInt("ExtraTime");
-					String requestedBy = rs.getString("RequestedBy");
-
-					Statement st = conn.createStatement();
-					int updateStmt = st.executeUpdate(
-							String.format("UPDATE exams SET time = time + %d WHERE examID = %s", extraTime, examID));
-					Statement statment = conn.createStatement();
-					int rowsAffected = statment
-							.executeUpdate(String.format("DELETE FROM requests WHERE examID=%s", examID));
-
-					Request request = new Request("Who Requested Extra Time", requestedBy);
-					client.sendToClient(request);
-
-				}
-				break;
-			case "REJECT":
-				while (rs.next()) {
-					Statement st = conn.createStatement();
-					int rowsAffected = st.executeUpdate(String.format("DELETE FROM requests WHERE examID=%s", examID));
-
-				}
-
-			}
-
-			// Close the resources
-			rs.close();
-			stmt.close();
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-	}
-
-	private void getRequestTimeInfo(RequestTime requestTime, ConnectionToClient client) {
-
-		try {
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
-					"Aa123456");
-			ArrayList<RequestTime> requestList = new ArrayList<RequestTime>();
-			Statement stmt = conn.createStatement();
-			String command = String.format("SELECT * FROM cems.requests");
-			ResultSet rs = stmt.executeQuery(command);
-			while (rs.next()) {
-				String examID = rs.getString(1);
-				String IDRequest = rs.getString(2);
-				String RequestBy = rs.getString(3);
-				String reason = rs.getString(4);
-				int extraTime = rs.getInt(5);
-				RequestTime request = new RequestTime(examID, IDRequest, RequestBy, extraTime, reason);
-				requestList.add(request);
-			}
-			client.sendToClient(requestList);
-		} catch (Exception ex) {
-			/* handle the error */
-			ex.printStackTrace();
-		}
-	}
-
 	private void logOut(LogInInfo login, ConnectionToClient client) {
 
-		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
-				"Aa123456"); Statement stmt = conn.createStatement()) {
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			Statement stmt = conn.createStatement();
 			stmt.executeUpdate(String.format("UPDATE users SET isLogged=0 WHERE userName='%s' AND password ='%s'",
 					login.getUserName(), login.getPassword()));
 			addUserToLoggedTable(conn);
@@ -237,87 +850,7 @@ public class EchoServer extends AbstractServer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
 
-	private void importID(String gID, ConnectionToClient client) throws IOException {
-		ArrayList<Grades> grades= new ArrayList<>();
-		System.out.println("THE ID IS");
-		//String ID = (String) gID.getRequestParam();
-		System.out.println(gID.toString());
-		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
-				"Aa123456"); 
-				Statement stmt = conn.createStatement()) {
-			String command = String.format("SELECT * FROM cems.users WHERE id="+gID);
-			ResultSet rs = stmt.executeQuery(command);
-			if (rs.next()) {
-				// get fields from resultSet
-				Integer id = rs.getInt("id");
-				String firstName = rs.getString("firstName");
-				String lastName = rs.getString("LastName");
-				String userName = rs.getString("userName");
-				int role = rs.getInt("role");
-				// RequestTime request = new RequestTime(IDRequest, CourseName, RequestBy,extraTime, reason);
-				// requestList.add(request);
-				if (role == 0) { // if its student
-					 command = String.format("SELECT * FROM cems.grades WHERE studentID="+gID);
-					ResultSet rs2 = stmt.executeQuery(command); //send student data to the client
-					while(rs2.next()) {
-						// get fields from resultSet
-						String exemID1= rs2.getString("examID");
-						String studentID1 = rs2.getString("studentID");
-						String courseID1 = rs2.getString("courseID");
-						int grade1 = rs2.getInt("grade");
-						int dataof = rs2.getInt("dataOf");
-						String lectuerID=rs2.getString("lectuerID");
-						grades.add(new Grades(exemID1, studentID1,courseID1,grade1,dataof,lectuerID));
-				
-					}
-					client.sendToClient(grades);
-					}
-				
-				if (role == 1) { // if its lecture
-					 command = String.format("SELECT * FROM grades WHERE lectureID="+gID);
-					ResultSet rs2 = stmt.executeQuery(command);//send lecture to the client
-					////
-					while(rs2.next()) {
-						// get fields from resultSet
-						String exemID1= rs2.getString("examID");
-						String studentID1 = rs2.getString("studentID");
-						String courseID1 = rs2.getString("courseID");
-						int grade1 = rs2.getInt("grade");
-						int dataof = rs2.getInt("dataOf");
-						String lectuerID=rs2.getString("lectuerID");
-						grades.add(new Grades(exemID1, studentID1,courseID1,grade1,dataof,lectuerID));
-					}
-					
-					client.sendToClient(grades);
-					}
-				
-				}
-				
-				else {//if its course
-					 command = String.format("SELECT *  FROM grades WHERE courseID="+gID);
-					ResultSet rs2 = stmt.executeQuery(command);//send lecture to the client
-					while(rs2.next()) {
-						// get fields from resultSet
-						String exemID1= rs2.getString("examID");
-						String studentID1 = rs2.getString("studentID");
-						String courseID1 = rs2.getString("courseID");
-						int grade1 = rs2.getInt("grade");
-						int dataof = rs2.getInt("dataOf");
-						String lectuerID=rs2.getString("lectuerID");
-						grades.add(new Grades(exemID1, studentID1,courseID1,grade1,dataof,lectuerID));
-					}
-					
-					client.sendToClient(grades);
-					}
-				
-			
-			// client.sendToClient(requestList);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	/**
@@ -338,7 +871,7 @@ public class EchoServer extends AbstractServer {
 		System.out.println("Server has stopped listening for connections.");
 	}
 
-	// Class methods *****************
+	// Class methods ***************************************************
 
 	/**
 	 * This method is responsible for the creation of the server instance (there is
@@ -365,6 +898,4 @@ public class EchoServer extends AbstractServer {
 			System.out.println("ERROR - Could not listen for clients!");
 		}
 	}
-
-}
-// End of EchoServer class
+}///original

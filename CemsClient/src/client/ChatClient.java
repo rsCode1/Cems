@@ -38,6 +38,7 @@ public class ChatClient extends AbstractClient
 	 *
 	 * @param msg The message from the server.
 	 */
+	@SuppressWarnings("unchecked")
 	public void handleMessageFromServer(Object msg) {
 
 		if (msg instanceof Users || msg == null) {
@@ -55,27 +56,27 @@ public class ChatClient extends AbstractClient
 
 		}
 		if (msg instanceof ArrayList<?>) {
-		
-			if(	((ArrayList) msg).get(0)instanceof RequestTime) {
-			hdController.UpdateRequestTime((ArrayList<RequestTime>) msg);
-			for (RequestTime rt : (ArrayList<RequestTime>) msg) {
-				System.out.println("111" + rt.toString());
 
+			if (((ArrayList) msg).get(0) instanceof RequestTime) {
+				hdController.UpdateRequestTime((ArrayList<RequestTime>) msg);
+				for (RequestTime rt : (ArrayList<RequestTime>) msg) {
+					System.out.println("111" + rt.toString());
+
+				}
 			}
-			}
-			if(	((ArrayList) msg).get(0) instanceof Grades) {
+			if (((ArrayList) msg).get(0) instanceof Grades) {
 				System.out.println("BEFOR");
-				Grades grade=(Grades)msg;
-				if(grade.getDataOf()==0) {
-				hdController.ImportLectueGradeStatistics((ArrayList<Grades>) msg);
-				System.out.println("AFTER");
-			}
-				if(grade.getDataOf()==1) {
+				Grades grade = (Grades) msg;
+				if (grade.getDataOf() == 0) {
+					hdController.ImportLectueGradeStatistics((ArrayList<Grades>) msg);
+					System.out.println("AFTER");
+				}
+				if (grade.getDataOf() == 1) {
 					hdController.ImportStudentGradeStatistics((ArrayList<Grades>) msg);
 				}
-				if(grade.getDataOf()==2) {
+				if (grade.getDataOf() == 2) {
 					hdController.ImportCourseGradeStatistics((ArrayList<Grades>) msg);
-				
+
 				}
 			}
 		}
@@ -83,11 +84,20 @@ public class ChatClient extends AbstractClient
 			Request rq = (Request) msg;
 			switch (rq.getRequestType()) {
 			case "Who Requested Extra Time":
+				hdController.setTest((String) rq.getRequestParam());
+				hdController.refreshTable1();
 				hdController.showpPopupApprove((String) rq.getRequestParam());
 				break;
+			case "RETURN-STUDENT-GRADES":
+				ArrayList<String> returnarr = (ArrayList<String>) rq.getRequestParam();
+				for (String str : returnarr)
+					System.out.println(str.toString());
+				hdController.setGeneralArray(returnarr);
+				break;
 			}
+
 		}
-		
+
 	}
 
 	public void setController(LoginScreenController controller) {

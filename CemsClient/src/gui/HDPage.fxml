@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -7,16 +8,18 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="617.0" prefWidth="942.0" styleClass="background" stylesheets="@../../../CemsShared/src/Styles/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.HDController">
+<AnchorPane fx:id="anchorpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="617.0" prefWidth="942.0" styleClass="background" stylesheets="@../../../CemsShared/src/Styles/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.HDController">
    <children>
       <Label layoutX="261.0" layoutY="15.0" prefHeight="48.0" prefWidth="386.0" text="Welcome Head Of Departmant" AnchorPane.leftAnchor="261.0" AnchorPane.rightAnchor="295.0" AnchorPane.topAnchor="15.0">
          <font>
@@ -60,7 +63,7 @@
                               <Font size="17.0" />
                            </font>
                         </Label>
-                        <Label fx:id="testlbl" layoutX="387.0" layoutY="396.0" text="Label" />
+                        <Label fx:id="testlbl" layoutX="387.0" layoutY="396.0" />
                      </children>
                   </AnchorPane>
             </content>
@@ -69,7 +72,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="ShowLectuerBTN" layoutX="54.0" layoutY="247.0" mnemonicParsing="false" onAction="#ShowGradeStatistics" prefHeight="31.0" prefWidth="200.0" text="Show Statistics" />
+                        <Button fx:id="ShowLectuerBTN" layoutX="41.0" layoutY="145.0" mnemonicParsing="false" onAction="#ShowGradeStatistics" prefHeight="31.0" prefWidth="200.0" text="Show Statistics" />
                         <Label layoutX="401.0" layoutY="25.0" prefHeight="31.0" prefWidth="206.0" text="Score Distribution">
                            <font>
                               <Font name="System Bold" size="20.0" />
@@ -87,14 +90,14 @@
                             <NumberAxis side="LEFT" />
                           </yAxis>
                         </BarChart>
-                        <TextField fx:id="LectuerID" layoutX="60.0" layoutY="180.0" onAction="#ShowGradeStatistics" />
-                        <Label layoutX="30.0" layoutY="185.0" text="ID:" />
+                        <TextField fx:id="LectuerID" layoutX="66.0" layoutY="86.0" onAction="#ShowGradeStatistics" />
+                        <Label layoutX="36.0" layoutY="91.0" text="ID:" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please Enter Student ID :" wrappingWidth="178.39999999999986">
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font>
                         </Text>
-                        <Text layoutX="58.0" layoutY="146.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please Enter Lectuer ID:" textAlignment="CENTER" wrappingWidth="178.0" />
+                        <Text layoutX="36.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please Enter Lectuer ID:" textAlignment="CENTER" wrappingWidth="178.0" />
                         <Label layoutX="641.0" layoutY="32.0" text="Lectuer name:" />
                         <TextField fx:id="LectuerName" layoutX="737.0" layoutY="28.0" />
                      </children>
@@ -110,7 +113,7 @@
                               <Font name="System Bold" size="15.0" />
                            </font>
                         </Text>
-                        <Button fx:id="ShowStudentBTN" layoutX="28.0" layoutY="270.0" mnemonicParsing="false" onAction="#ShowGradeStatistics" prefHeight="38.0" prefWidth="244.0" text="Show Student Statistics " AnchorPane.leftAnchor="28.0">
+                        <Button fx:id="ShowStudentBTN" layoutX="14.0" layoutY="250.0" mnemonicParsing="false" onAction="#ShowGradeStatistics" prefHeight="38.0" prefWidth="244.0" text="Show Student Statistics " AnchorPane.leftAnchor="14.0">
                            <font>
                               <Font size="8.0" />
                            </font></Button>
@@ -148,7 +151,7 @@
                               <Font name="System Bold" size="15.0" />
                            </font>
                         </Text>
-                        <Button fx:id="ShowCourseBTN" layoutX="45.0" layoutY="235.0" mnemonicParsing="false" onAction="#ShowGradeStatistics" prefHeight="31.0" prefWidth="170.0" text="Show Course Statistics" AnchorPane.leftAnchor="45.0" />
+                        <Button fx:id="ShowCourseBTN" layoutX="24.0" layoutY="239.0" mnemonicParsing="false" onAction="#ShowGradeStatistics" prefHeight="31.0" prefWidth="230.0" text="Show Course Statistics" AnchorPane.leftAnchor="24.0" />
                         <Label layoutX="303.0" layoutY="21.0" prefHeight="31.0" prefWidth="206.0" text="Score Distribution">
                            <font>
                               <Font name="System Bold" size="23.0" />
@@ -173,6 +176,61 @@
                      </children>
                   </AnchorPane>
                </content>
+            </Tab>
+            <Tab text="Free Search">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <BarChart fx:id="generalScreenBarChart" layoutX="297.0" layoutY="84.0" prefHeight="326.0" prefWidth="591.0">
+                           <xAxis>
+                              <CategoryAxis side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                              <NumberAxis side="LEFT" />
+                           </yAxis>
+                        </BarChart>
+                        <Label alignment="CENTER" layoutX="1.0" layoutY="39.0" prefHeight="18.0" prefWidth="122.0" text="i want to watch:" />
+                        <VBox layoutX="119.0" layoutY="39.0" prefHeight="66.0" prefWidth="100.0" spacing="4.0">
+                           <children>
+                              <RadioButton fx:id="medianrb" mnemonicParsing="false" onAction="#pressInfoRadioButton" text="median" />
+                              <RadioButton fx:id="gparb" mnemonicParsing="false" onAction="#pressInfoRadioButton" text="GPA" />
+                              <RadioButton fx:id="deistributionrb" mnemonicParsing="false" onAction="#pressInfoRadioButton" text="Distribution" />
+                           </children>
+                           <padding>
+                              <Insets bottom="1.0" left="4.0" right="1.0" top="1.0" />
+                           </padding>
+                        </VBox>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="5.0" layoutY="123.0" prefHeight="18.0" prefWidth="111.0" text="from the:" />
+                        <VBox layoutX="113.0" layoutY="123.0" prefHeight="85.0" prefWidth="94.0" spacing="4.0">
+                           <children>
+                              <RadioButton fx:id="lecturerrb" mnemonicParsing="false" onAction="#pressfromRadioButtonLecturer" text="lecturer" />
+                              <RadioButton fx:id="studentrb" mnemonicParsing="false" onAction="#pressfromRadioButtonStudent" text="student" />
+                              <RadioButton fx:id="courserb1" mnemonicParsing="false" onAction="#pressfromRadioButtonCourse" text="course" />
+                              <RadioButton fx:id="examrb" mnemonicParsing="false" onAction="#pressfromRadioButtonExam" text="exam" />
+                           </children>
+                           <padding>
+                              <Insets bottom="1.0" left="4.0" right="1.0" top="1.0" />
+                           </padding>
+                        </VBox>
+                        <Button layoutX="47.0" layoutY="361.0" mnemonicParsing="false" onAction="#pressShowResultButton" text="Show results" />
+                        <Label layoutX="370.0" layoutY="48.0" text="GPA :" />
+                        <Label layoutX="683.0" layoutY="48.0" text="Median :" />
+                        <TextField fx:id="gpaTxtField" layoutX="407.0" layoutY="44.0" />
+                        <TextField fx:id="medianTxtField" layoutX="739.0" layoutY="44.0" />
+                        <TextField fx:id="selectionNameTxtField" layoutX="115.0" layoutY="297.0" />
+                        <Label fx:id="wholbl" layoutX="35.0" layoutY="230.0" />
+                        <Label fx:id="checkinfolLabel" layoutX="33.0" layoutY="428.0" text="test label" />
+                        <Label fx:id="tt11" layoutX="40.0" layoutY="405.0" text="Label" />
+                        <Label fx:id="tt22" layoutX="40.0" layoutY="446.0" text="Label" />
+                        <Label fx:id="errlbl" alignment="CENTER" layoutY="105.0" prefHeight="18.0" prefWidth="268.0" text="Label" visible="false" />
+                        <Label fx:id="errlbl1" alignment="CENTER" layoutY="203.0" prefHeight="18.0" prefWidth="268.0" text="Label" visible="false" />
+                        <Label fx:id="checkedWholbl" alignment="CENTER" layoutX="5.0" layoutY="204.0" prefHeight="18.0" prefWidth="265.0" text="Label" visible="false" />
+                        <Label fx:id="wholbl1" alignment="CENTER" layoutX="3.0" layoutY="301.0" prefHeight="18.0" prefWidth="110.0" text="enter name :" />
+                        <Label layoutX="43.0" layoutY="213.0" />
+                        <Button fx:id="btn" layoutX="239.0" layoutY="401.0" mnemonicParsing="false" onAction="#handleAddDataButton" text="Button" />
+                     </children>
+                  </AnchorPane>
+              </content>
             </Tab>
         </tabs>
       </TabPane>
