@@ -143,11 +143,6 @@
             <ToggleGroup fx:id="correctAnswer1" />
          </toggleGroup>
       </RadioButton>
-      <Text fx:id="toolWriteQuestions" fill="#03573c" layoutX="431.0" layoutY="38.0" onMouseClicked="#showCreateQuestionFormTool" stroke="#02a894" strokeType="OUTSIDE" text="Write Questions">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Text>
       <Text fx:id="toolGrade" fill="#03573c" layoutX="890.0" layoutY="39.0" stroke="#02a894" strokeType="OUTSIDE" text="Grade">
          <font>
             <Font name="System Bold" size="18.0" />
