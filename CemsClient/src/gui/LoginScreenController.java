@@ -18,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import logic.LogInInfo;
 import logic.Request;
@@ -92,6 +93,13 @@ public class LoginScreenController {
 						lecturerController.setLecturerAndClient(user, client);
 					}
 					window.setScene(new Scene(root));
+					// Center the stage on the screen
+	                double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
+	                double screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
+	                double stageWidth = window.getWidth();
+	                double stageHeight = window.getHeight();
+	                window.setX((screenWidth - stageWidth) / 2);
+	                window.setY((screenHeight - stageHeight) / 2);
 					window.show();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
