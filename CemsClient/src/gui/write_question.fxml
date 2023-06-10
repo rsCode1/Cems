@@ -23,10 +23,30 @@
             <Image url="@images/background.jpeg" />
          </image>
       </ImageView>
-      <ComboBox fx:id="coursesComboBox" layoutX="44.0" layoutY="189.0" onAction="#btnSelectCourse" prefHeight="25.0" prefWidth="212.0" promptText="Select Course" />
-      <ComboBox fx:id="professionsComboBox" layoutX="44.0" layoutY="144.0" onAction="#btnSelectProfession" prefHeight="25.0" prefWidth="212.0" promptText="Select Subject" />
-      <Button fx:id="backBtn" layoutX="29.0" layoutY="619.0" mnemonicParsing="false" onAction="#backToMainScreen" prefHeight="35.0" prefWidth="74.0" text="back" />
-      <Label layoutX="47.0" layoutY="2.0" prefHeight="58.0" prefWidth="123.0" text="Cems" textFill="#00ffbd">
+      <ComboBox fx:id="coursesComboBox" layoutX="44.0" layoutY="189.0" prefHeight="25.0" prefWidth="212.0" promptText="Select Course" />
+      <ComboBox fx:id="professionsComboBox" layoutX="44.0" layoutY="144.0" prefHeight="25.0" prefWidth="212.0" promptText="Select Subject" />
+      <Button fx:id="backBtn" layoutX="23.0" layoutY="685.0" mnemonicParsing="false" onAction="#backToMainScreen" prefHeight="35.0" prefWidth="74.0" text="back" />
+      <Text fx:id="toolWriteQuestion" fill="#03573c" layoutX="456.0" layoutY="36.0" stroke="#02a894" strokeType="OUTSIDE" text="Write Questions">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="toolGrade" fill="#03573c" layoutX="915.0" layoutY="37.0" stroke="#02a894" strokeType="OUTSIDE" text="Grade">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="toolStatistics" fill="#03573c" layoutX="995.0" layoutY="37.0" stroke="#02a894" strokeType="OUTSIDE" text="Statistics">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="toolCreateExams" fill="#03573c" layoutX="618.0" layoutY="36.0" stroke="#02a894" strokeType="OUTSIDE" text="Create Exams">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Label layoutX="50.0" layoutY="-1.0" prefHeight="58.0" prefWidth="123.0" text="Cems" textFill="#00ffbd">
          <font>
             <Font name="Calibri Bold" size="50.0" />
          </font>

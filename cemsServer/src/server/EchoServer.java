@@ -18,6 +18,7 @@ import logic.LogInInfo;
 import logic.LoggedUsers;
 import logic.Question;
 import logic.Request;
+import logic.Response;
 import logic.Users;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
@@ -63,12 +64,70 @@ public class EchoServer extends AbstractServer {
 				case "writeQuestion":
 					writeQuestion((Question) request.getRequestParam(), client);
 					break;
+				case "getSubjects":
+					getSubjects(client);
+					break;
+				case "getCourses":
+					getCourses(client,(String)request.getRequestParam());
+					break;
+
 					
 
 				// Add more case statements for other request types
 			}
 		}
 	}
+
+	//same as getSubjects but for courses
+	private void getCourses(ConnectionToClient client,String subject){
+				try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			System.out.println("SQL connection succeed");
+			Statement stmt = conn.createStatement();
+			String command = "SELECT subject_id FROM subjects WHERE subject_name = '" + subject + "'";
+			ResultSet rs = stmt.executeQuery(command);
+			rs.next();
+			String subjectId=rs.getString("subject_id");
+			command = "SELECT course_name FROM courses WHERE subject_id = '" + subjectId + "'";
+			rs = stmt.executeQuery(command);
+			ArrayList<String> courses = new ArrayList<String>();
+			while (rs.next()) {
+				courses.add(rs.getString("course_name"));
+			}
+			Response response = new Response("Courses", courses);
+			client.sendToClient(response);
+		} catch (Exception ex) {
+			/* handle the error */
+			ex.printStackTrace();
+		}
+	}
+	private void getSubjects(ConnectionToClient client) {
+		
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			System.out.println("SQL connection succeed");
+			Statement stmt = conn.createStatement();
+			String command = "SELECT subject_name FROM subjects";
+			ResultSet rs = stmt.executeQuery(command);
+			ArrayList<String> subjects = new ArrayList<String>();
+			while (rs.next()) {
+				subjects.add(rs.getString("subject_name"));
+			}
+			for (String subject : subjects) {
+				System.out.println(subject);
+			}
+			Response response = new Response("Subjects", subjects);
+			client.sendToClient(response);
+		} catch (Exception ex) {
+			/* handle the error */
+			ex.printStackTrace();
+		}
+	}
+
+
+
 
 	// save the question in the DB
 	// uses Question class from cemsShared
@@ -106,7 +165,8 @@ public class EchoServer extends AbstractServer {
 			}
 			updateUserLoggedIn(loginInfo, conn);
 			addUserToLoggedTable(conn);
-			client.sendToClient(user);
+			Response response = new Response("LOGIN_success", user);
+			client.sendToClient(response);
 
 		} catch (Exception ex) {
 			/* handle the error */

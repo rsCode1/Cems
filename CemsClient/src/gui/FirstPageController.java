@@ -104,69 +104,48 @@ public class FirstPageController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LoginScreen.fxml")); // specify the path to the
-																								// new fxml file
-		Parent parent = null;
-		try {
-			parent = loader.load();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		Scene nextScene = new Scene(parent);
-
-		// Get the new scene's controller and pass the ChatClient instance to it
-		LoginScreenController controller = loader.getController();
-		controller.setClient(this.client, controller);
-		// Get the Stage information
-		Stage window = (Stage) logOutBtn.getScene().getWindow();
-		window.setScene(nextScene);
-		window.show();
-	}
-
-	@FXML
-	public void showCreateQuestionForm(ActionEvent event) {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/write_question.fxml")); // specify the path to
-																								// the new fxml file
-		Parent parent = null;
-		try {
-			parent = loader.load();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		Scene nextScene = new Scene(parent);
-
-		// Get the new scene's controller and pass the ChatClient instance to it
-		writeQuestionController controller = loader.getController();
-		controller.setClientAndLecturer(this.client, lecturer);
-		// Get the Stage information
-		Stage window = (Stage) writeQuestionBtn.getScene().getWindow();
-		window.setScene(nextScene);
-		window.show();
-	}
 	
-	@FXML
-	public void showCreateQuestionFormTool(MouseEvent event) {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/write_question.fxml")); // specify the path to the new fxml file
-		Parent parent=null;
-		try {
-			parent = loader.load();
-			
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		Scene nextScene = new Scene(parent);
-
+	
+	FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LoginScreen.fxml")); // specify the path to the new fxml file
+	Parent parent=null;
+	try {
+		parent = loader.load();
 		
-		// Get the new scene's controller and pass the ChatClient instance to it
-		writeQuestionController controller = loader.getController();
-		controller.setClientAndLecturer(this.client,lecturer);
-		// Get the Stage information
-		Stage window = (Stage) writeQuestionBtn.getScene().getWindow();
-		window.setScene(nextScene);
-		window.show();
+	}catch (Exception e) {
+		e.printStackTrace();
+	}
+    Scene nextScene = new Scene(parent);
+    
+    // Get the new scene's controller and pass the ChatClient instance to it
+    LoginScreenController controller = loader.getController();
+    controller.setClient(this.client,controller);
+
+    // Get the Stage information
+    Stage window = (Stage) logOutBtn.getScene().getWindow();
+    window.setScene(nextScene);
+    window.show();
+}
+
+@FXML
+public void showCreateQuestionForm(ActionEvent event) {
+	FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/write_question.fxml")); // specify the path to the new fxml file
+	Parent parent=null;
+	try {
+		parent = loader.load();
+		
+	}catch (Exception e) {
+		e.printStackTrace();
+	}
+	Scene nextScene = new Scene(parent);
+	
+	// Get the new scene's controller and pass the ChatClient instance to it
+	writeQuestionController controller = loader.getController();
+	controller.setClientAndLecturer(this.client,lecturer);
+	client.setController(controller);
+	// Get the Stage information
+	Stage window = (Stage) writeQuestionBtn.getScene().getWindow();
+	window.setScene(nextScene);
+	window.show();
 
 
 	}
