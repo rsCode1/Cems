@@ -39,7 +39,7 @@
             </DropShadow>
          </effect>
       </Label>
-      <Label layoutX="383.0" layoutY="94.0" prefHeight="58.0" prefWidth="301.0" text="Welcome Anat!" textFill="#1e1f26">
+      <Label layoutX="383.0" layoutY="94.0" prefHeight="58.0" prefWidth="180.0" text="Welcome" textFill="#1e1f26">
          <font>
             <Font name="Calibri" size="41.0" />
          </font>
@@ -52,11 +52,11 @@
                </color>
             </InnerShadow>
          </effect></Button>
-      <TableView layoutX="200.0" layoutY="201.0" prefHeight="122.0" prefWidth="701.0">
+      <TableView fx:id="ongoingExamsTable" layoutX="200.0" layoutY="201.0" prefHeight="122.0" prefWidth="701.0">
          <columns>
-            <TableColumn prefWidth="218.0" text="Subject" />
-            <TableColumn prefWidth="234.0" text="Exam" />
-            <TableColumn prefWidth="252.0" text="Time started" />
+            <TableColumn fx:id="ongoingTableSubject" prefWidth="218.0" text="Subject" />
+            <TableColumn fx:id="ongoingTableExam" prefWidth="234.0" text="Exam" />
+            <TableColumn fx:id="ongoingTableTime" prefWidth="252.0" text="Time started" />
             <TableColumn prefWidth="509.0" text="qustion" />
          </columns>
       </TableView>
@@ -65,32 +65,12 @@
             <Font name="Calibri" size="16.0" />
          </font>
       </Label>
-      <Text fill="#03573c" layoutX="508.0" layoutY="40.0" stroke="#02a894" strokeType="OUTSIDE" text="Create">
-         <font>
-            <Font name="System Bold" size="21.0" />
-         </font>
-      </Text>
-      <Text fill="#03573c" layoutX="844.0" layoutY="40.0" stroke="#02a894" strokeType="OUTSIDE" text="Grade">
-         <font>
-            <Font name="System Bold" size="21.0" />
-         </font>
-      </Text>
-      <Text fill="#03573c" layoutX="954.0" layoutY="40.0" stroke="#02a894" strokeType="OUTSIDE" text="Statistics">
-         <font>
-            <Font name="System Bold" size="21.0" />
-         </font>
-      </Text>
-      <Text fill="#03573c" layoutX="633.0" layoutY="40.0" stroke="#02a894" strokeType="OUTSIDE" text="Ongoing exams">
-         <font>
-            <Font name="System Bold" size="21.0" />
-         </font>
-      </Text>
       <Label layoutX="477.0" layoutY="333.0" prefHeight="35.0" prefWidth="114.0" text="Quick actions:" textFill="#1e1f26">
          <font>
             <Font name="Calibri" size="16.0" />
          </font>
       </Label>
-      <Button layoutX="437.0" layoutY="370.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="194.0" style="-fx-background-color: #02c3bc;" text="Write a question">
+      <Button fx:id="writeQuestionBtn" layoutX="437.0" layoutY="370.0" mnemonicParsing="false" onAction="#showCreateQuestionForm" prefHeight="49.0" prefWidth="194.0" style="-fx-background-color: #02c3bc;" text="Write a question">
          <effect>
             <InnerShadow>
                <color>
@@ -102,7 +82,7 @@
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
-      <Button layoutX="437.0" layoutY="434.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="194.0" style="-fx-background-color: #02c3bc;" text="Create an Exam">
+      <Button fx:id="CreateExamBtn" layoutX="437.0" layoutY="434.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="194.0" style="-fx-background-color: #02c3bc;" text="Create an Exam">
          <effect>
             <InnerShadow>
                <color>
@@ -114,7 +94,7 @@
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
-      <Button layoutX="437.0" layoutY="498.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="194.0" style="-fx-background-color: #37da83;" text="Start an Exam">
+      <Button fx:id="StartExamBtn" layoutX="437.0" layoutY="498.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="194.0" style="-fx-background-color: #37da83;" text="Start an Exam">
          <effect>
             <InnerShadow>
                <color>
@@ -126,5 +106,35 @@
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
+      <Text fx:id="toolWriteQuestions" fill="#03573c" layoutX="431.0" layoutY="38.0" stroke="#02a894" strokeType="OUTSIDE" text="Write Questions">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="toolGrade" fill="#03573c" layoutX="890.0" layoutY="39.0" stroke="#02a894" strokeType="OUTSIDE" text="Grade">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="toolStatistics" fill="#03573c" layoutX="970.0" layoutY="39.0" stroke="#02a894" strokeType="OUTSIDE" text="Statistics">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="toolCreateExams" fill="#03573c" layoutX="593.0" layoutY="38.0" stroke="#02a894" strokeType="OUTSIDE" text="Create Exams">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="toolTimeRequest" fill="#03573c" layoutX="741.0" layoutY="38.0" stroke="#02a894" strokeType="OUTSIDE" text="Time Request">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Label fx:id="lecturerName" layoutX="560.0" layoutY="94.0" prefHeight="58.0" prefWidth="180.0" text="&quot;name&quot;" textFill="#1e1f26">
+         <font>
+            <Font name="Calibri" size="41.0" />
+         </font>
+      </Label>
    </children>
 </Pane>
