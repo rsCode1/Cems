@@ -64,14 +64,20 @@ public class LoginScreenController {
 			String Studentpath = "/gui/StudentPage.fxml";
 			String Lacturertpath = "/gui/FirstPage.fxml";
 			String HDpath = "/gui/HDPage.fxml";
+			
 
 			if (user == null) {
 				// show error text
+				System.out.println("doesnt get here");
 
 				loginStatus.setText("Username or password is incorrect, please try again!");
 			} else {
 				FXMLLoader loader = null;
 				loginStatus.setText("");
+
+				
+
+
 
 				if (user.getRole() == 0) {
 					loader = new FXMLLoader(getClass().getResource(Studentpath));

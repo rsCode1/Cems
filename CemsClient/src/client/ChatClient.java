@@ -8,6 +8,7 @@ import client.*;
 import gui.ConnectToServerScreenController;
 import gui.LoginScreenController;
 import gui.writeQuestionController;
+import gui.createExamController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -28,88 +29,93 @@ import ocsf.client.*;
 public class ChatClient extends AbstractClient
 
 {
-  private LoginScreenController loginScreecontroller;
-  private writeQuestionController writeQuestionController;
+	private LoginScreenController loginScreecontroller;
+	private writeQuestionController writeQuestionController;
+	private createExamController createExamController;
 
-  private String ip = "";
-  private int portServer;
-  // Instance variables **********************************************
+	private String ip = "";
+	private int portServer;
+	// Instance variables **********************************************
 
-  public ChatClient(String host, int port, Object clientUI)
-      throws IOException {
-    super(host, port);
-    ip = host;
-    this.portServer = port;
-  }
-  // this is new line
-  // Instance methods ************************************************
+	public ChatClient(String host, int port, Object clientUI) throws IOException {
+		super(host, port);
+		ip = host;
+		this.portServer = port;
+	}
+	// this is new line
+	// Instance methods ************************************************
 
-  /**
-   * This method handles all data that comes in from the server.
-   *
-   * @param msg The message from the server.
-   */
-  public void handleMessageFromServer(Object msg) {
+	/**
+	 * This method handles all data that comes in from the server.
+	 *
+	 * @param msg The message from the server.
+	 */
+	public void handleMessageFromServer(Object msg) {
 
-    if (msg instanceof Response){
-      Response response = (Response) msg;
-      switch(response.getResponseType()){
-        case "LOGIN_success":
-            login((Users) response.getResponseParam());
-            break;
-        case "Subjects":
-          ArrayList <String> subjectsArr = (ArrayList<String>) response.getResponseParam();
-          writeQuestionController.updateSubjectsComboBox(subjectsArr);
-          System.out.println("hello");
-          break;
-      
-        case "Courses":
-          ArrayList <String> coursesArr = (ArrayList<String>) response.getResponseParam();
-          writeQuestionController.updateCoursesComboBox(coursesArr);
-          System.out.println("hello2");
-          break;
-    }
-    }
+		if (msg instanceof Response) {
+			Response response = (Response) msg;
+			switch (response.getResponseType()) {
+			case "LOGIN_success":
+				login((Users) response.getResponseParam());
+				break;
+			case "Subjects":
+				ArrayList<String> subjectsArr = (ArrayList<String>) response.getResponseParam();
+				writeQuestionController.updateSubjectsComboBox(subjectsArr);
+				System.out.println("hello");
+				break;
 
-  }
-  private void  login (Users user)  {
+			case "Courses":
+				ArrayList<String> coursesArr = (ArrayList<String>) response.getResponseParam();
+				writeQuestionController.updateCoursesComboBox(coursesArr);
+				System.out.println("hello2");
+				break;
+			}
+		}
 
-      System.out.println(user);
-      try {
-        loginScreecontroller.ShowUserWelcomeScreen(user);
-      } catch (Exception e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-      System.out.println(user.getRole());
- 
-  }
+	}
 
-  public void setController(LoginScreenController controller) {
-    this.loginScreecontroller = controller;
-  }
-    public void setController(writeQuestionController controller) {
-    this.writeQuestionController = controller;
-  }
+	private void login(Users user) {
 
-  /**
-   * This method terminates the client.
-   */
-  public void quit() {
+		System.out.println(user);
+		try {
+			loginScreecontroller.ShowUserWelcomeScreen(user);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(user.getRole());
 
-    try {
-      closeConnection();
-    } catch (IOException e) {
-    }
-    System.exit(0);
-  }
+	}
 
-  public String getIp() {
-    return ip;
-  }
+	public void setController(LoginScreenController controller) {
+		this.loginScreecontroller = controller;
+	}
 
-  public int getPortServer() {
-    return portServer;
-  }
+	public void setController(writeQuestionController controller) {
+		this.writeQuestionController = controller;
+	}
+	public void setController(createExamController controller) {
+		this.createExamController = controller;
+	}
+
+	/**
+	 * This method terminates the client.
+	 */
+	public void quit() {
+
+		try {
+			closeConnection();
+		} catch (IOException e) {
+		}
+		System.exit(0);
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public int getPortServer() {
+		return portServer;
+	}
 }
 // End of ChatClient class
