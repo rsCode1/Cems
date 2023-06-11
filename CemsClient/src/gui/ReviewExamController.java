@@ -8,7 +8,10 @@ import client.ChatClient;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -17,6 +20,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import logic.Exam;
 import logic.Question;
 import logic.Request;
@@ -74,6 +78,33 @@ public class ReviewExamController implements Initializable {
     private Text testTiime;
     @FXML
     private Label errLabel;
+    @FXML
+    private Button backBtn;
+
+
+    @FXML
+    public void goBack(ActionEvent event) {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/create_exam.fxml")); // specify the path to the
+																							// main screen FXML file
+		Parent parent = null;
+		try {
+			parent = loader.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Scene mainScene = new Scene(parent);
+
+		// Get the main screen's controller and pass the ChatClient and lecturer
+		// instances to it
+		createExamController controller = loader.getController();
+		controller.setClientAndLecturer(client,exam.getLecturer());
+        client.setController(controller);
+		// Get the Stage information
+		Stage window = (Stage) backBtn.getScene().getWindow();
+		window.setScene(mainScene);
+		window.show();
+
+    }
 
 
     public void setLabel() {

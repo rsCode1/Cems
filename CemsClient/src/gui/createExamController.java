@@ -123,26 +123,7 @@ public class createExamController implements Initializable {
 				errLabel.setText("Please enter a valid time");
 				return;
 			}
-			// check if the exam time is valid
-			if (Integer.parseInt(setTimeTextField.getText()) < 1) {
-				errLabel.setText("Please enter a valid time");
-				return;
-			}
-			// check if the exam time is valid
-			if (Integer.parseInt(setTimeTextField.getText()) > 120) {
-				errLabel.setText("Please enter a valid time");
-				return;
-			}
-			// check if the exam time is valid
-			if (Integer.parseInt(setTimeTextField.getText()) % 5 != 0) {
-				errLabel.setText("Please enter a valid time");
-				return;
-			}
-			// check if the exam time is valid
-			if (Integer.parseInt(setTimeTextField.getText()) > 120) {
-				errLabel.setText("Please enter a valid time");
-				return;
-			}
+
 			// check if the exam time is valid
 			if (Integer.parseInt(setTimeTextField.getText()) < 1) {
 				errLabel.setText("Please enter a valid time");
