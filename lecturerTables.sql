@@ -52,6 +52,7 @@ DROP TABLE IF EXISTS `exam_questions`;
 CREATE TABLE `exam_questions` (
   `exam_id` int NOT NULL,
   `question_id` int NOT NULL,
+  `score` int DEFAULT NULL,
   PRIMARY KEY (`exam_id`,`question_id`),
   KEY `question_id` (`question_id`),
   CONSTRAINT `exam_questions_ibfk_1` FOREIGN KEY (`exam_id`) REFERENCES `exams` (`exam_id`),
@@ -79,6 +80,8 @@ CREATE TABLE `exams` (
   `exam_id` int NOT NULL AUTO_INCREMENT,
   `course_name` varchar(255) NOT NULL,
   `lecturer_id` int NOT NULL,
+  `lecturer_comments` text,
+  `student_comments` text,
   PRIMARY KEY (`exam_id`),
   KEY `lecturer_id` (`lecturer_id`),
   CONSTRAINT `exams_ibfk_1` FOREIGN KEY (`lecturer_id`) REFERENCES `users` (`id`)
@@ -118,7 +121,7 @@ CREATE TABLE `questions` (
   CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
   CONSTRAINT `questions_ibfk_2` FOREIGN KEY (`lecturer_id`) REFERENCES `users` (`id`),
   CONSTRAINT `questions_chk_1` CHECK ((`correct_answer` between 1 and 4))
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -127,7 +130,7 @@ CREATE TABLE `questions` (
 
 LOCK TABLES `questions` WRITE;
 /*!40000 ALTER TABLE `questions` DISABLE KEYS */;
-INSERT INTO `questions` VALUES (2,'dsadsadsa','dsadsa','dsadsa','dsa','dsadsa',1,2,2,'Jane Smith'),(3,'helllooo','answer11','answer22','answer33','answer44',1,4,2,'Jane Smith'),(4,'heeeeee','2131231','sdadwa','xz ','    cxzcxz',4,10,2,'Jane Smith'),(5,'heleleleolpwe','aaa','bbb','ccc','ddd',3,8,2,'Jane Smith'),(6,'dsadsa','dsadsa','dsadsa','dsadsa','dsadsa',2,8,2,'Jane Smith'),(7,'dsadsa','dsa','dsa','dsa','dsa',2,4,2,'Jane Smith'),(8,'dsadsa','dsadsa','dsadsa','dsa','dasdsadsa',4,1,2,'Jane Smith'),(9,'test','a','b','c','d',3,12,2,'Jane Smith'),(10,'test2','aaaaaa','bbbbb','cccc','ddddd',2,15,2,'Jane Smith');
+INSERT INTO `questions` VALUES (2,'dsadsadsa','dsadsa','dsadsa','dsa','dsadsa',1,2,2,'Jane Smith'),(3,'helllooo','answer11','answer22','answer33','answer44',1,4,2,'Jane Smith'),(4,'heeeeee','2131231','sdadwa','xz ','    cxzcxz',4,10,2,'Jane Smith'),(5,'heleleleolpwe','aaa','bbb','ccc','ddd',3,8,2,'Jane Smith'),(6,'dsadsa','dsadsa','dsadsa','dsadsa','dsadsa',2,8,2,'Jane Smith'),(7,'dsadsa','dsa','dsa','dsa','dsa',2,4,2,'Jane Smith'),(8,'dsadsa','dsadsa','dsadsa','dsa','dasdsadsa',4,1,2,'Jane Smith'),(9,'test','a','b','c','d',3,12,2,'Jane Smith'),(10,'test2','aaaaaa','bbbbb','cccc','ddddd',2,15,2,'Jane Smith'),(11,'ttttt','aadsads','adsacxv','432432','342432',3,12,2,'Jane Smith');
 /*!40000 ALTER TABLE `questions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -194,4 +197,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-11 11:39:44
+-- Dump completed on 2023-06-11 14:43:45
