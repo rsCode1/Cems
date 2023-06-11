@@ -157,5 +157,10 @@
             <Font size="16.0" />
          </font>
       </Text>
+      <Label fx:id="errLabel" layoutX="500.0" layoutY="650.0" prefHeight="35.0" prefWidth="310.0" textFill="#2fff00">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Label>
    </children>
 </Pane>

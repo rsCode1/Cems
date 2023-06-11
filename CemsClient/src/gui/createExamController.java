@@ -173,6 +173,7 @@ public class createExamController implements Initializable {
 			controller.setClient(client);
 			controller.setExam(exam);
 			controller.setDataTable();
+			client.setController(controller);
 			// Get the Stage information
 			Stage window = (Stage) reviewExamBtn.getScene().getWindow();
 			window.setScene(mainScene);

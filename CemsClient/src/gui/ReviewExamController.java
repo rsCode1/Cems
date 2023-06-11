@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -18,6 +19,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import logic.Exam;
 import logic.Question;
+import logic.Request;
 
 public class ReviewExamController implements Initializable {
 
@@ -70,9 +72,26 @@ public class ReviewExamController implements Initializable {
 
     @FXML
     private Text testTiime;
+    @FXML
+    private Label errLabel;
+
+
+    public void setLabel() {
+        Platform.runLater(() -> {
+        errLabel.setText("Exam saved successfully");
+        });
+    }
 
     @FXML
     void saveExam(ActionEvent event) {
+        exam.setLecturerComments(lecturetComments.getText());
+        exam.setStudentComments(studentComments.getText());
+        try {
+            client.sendToServer(new Request("saveExam", exam));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
     }
 
