@@ -161,7 +161,7 @@ public class writeQuestionController {
         int authorID = lecturer.getId();
         // create a Question object
         Question question = new Question(questionDescription, answer1, answer2, answer3, answer4, correctAnswer,
-                course, subject, authorID,author);
+                course, authorID,author);
         // create a Request object
         Request request = new Request("writeQuestion", question);
         // send the request to the server

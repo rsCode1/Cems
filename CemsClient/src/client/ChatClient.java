@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 import logic.LogInInfo;
 import logic.Response;
 import logic.Users;
-
+import logic.Question;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,14 +60,28 @@ public class ChatClient extends AbstractClient
 				break;
 			case "Subjects":
 				ArrayList<String> subjectsArr = (ArrayList<String>) response.getResponseParam();
-				writeQuestionController.updateSubjectsComboBox(subjectsArr);
+				if(writeQuestionController!=null)
+					writeQuestionController.updateSubjectsComboBox(subjectsArr);
+				if(createExamController!=null)
+					createExamController.updateSubjectsComboBox(subjectsArr);
+				
 				System.out.println("hello");
 				break;
 
 			case "Courses":
 				ArrayList<String> coursesArr = (ArrayList<String>) response.getResponseParam();
-				writeQuestionController.updateCoursesComboBox(coursesArr);
+				if(writeQuestionController!=null)
+					writeQuestionController.updateCoursesComboBox(coursesArr);
+				if(createExamController!=null)
+					createExamController.updateCoursesComboBox(coursesArr);
 				System.out.println("hello2");
+				break;
+
+			
+			case "QuestionsArray":
+				ArrayList<Question> questionsArr = (ArrayList<Question>) response.getResponseParam();
+				createExamController.upadteQuestionViewTable(questionsArr);
+				System.out.println("hello3");
 				break;
 			}
 		}

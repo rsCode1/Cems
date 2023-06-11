@@ -35,7 +35,7 @@
          </font>
       </Label>
       <Button fx:id="backBtn" layoutX="23.0" layoutY="682.0" mnemonicParsing="false" onAction="#backToMainScreen" prefHeight="35.0" prefWidth="74.0" text="back" />
-      <Button layoutX="887.0" layoutY="597.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="123.0" text="Review Exam">
+      <Button fx:id="reviewExamBtn" layoutX="887.0" layoutY="597.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="123.0" text="Review Exam">
          <effect>
             <DropShadow height="50.31" radius="23.9225" width="47.38">
                <color>
@@ -46,10 +46,10 @@
          <font>
             <Font name="System Bold" size="15.0" />
          </font></Button>
-      <TableView layoutX="40.0" layoutY="199.0" prefHeight="382.0" prefWidth="445.0">
+      <TableView fx:id="questionViewTABLE" layoutX="40.0" layoutY="199.0" prefHeight="382.0" prefWidth="445.0">
          <columns>
-            <TableColumn prefWidth="75.0" text="#" />
-            <TableColumn minWidth="0.0" prefWidth="273.6000518798828" text="question" />
+            <TableColumn fx:id="questionIdViewColumn" prefWidth="75.0" text="#" />
+            <TableColumn fx:id="questionTextColumn" minWidth="0.0" prefWidth="273.6000518798828" text="question" />
          </columns>
       </TableView>
       <Label layoutX="44.0" layoutY="167.0" prefHeight="35.0" prefWidth="149.0" text="Question view:" textFill="#1e1f26">
@@ -112,38 +112,39 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Button layoutX="272.0" layoutY="109.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="62.0" text="show" textAlignment="CENTER">
+      <Button fx:id="showQuestionView" layoutX="272.0" layoutY="109.0" mnemonicParsing="false" onAction="#showQuestionView" prefHeight="58.0" prefWidth="62.0" text="show" textAlignment="CENTER">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Button>
-      <TableView layoutX="587.0" layoutY="196.0" prefHeight="388.0" prefWidth="467.0">
+      <TableView fx:id="examViewTable" layoutX="587.0" layoutY="196.0" prefHeight="388.0" prefWidth="467.0">
          <columns>
-            <TableColumn prefWidth="75.0" text="#" />
-            <TableColumn minWidth="0.0" prefWidth="295.199951171875" text="question" />
+            <TableColumn fx:id="examViewIdColumn" prefWidth="75.0" text="#" />
+            <TableColumn fx:id="examViewQuestioColumn" minWidth="0.0" prefWidth="295.199951171875" text="question" />
             <TableColumn prefWidth="93.60009765625" text="score" />
          </columns>
       </TableView>
-      <Button layoutX="503.0" layoutY="278.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="59.0" text="Add" />
-      <Button layoutX="503.0" layoutY="406.0" mnemonicParsing="false" text="Remove" />
+      <Button fx:id="addQuestionBtn" layoutX="503.0" layoutY="278.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="59.0" text="Add" />
+      <Button fx:id="removeQuestionBtn" layoutX="503.0" layoutY="406.0" mnemonicParsing="false" text="Remove" />
       <Text layoutX="773.0" layoutY="174.0" strokeType="OUTSIDE" strokeWidth="0.0" />
       <Label layoutX="589.0" layoutY="160.0" prefHeight="35.0" prefWidth="149.0" text="Exam view:" textFill="#1e1f26">
          <font>
             <Font name="Calibri" size="16.0" />
          </font>
       </Label>
-      <Button layoutX="584.0" layoutY="594.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="74.0" text="set score" />
-      <TextField layoutX="664.0" layoutY="594.0" prefHeight="35.0" prefWidth="92.0" promptText="enter score" />
+      <Button fx:id="setScoreBtn" layoutX="584.0" layoutY="594.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="74.0" text="set score" />
+      <TextField fx:id="scoreTextField" layoutX="664.0" layoutY="594.0" prefHeight="35.0" prefWidth="92.0" promptText="enter score" />
       <Label layoutX="50.0" layoutY="601.0" prefHeight="35.0" prefWidth="74.0" text="Set time:" textFill="#1e1f26">
          <font>
             <Font name="Calibri" size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="getCourse1" layoutX="120.0" layoutY="606.0" prefHeight="25.0" prefWidth="106.0" />
+      <TextField fx:id="setTimeTextField" layoutX="120.0" layoutY="606.0" prefHeight="25.0" prefWidth="106.0" />
       <Text layoutX="397.0" layoutY="149.0" strokeType="OUTSIDE" strokeWidth="0.0" text="please select a question,add it to the exam and set its score">
          <font>
             <Font size="13.0" />
          </font>
       </Text>
+      <Label fx:id="errLabel" layoutX="236.0" layoutY="176.0" prefHeight="17.0" prefWidth="269.0" textFill="#e11616" />
    </children>
 </Pane>

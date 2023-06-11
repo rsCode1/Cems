@@ -70,6 +70,9 @@ public class EchoServer extends AbstractServer {
 				case "getCourses":
 					getCourses(client,(String)request.getRequestParam());
 					break;
+				case "getQuestions":
+					getQuestions(client,(String)request.getRequestParam());
+					break;
 
 					
 
@@ -77,6 +80,44 @@ public class EchoServer extends AbstractServer {
 			}
 		}
 	}
+
+	private void getQuestions(ConnectionToClient client, String course) {
+
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			System.out.println("SQL connection succeed");
+			Statement stmt = conn.createStatement();
+			String command = "SELECT course_id FROM courses WHERE course_name = '" + course + "'";
+			ResultSet rs = stmt.executeQuery(command);
+			rs.next();
+			int courseId=rs.getInt("course_id");
+			command = "SELECT * FROM questions WHERE course_id = '" + courseId + "'";
+			rs = stmt.executeQuery(command);
+			ArrayList<Question> questions = new ArrayList<Question>();
+			while (rs.next()) {
+				int questionId = rs.getInt("question_id");
+				String questionText = rs.getString("question_text");
+				String answer1 = rs.getString("answer1");
+				String answer2 = rs.getString("answer2");
+				String answer3 = rs.getString("answer3");
+				String answer4 = rs.getString("answer4");
+				int correctAnswer = rs.getInt("correct_answer");
+				int authorId = rs.getInt("lecturer_id");
+				String authorName = rs.getString("lecturer_name");
+				Question question = new Question(questionId, questionText, answer1, answer2, answer3, answer4,
+						correctAnswer, courseId, authorId, authorName);
+				questions.add(question);
+			}
+			Response response = new Response("QuestionsArray", questions);
+			client.sendToClient(response);
+		} catch (Exception ex) {
+			/* handle the error */
+			ex.printStackTrace();
+		}
+	}
+
+
 
 	//same as getSubjects but for courses
 	private void getCourses(ConnectionToClient client,String subject){
@@ -137,7 +178,7 @@ public class EchoServer extends AbstractServer {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
 					"Aa123456");
 			System.out.println("SQL connection succeed");
-			int courseId = getCourseId(question.getCourse(), conn);
+			int courseId = getCourseId(question.getCourseName(), conn);
 			Statement stmt = conn.createStatement();
 			String command = "INSERT INTO questions (question_text,answer1,answer2,answer3,answer4,correct_answer,course_id,lecturer_id,lecturer_name) VALUES ('"
 					+ question.getQuestionDescription() + "','" + question.getAnswer1() + "','" + question.getAnswer2()
