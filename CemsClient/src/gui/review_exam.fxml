@@ -19,7 +19,7 @@
    <children>
       <ImageView fitHeight="758.0" fitWidth="1092.0" layoutX="-5.0" layoutY="-7.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../backgroundfinal1.jpg" />
+            <Image url="@images/background.jpeg" />
          </image>
       </ImageView>
       <Label layoutX="860.0" layoutY="171.0" prefHeight="35.0" prefWidth="114.0" text="Exam Number:" textFill="#1e1f26">
@@ -97,7 +97,7 @@
          </font>
       </Text>
       <TextField layoutX="254.0" layoutY="16.0" prefHeight="25.0" prefWidth="187.0" text="Home &gt; Exam creation&gt;Review" />
-      <Button layoutX="855.0" layoutY="519.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="175.0" style="-fx-alignment: red;" text="Show/Update selected">
+      <Button layoutX="855.0" layoutY="519.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="175.0" text="Show/Update selected">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
