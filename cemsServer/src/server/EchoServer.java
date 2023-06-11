@@ -67,9 +67,9 @@ public class EchoServer extends AbstractServer {
 				case "GetExam" :
 					getExam( (TestCode) request.getRequestParam(),client);
 					break;
-				case "StartTest" :
-					startTest( (TestApplyInfo) request.getRequestParam(),client);
-					break;
+				//case "StartTest" :
+					//startTest( (TestApplyInfo) request.getRequestParam(),client);
+					//break;
 				case "SubmitExam" :
 					submitTest( (StudentInTest) request.getRequestParam(),client);
 					break;
@@ -152,7 +152,7 @@ public class EchoServer extends AbstractServer {
 			
 		}
 		
-		private  boolean startTest( TestApplyInfo testApplyInfo, ConnectionToClient client) {
+	/*	private  void startTest( TestApplyInfo testApplyInfo, ConnectionToClient client) {
 			Statement stmt;
 			boolean ret=false;
 			try {
@@ -170,7 +170,7 @@ public class EchoServer extends AbstractServer {
 			}
 			catch (SQLException e) {e.printStackTrace();}
 			return ret;////client.sendtoclient
-		}
+		}*/
 		//returns Question list if testid Existed in DataBase else null
 		private  Question[] getTestQuestions(Connection conn,int testid,int Size) {
 			Question[] qLst=new Question[Size];
@@ -230,6 +230,7 @@ public class EchoServer extends AbstractServer {
 
 		//gets test Data from DataBase and puts it in Test Object and returns it;
 		private Test getTest(Connection conn,int testid) {
+			ArrayList<Integer> studentsIdForTest = new ArrayList<>();
 			Test test=null;
 			Statement stmt;
 			try {
@@ -241,6 +242,15 @@ public class EchoServer extends AbstractServer {
 	 			test= new Test(rs.getString(7),rs.getInt(2),rs.getString(4),rs.getInt(3),rs.getInt(1));
 			}
 	 		rs.close();
+	 		str="SELECT list.stdId FROM cems.students_applying_for_test_list list WHERE testId=" +testid + ";";
+	 		Statement stmt2 = conn.createStatement();
+	 		rs = stmt2.executeQuery(str);
+	 		while (rs.next()) {
+	 			studentsIdForTest.add(rs.getInt(1));
+			}
+	 		rs.close();
+	 		test.setStudentsIdForTest(studentsIdForTest);
+ 		    rs.close();
 	 		return test;
 			}
 			catch (SQLException e) {e.printStackTrace();}

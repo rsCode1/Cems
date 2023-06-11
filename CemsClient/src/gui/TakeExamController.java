@@ -2,7 +2,7 @@ package gui;
 
 import java.io.IOException;
 
-import com.gluonhq.charm.glisten.control.TextArea;
+import javafx.scene.control.TextArea;
 
 import client.ChatClient;
 import javafx.application.Platform;
@@ -37,6 +37,7 @@ public class TakeExamController {
     	this.client=client;
     	this.client.setTakeExamController(controller);
     }
+	 
 	 @FXML
 	    private Text errMes1;
 
@@ -76,6 +77,7 @@ public class TakeExamController {
 
     @FXML
     void startBtnClicked(ActionEvent event) {
+    	
     	String code = codeTxt.getText() ;
     	if ( CheckApplyingInfo(code)) {
     		TestCode testCode = new TestCode(Integer.valueOf(code));
@@ -83,7 +85,7 @@ public class TakeExamController {
     			client.openConnection();
     			if (client.isConnected()) {
     				client.sendToServer(new Request("GetExam", testCode));
-    				System.out.println("connected to server.");
+    				//errMes1.setText("Code is wrong!, please try again!");
     			} else {
     				System.out.println("Not connected to server.");
     			}
@@ -116,26 +118,27 @@ public class TakeExamController {
 
     }
     
-    public void ShowStudentTestScreen(Test test) throws IOException {
-    	System.out.println("I arruved at show student test");
+    public void ShowStudentEnterIdScreen(Test test) throws IOException {
+    	//System.out.println("I arruved at show student test");
     	Platform.runLater(() -> {
 			if (test == null) {
 				// show error text
 				errMes1.setText("Code is wrong!, please try again!"); } 
 			
 			else {
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/InExam.fxml")); // specify the path to the new fxml file
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/EnterIdForTest.fxml")); // specify the path to the new fxml file
 	    		Parent root;
 				try {
 					root = loader.load();
 					Stage window = (Stage) getstartBtn().getScene().getWindow();
-				    InExamController controller = loader.getController();
-				    //controller.setClient(this.client,controller);
+				    EnterIdForTestController controller = loader.getController();
+				   // controller.setClient(this.client,controller);
 				    // Get the Stage information
 				    controller.setTest(test);
 				    controller.setStudentAndClient(student, client);
-				    controller.setStudentInTest();
-				    controller.setFirstPage();
+				   // controller.setStudentInTest();
+				    //controller.setFirstPage();
+				    controller.SetLectureNotes();
 				    window.setScene(new Scene(root));
 					window.show();
 				}

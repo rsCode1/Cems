@@ -63,10 +63,6 @@
          <font>
             <Font size="15.0" />
          </font></Text>
-      <Text fx:id="timeTxt" fill="#219407" layoutX="492.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Remaining Time:" wrappingWidth="175.6063232421875">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font></Text>
       <Text fx:id="scoreTxt" fill="#072dc4" layoutX="460.0" layoutY="209.265625" strokeType="OUTSIDE" strokeWidth="0.0" text="Score :" wrappingWidth="175.6063232421875" AnchorPane.topAnchor="192.0">
          <font>
             <Font name="System Bold" size="16.0" />
@@ -88,5 +84,6 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Text>
+      <Label id="timeLabel" fx:id="timeLabel" layoutX="485.0" layoutY="19.0" prefHeight="18.0" prefWidth="146.0" text="Reamening Time :" />
    </children>
 </AnchorPane>

@@ -65,7 +65,7 @@ public class ChatClient extends AbstractClient
 	  Test test= (Test) msg ;
 	  try {
 		  System.out.println("I arruved at h.m.f.s2");
-		  takeExamController.ShowStudentTestScreen(test);
+		  takeExamController.ShowStudentEnterIdScreen(test);
 		  System.out.println("I arruved at h.m.f.s2");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
