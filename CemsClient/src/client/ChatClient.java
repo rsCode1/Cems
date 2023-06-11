@@ -7,6 +7,7 @@ package client;
 import client.*;
 import gui.ConnectToServerScreenController;
 import gui.LoginScreenController;
+import gui.ReviewExamController;
 import gui.writeQuestionController;
 import gui.createExamController;
 import javafx.application.Platform;
@@ -32,6 +33,7 @@ public class ChatClient extends AbstractClient
 	private LoginScreenController loginScreecontroller;
 	private writeQuestionController writeQuestionController;
 	private createExamController createExamController;
+	private ReviewExamController reviewExamController;
 
 	private String ip = "";
 	private int portServer;
@@ -55,35 +57,39 @@ public class ChatClient extends AbstractClient
 		if (msg instanceof Response) {
 			Response response = (Response) msg;
 			switch (response.getResponseType()) {
-			case "LOGIN":
-				login((Users) response.getResponseParam());
-				break;
-			case "Subjects":
-				ArrayList<String> subjectsArr = (ArrayList<String>) response.getResponseParam();
-				if(writeQuestionController!=null)
-					writeQuestionController.updateSubjectsComboBox(subjectsArr);
-				if(createExamController!=null)
-					createExamController.updateSubjectsComboBox(subjectsArr);
-				
-				System.out.println("hello");
-				break;
+				case "LOGIN":
+					login((Users) response.getResponseParam());
+					break;
+				case "Subjects":
+					ArrayList<String> subjectsArr = (ArrayList<String>) response.getResponseParam();
+					if (writeQuestionController != null)
+						writeQuestionController.updateSubjectsComboBox(subjectsArr);
+					if (createExamController != null)
+						createExamController.updateSubjectsComboBox(subjectsArr);
 
-			case "Courses":
-				ArrayList<String> coursesArr = (ArrayList<String>) response.getResponseParam();
-				if(writeQuestionController!=null)
-					writeQuestionController.updateCoursesComboBox(coursesArr);
-				if(createExamController!=null)
-					createExamController.updateCoursesComboBox(coursesArr);
-				System.out.println("hello2");
-				break;
+					System.out.println("hello");
+					break;
 
-			
-			case "QuestionsArray":
-				ArrayList<Question> questionsArr = (ArrayList<Question>) response.getResponseParam();
-				createExamController.upadteQuestionViewTable(questionsArr);
-				System.out.println("hello3");
-				break;
+				case "Courses":
+					ArrayList<String> coursesArr = (ArrayList<String>) response.getResponseParam();
+					if (writeQuestionController != null)
+						writeQuestionController.updateCoursesComboBox(coursesArr);
+					if (createExamController != null)
+						createExamController.updateCoursesComboBox(coursesArr);
+					System.out.println("hello2");
+					break;
+
+				case "QuestionsArray":
+					ArrayList<Question> questionsArr = (ArrayList<Question>) response.getResponseParam();
+					createExamController.upadteQuestionViewTable(questionsArr);
+					System.out.println("hello3");
+					break;
+
+				case "ExamSaved":
+					reviewExamController.setLabel();
+					break;
 			}
+
 		}
 
 	}
@@ -108,8 +114,13 @@ public class ChatClient extends AbstractClient
 	public void setController(writeQuestionController controller) {
 		this.writeQuestionController = controller;
 	}
+
 	public void setController(createExamController controller) {
 		this.createExamController = controller;
+	}
+
+	public void setController(ReviewExamController controller) {
+		this.reviewExamController = controller;
 	}
 
 	/**

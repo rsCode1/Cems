@@ -66,6 +66,7 @@ CREATE TABLE `exam_questions` (
 
 LOCK TABLES `exam_questions` WRITE;
 /*!40000 ALTER TABLE `exam_questions` DISABLE KEYS */;
+INSERT INTO `exam_questions` VALUES (7,3,5),(7,7,10);
 /*!40000 ALTER TABLE `exam_questions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -82,10 +83,11 @@ CREATE TABLE `exams` (
   `lecturer_id` int NOT NULL,
   `lecturer_comments` text,
   `student_comments` text,
+  `test_time` int DEFAULT NULL,
   PRIMARY KEY (`exam_id`),
   KEY `lecturer_id` (`lecturer_id`),
   CONSTRAINT `exams_ibfk_1` FOREIGN KEY (`lecturer_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -94,6 +96,7 @@ CREATE TABLE `exams` (
 
 LOCK TABLES `exams` WRITE;
 /*!40000 ALTER TABLE `exams` DISABLE KEYS */;
+INSERT INTO `exams` VALUES (7,'Quantum Mechanics',2,'hello','there',100);
 /*!40000 ALTER TABLE `exams` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -197,4 +200,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-11 18:17:03
+-- Dump completed on 2023-06-11 23:38:19

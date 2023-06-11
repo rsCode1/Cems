@@ -15,11 +15,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="createQuestionForm" prefHeight="734.0" prefWidth="1081.0" style="-fx-background-color: #d8bfd8;" styleClass="b" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="createQuestionForm" prefHeight="734.0" prefWidth="1081.0" style="-fx-background-color: #d8bfd8;" styleClass="b" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ReviewExamController">
    <children>
       <ImageView fitHeight="758.0" fitWidth="1092.0" layoutX="-5.0" layoutY="-7.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../backgroundfinal1.jpg" />
+            <Image url="@images/background.jpeg" />
          </image>
       </ImageView>
       <Label layoutX="860.0" layoutY="171.0" prefHeight="35.0" prefWidth="114.0" text="Exam Number:" textFill="#1e1f26">
@@ -33,7 +33,7 @@
          </font>
       </Label>
       <Button layoutX="23.0" layoutY="682.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="74.0" text="back" />
-      <Button layoutX="856.0" layoutY="581.0" mnemonicParsing="false" prefHeight="69.0" prefWidth="175.0" style="-fx-background-color: #37da83;" text="Save exam">
+      <Button fx:id="saveExamBtn" layoutX="856.0" layoutY="581.0" mnemonicParsing="false" onAction="#saveExam" prefHeight="69.0" prefWidth="175.0" style="-fx-background-color: #37da83;" text="Save exam">
          <effect>
             <DropShadow height="50.31" radius="23.9225" width="47.38">
                <color>
@@ -44,15 +44,15 @@
          <font>
             <Font name="System Bold" size="15.0" />
          </font></Button>
-      <TableView layoutX="63.0" layoutY="198.0" prefHeight="313.0" prefWidth="968.0">
+      <TableView fx:id="ExamQuestionTable" layoutX="63.0" layoutY="198.0" prefHeight="313.0" prefWidth="968.0">
          <columns>
-            <TableColumn prefWidth="75.0" text="#" />
-            <TableColumn minWidth="0.0" prefWidth="257.0" text="question" />
-            <TableColumn maxWidth="89.0" prefWidth="140.0" text="answer 1" />
-            <TableColumn prefWidth="140.0" text="answer 2" />
-            <TableColumn prefWidth="140.0" text="answer 3" />
-            <TableColumn prefWidth="140.0" text="answer 4" />
-            <TableColumn minWidth="0.0" prefWidth="126.0" text="score" />
+            <TableColumn fx:id="questionId" prefWidth="75.0" text="#" />
+            <TableColumn fx:id="questionText" minWidth="0.0" prefWidth="257.0" text="question" />
+            <TableColumn fx:id="answer1" maxWidth="89.0" prefWidth="140.0" text="answer 1" />
+            <TableColumn fx:id="answer2" prefWidth="140.0" text="answer 2" />
+            <TableColumn fx:id="answer3" prefWidth="140.0" text="answer 3" />
+            <TableColumn fx:id="answer4" prefWidth="140.0" text="answer 4" />
+            <TableColumn fx:id="score" minWidth="0.0" prefWidth="126.0" text="score" />
          </columns>
       </TableView>
       <Label layoutX="97.0" layoutY="162.0" prefHeight="35.0" prefWidth="114.0" text="Exam Review:" textFill="#1e1f26">
@@ -60,12 +60,12 @@
             <Font name="Calibri" size="16.0" />
          </font>
       </Label>
-      <TextArea layoutX="397.0" layoutY="551.0" prefHeight="82.0" prefWidth="269.0" style="-fx-background-color: black;">
+      <TextArea fx:id="studentComments" layoutX="397.0" layoutY="551.0" prefHeight="82.0" prefWidth="269.0" style="-fx-background-color: black;">
          <font>
             <Font size="27.0" />
          </font>
       </TextArea>
-      <TextArea layoutX="97.0" layoutY="551.0" prefHeight="85.0" prefWidth="269.0" style="-fx-background-color: black;">
+      <TextArea fx:id="lecturetComments" layoutX="97.0" layoutY="551.0" prefHeight="85.0" prefWidth="269.0" style="-fx-background-color: black;">
          <font>
             <Font size="27.0" />
          </font>
@@ -97,7 +97,7 @@
          </font>
       </Text>
       <TextField layoutX="254.0" layoutY="16.0" prefHeight="25.0" prefWidth="187.0" text="Home &gt; Exam creation&gt;Review" />
-      <Button layoutX="855.0" layoutY="519.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="175.0" style="-fx-alignment: red;" text="Show/Update selected">
+      <Button layoutX="855.0" layoutY="519.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="175.0" text="Show/Update selected">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
@@ -142,20 +142,25 @@
             <Font name="Calibri" size="16.0" />
          </font>
       </Label>
-      <Text layoutX="229.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" text="subject_selected" wrappingWidth="187.0">
+      <Text fx:id="subject" layoutX="229.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" text="subject_selected" wrappingWidth="187.0">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <Text layoutX="510.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Course_selected" wrappingWidth="240.60003662109375">
+      <Text fx:id="course" layoutX="510.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Course_selected" wrappingWidth="240.60003662109375">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <Text layoutX="831.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Time_selected" wrappingWidth="123.0">
+      <Text fx:id="testTiime" layoutX="831.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Time_selected" wrappingWidth="123.0">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
+      <Label fx:id="errLabel" layoutX="500.0" layoutY="650.0" prefHeight="35.0" prefWidth="310.0" textFill="#2fff00">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Label>
    </children>
 </Pane>
