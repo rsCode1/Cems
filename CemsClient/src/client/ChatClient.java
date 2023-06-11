@@ -55,7 +55,7 @@ public class ChatClient extends AbstractClient
 		if (msg instanceof Response) {
 			Response response = (Response) msg;
 			switch (response.getResponseType()) {
-			case "LOGIN_success":
+			case "LOGIN":
 				login((Users) response.getResponseParam());
 				break;
 			case "Subjects":

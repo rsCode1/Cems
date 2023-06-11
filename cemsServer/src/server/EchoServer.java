@@ -160,12 +160,13 @@ public class EchoServer extends AbstractServer {
 			System.out.println("SQL connection succeed");
 			Users user = getUserInfo(loginInfo, conn);
 			if (user == null) {
-				client.sendToClient((Users) null);
+				
+				client.sendToClient(new Response("LOGIN", null));
 				return;
 			}
 			updateUserLoggedIn(loginInfo, conn);
 			addUserToLoggedTable(conn);
-			Response response = new Response("LOGIN_success", user);
+			Response response = new Response("LOGIN", user);
 			client.sendToClient(response);
 
 		} catch (Exception ex) {
