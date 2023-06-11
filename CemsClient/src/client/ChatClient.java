@@ -10,6 +10,7 @@ import gui.LoginScreenController;
 import gui.ReviewExamController;
 import gui.writeQuestionController;
 import gui.createExamController;
+import gui.TimeRequestController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -34,6 +35,7 @@ public class ChatClient extends AbstractClient
 	private writeQuestionController writeQuestionController;
 	private createExamController createExamController;
 	private ReviewExamController reviewExamController;
+	private TimeRequestController TimeRequestController;
 
 	private String ip = "";
 	private int portServer;
@@ -121,6 +123,9 @@ public class ChatClient extends AbstractClient
 
 	public void setController(ReviewExamController controller) {
 		this.reviewExamController = controller;
+	}
+	public void setController(TimeRequestController controller) {
+		this.TimeRequestController = controller;
 	}
 
 	/**

@@ -100,7 +100,7 @@ public class writeQuestionController {
 
     @FXML
     void backToMainScreen(ActionEvent event) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/FirstPage.fxml")); // specify the path to the
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LecturerPage.fxml")); // specify the path to the
                                                                                            // main screen FXML file
         Parent parent = null;
         try {
@@ -112,7 +112,7 @@ public class writeQuestionController {
 
         // Get the main screen's controller and pass the ChatClient and lecturer
         // instances to it
-        FirstPageController controller = loader.getController();
+        LecturerPageController controller = loader.getController();
         controller.setLecturerAndClient(lecturer, client);
 
         // Get the Stage information

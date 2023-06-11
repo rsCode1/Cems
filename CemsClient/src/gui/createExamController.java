@@ -134,6 +134,15 @@ public class createExamController implements Initializable {
 				errLabel.setText("Please enter a valid time");
 				return;
 			}
+			 // check if the sum of question scores is 100
+	        int scoreSum = 0;
+	        for (Question question : questions) {
+	            scoreSum += question.getScore();
+	        }
+	        if (scoreSum != 100) {
+	            errLabel.setText("The sum of question scores must be 100");
+	            return;
+	        }
 			Exam exam = new Exam(coursesComboBox.getValue(), questions, lecturer,
 					Integer.parseInt(setTimeTextField.getText()), professionsComboBox.getValue());
 
@@ -227,7 +236,7 @@ public class createExamController implements Initializable {
 
 	@FXML
 	void backToMainScreen(ActionEvent event) {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/FirstPage.fxml")); // specify the path to the
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LecturerPage.fxml")); // specify the path to the
 																							// main screen FXML file
 		Parent parent = null;
 		try {
@@ -239,7 +248,7 @@ public class createExamController implements Initializable {
 
 		// Get the main screen's controller and pass the ChatClient and lecturer
 		// instances to it
-		FirstPageController controller = loader.getController();
+		LecturerPageController controller = loader.getController();
 		controller.setLecturerAndClient(lecturer, client);
 
 		// Get the Stage information

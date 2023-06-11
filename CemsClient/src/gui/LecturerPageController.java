@@ -23,12 +23,15 @@ import logic.LogInInfo;
 import logic.Request;
 import logic.Users;
 
-public class FirstPageController {
+public class LecturerPageController {
 	private Users lecturer;
 	private ChatClient client;
 
 	@FXML
 	private Button CreateExamBtn;
+	
+	@FXML
+	private Button CloseExamBtn;
 
 	@FXML
 	private Button StartExamBtn;
@@ -74,6 +77,9 @@ public class FirstPageController {
 
 	@FXML
 	void initialize() {
+	    toolTimeRequest.setOnMouseClicked(e -> {
+	    	showTimeRequestForm();
+	    });
 		Platform.runLater(() -> {
 			lecturerName.setText(lecturer.getFirstName() + " " + lecturer.getLastName());
 		});
@@ -174,5 +180,30 @@ public class FirstPageController {
 		window.show();
 
 	}
+	@FXML
+	public void showTimeRequestForm() {
+	    FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/time_request.fxml")); // specify the path to
+	    // the new fxml file
+	    Parent parent = null;
+
+	    try {
+	        parent = loader.load();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    Scene nextScene = new Scene(parent);
+
+
+		// Get the new scene's controller and pass the ChatClient instance to it
+		TimeRequestController controller = loader.getController();
+		controller.setClientAndLecturer(this.client, lecturer);
+		client.setController(controller);
+		// Get the Stage information
+		Stage window = (Stage) toolTimeRequest.getScene().getWindow();
+		window.setScene(nextScene);
+		window.show();
+	}
+
 
 }

@@ -62,13 +62,12 @@ public class LoginScreenController {
 	public void ShowUserWelcomeScreen(Users user) throws IOException {
 		Platform.runLater(() -> {
 			String Studentpath = "/gui/StudentPage.fxml";
-			String Lacturertpath = "/gui/FirstPage.fxml";
+			String Lacturertpath = "/gui/LecturerPage.fxml";
 			String HDpath = "/gui/HDPage.fxml";
 			
 
 			if (user == null) {
 				// show error text
-				System.out.println("doesnt get here");
 
 				loginStatus.setText("Username or password is incorrect, please try again!");
 			} else {
@@ -93,7 +92,7 @@ public class LoginScreenController {
 				try {
 					root = loader.load();
 					Stage window = (Stage) getLoginBtn().getScene().getWindow();
-					FirstPageController lecturerController=null;
+					LecturerPageController lecturerController=null;
 					if (user.getRole() == 1) {
 						lecturerController = loader.getController();
 						lecturerController.setLecturerAndClient(user, client);
