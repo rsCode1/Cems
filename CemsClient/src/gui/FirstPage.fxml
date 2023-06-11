@@ -39,7 +39,7 @@
             </DropShadow>
          </effect>
       </Label>
-      <Label layoutX="383.0" layoutY="94.0" prefHeight="58.0" prefWidth="180.0" text="Welcome" textFill="#1e1f26">
+      <Label layoutX="319.0" layoutY="94.0" prefHeight="58.0" prefWidth="180.0" text="Welcome" textFill="#1e1f26">
          <font>
             <Font name="Calibri" size="41.0" />
          </font>
@@ -131,7 +131,7 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Label fx:id="lecturerName" layoutX="560.0" layoutY="94.0" prefHeight="58.0" prefWidth="180.0" text="&quot;name&quot;" textFill="#1e1f26">
+      <Label fx:id="lecturerName" layoutX="499.0" layoutY="94.0" prefHeight="58.0" prefWidth="416.0" text="&quot;name&quot;" textFill="#1e1f26">
          <font>
             <Font name="Calibri" size="41.0" />
          </font>

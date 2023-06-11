@@ -139,10 +139,10 @@ public class EchoServer extends AbstractServer {
 			System.out.println("SQL connection succeed");
 			int courseId = getCourseId(question.getCourse(), conn);
 			Statement stmt = conn.createStatement();
-			String command = "INSERT INTO questions (question_text,answer1,answer2,answer3,answer4,correct_answer,course_id) VALUES ('"
-					+ question.getQuestionDescription() + "','" + question.getAnswer1() + "','" + question.getAnswer2() + "','"
-					+ question.getAnswer3() + "','" + question.getAnswer4() + "','" + question.getCorrectAnswer()
-					+ "','" + courseId + "')";
+			String command = "INSERT INTO questions (question_text,answer1,answer2,answer3,answer4,correct_answer,course_id,lecturer_id,lecturer_name) VALUES ('"
+					+ question.getQuestionDescription() + "','" + question.getAnswer1() + "','" + question.getAnswer2()
+					+ "','" + question.getAnswer3() + "','" + question.getAnswer4() + "','" + question.getCorrectAnswer()
+					+ "','" + courseId + "','" + question.getAuthorID() + "','" + question.getAuthor() + "')";
 			stmt.executeUpdate(command);
 
 		}catch (Exception ex) {

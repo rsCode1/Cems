@@ -14,8 +14,9 @@ public class Question implements Serializable {
     private String course;
     private String subject;
     private String author;
+    private int authorID;
 
-    public Question(String questionDescription, String answer1, String answer2, String answer3, String answer4, int correctAnswer, String course, String subject, String author) {
+    public Question(String questionDescription, String answer1, String answer2, String answer3, String answer4, int correctAnswer, String course, String subject,int authorID ,String author) {
         this.questionDescription = questionDescription;
         this.answer1 = answer1;
         this.answer2 = answer2;
@@ -25,6 +26,7 @@ public class Question implements Serializable {
         this.course = course;
         this.subject = subject;
         this.author = author;
+        this.authorID = authorID;
     }
 
     //getters for all fields
@@ -54,6 +56,9 @@ public class Question implements Serializable {
     }
     public String getAuthor() {
         return author;
+    }
+    public int getAuthorID() {
+        return authorID;
     }
 
 

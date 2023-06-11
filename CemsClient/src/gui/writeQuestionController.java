@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -95,8 +96,12 @@ public class writeQuestionController {
     private Text toolWriteQuestion;
 
     @FXML
+    private Label saveLabelBtn;
+
+    @FXML
     void backToMainScreen(ActionEvent event) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/FirstPage.fxml")); // specify the path to the main screen FXML file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/FirstPage.fxml")); // specify the path to the
+                                                                                           // main screen FXML file
         Parent parent = null;
         try {
             parent = loader.load();
@@ -105,7 +110,8 @@ public class writeQuestionController {
         }
         Scene mainScene = new Scene(parent);
 
-        // Get the main screen's controller and pass the ChatClient and lecturer instances to it
+        // Get the main screen's controller and pass the ChatClient and lecturer
+        // instances to it
         FirstPageController controller = loader.getController();
         controller.setLecturerAndClient(lecturer, client);
 
@@ -119,12 +125,12 @@ public class writeQuestionController {
         this.client = client;
         this.lecturer = lecturer;
     }
-    
+
     // sends the question to the server
-    //uses the Question class from CemsShared
-    //creates a Request object with the question and sends it to the server
+    // uses the Question class from CemsShared
+    // creates a Request object with the question and sends it to the server
     @FXML
-    void btnSaveQuestion(ActionEvent event) {
+    public void btnSaveQuestion(ActionEvent event) {
         String questionDescription = questionDescriptionField.getText();
         String answer1 = this.answer1.getText();
         String answer2 = this.answer2.getText();
@@ -140,11 +146,22 @@ public class writeQuestionController {
         } else if (radio4.isSelected()) {
             correctAnswer = 4;
         }
+        
         String course = coursesComboBox.getValue();
         String subject = professionsComboBox.getValue();
-        String author = lecturer.getUserName();
+        if (questionDescription.equals("") || answer1.equals("") || answer2.equals("") || answer3.equals("")
+            || answer4.equals("") || correctAnswer == 0 || course == null || subject == null) {
+                saveLabelBtn.setText("Please fill all the fields");
+                return;
+            }
+
+        
+
+        String author = lecturer.getFirstName()+" "+lecturer.getLastName();
+        int authorID = lecturer.getId();
         // create a Question object
-        Question question = new Question(questionDescription, answer1, answer2, answer3, answer4, correctAnswer, course, subject, author);
+        Question question = new Question(questionDescription, answer1, answer2, answer3, answer4, correctAnswer,
+                course, subject, authorID,author);
         // create a Request object
         Request request = new Request("writeQuestion", question);
         // send the request to the server
@@ -154,9 +171,9 @@ public class writeQuestionController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        saveLabelBtn.setText("Question saved successfully");
 
     }
-
 
     public void updateSubjectsComboBox(ArrayList<String> subjects) {
         Platform.runLater(() -> {
@@ -164,6 +181,7 @@ public class writeQuestionController {
             professionsComboBox.setItems(list);
         });
     }
+
     public void updateCoursesComboBox(ArrayList<String> courses) {
         Platform.runLater(() -> {
             ObservableList<String> list = FXCollections.observableArrayList(courses);
@@ -173,75 +191,66 @@ public class writeQuestionController {
     }
     // @FXML
     // public void btnSelectCourse(ActionEvent event) {
-    //     // add some courses to the comboBox depending on the subject currently selected
-    //     String subject = professionsComboBox.getValue();
-    //     if (subject.equals("Select Subject"))
-    //         return;
-    //     Request request = new Request("getCourses", subject);
-    //     try {
-    //         client.sendToServer(request);
-    //     }catch(Exception e) {
-    //         e.printStackTrace();
-    //     }
-
+    // // add some courses to the comboBox depending on the subject currently
+    // selected
+    // String subject = professionsComboBox.getValue();
+    // if (subject.equals("Select Subject"))
+    // return;
+    // Request request = new Request("getCourses", subject);
+    // try {
+    // client.sendToServer(request);
+    // }catch(Exception e) {
+    // e.printStackTrace();
+    // }
 
     // }
 
-
-
-
-
     // @FXML
     // public void btnSelectProfession(MouseDragEvent event) {
-    //     System.out.println("btnSelectProfession");
-    //     // add some subjects to the comboBox
-    //     Request request = new Request("getSubjects", null);
-    //     try {
-    //         client.sendToServer(request);
-    //     } catch (Exception e) {
-    //         // TODO Auto-generated catch block
-    //         e.printStackTrace();
-    //     }
+    // System.out.println("btnSelectProfession");
+    // // add some subjects to the comboBox
+    // Request request = new Request("getSubjects", null);
+    // try {
+    // client.sendToServer(request);
+    // } catch (Exception e) {
+    // // TODO Auto-generated catch block
+    // e.printStackTrace();
+    // }
     // }
 
     @FXML
     public void initialize() {
-radio1.setToggleGroup(correctAnswer);
-radio2.setToggleGroup(correctAnswer);
-radio3.setToggleGroup(correctAnswer);
-radio4.setToggleGroup(correctAnswer);
+        radio1.setToggleGroup(correctAnswer);
+        radio2.setToggleGroup(correctAnswer);
+        radio3.setToggleGroup(correctAnswer);
+        radio4.setToggleGroup(correctAnswer);
 
+        professionsComboBox.setOnMouseClicked(event -> {
+            System.out.println(professionsComboBox.getValue());
+            // add some subjects to the comboBox
+            Request request = new Request("getSubjects", null);
+            try {
+                client.sendToServer(request);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        });
 
-professionsComboBox.setOnMouseClicked(event -> {
-    System.out.println("professionsComboBox");
-    // add some subjects to the comboBox
-    Request request = new Request("getSubjects", null);
-    try {
-        client.sendToServer(request);
-    } catch (Exception e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-    }
-});
+        coursesComboBox.setOnMouseClicked(event -> {
+            // add some courses to the comboBox depending on the subject currently selected
+            String subject = professionsComboBox.getValue();
+            if (!subject.equals("Select Course")) {
+                Request request = new Request("getCourses", subject);
+                try {
+                    client.sendToServer(request);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
-coursesComboBox.setOnMouseClicked(event->{
-        // add some courses to the comboBox depending on the subject currently selected
-        String subject = professionsComboBox.getValue();
-        if (!subject.equals("Select Course") ){
-        Request request = new Request("getCourses", subject);
-        try {
-            client.sendToServer(request);
-        }catch(Exception e) {
-            e.printStackTrace();
-        }
-        }
-
-
-});
-
-
+        });
 
     }
-
 
 }

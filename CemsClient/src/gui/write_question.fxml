@@ -168,5 +168,10 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
+      <Label fx:id="saveLabelBtn" layoutX="523.0" layoutY="569.0" prefHeight="52.0" prefWidth="326.0" textAlignment="CENTER">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
    </children>
 </Pane>
