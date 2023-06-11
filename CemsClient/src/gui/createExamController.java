@@ -24,73 +24,76 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import logic.Exam;
 import logic.LoggedUsers;
 import logic.Question;
 import logic.Request;
 import logic.Users;
 
-
 public class createExamController implements Initializable {
 	private ChatClient client;
 	private Users lecturer;
-
-    @FXML
-    private Button addQuestionBtn;
-
-    @FXML
-    private Button backBtn;
-
-    @FXML
-    private ComboBox<String> coursesComboBox;
-
-    @FXML
-    private Pane createExamForm;
-
-    @FXML
-    private TableColumn<?, ?> examViewIdColumn;
-
-    @FXML
-    private TableColumn<?, ?> examViewQuestioColumn;
-
-    @FXML
-    private ComboBox<String> professionsComboBox;
-
-    @FXML
-    private TableColumn<Question, Integer> questionIdViewColumn;
-
-    @FXML
-    private TableColumn<Question, String> questionTextColumn;
-
-    @FXML
-    private TableView<Question> questionViewTABLE;
+	private ObservableList<Question> questions = FXCollections.observableArrayList();
 
 	@FXML
-    private TableView<?> examViewTable;
+	private Button addQuestionBtn;
 
-    @FXML
-    private Button removeQuestionBtn;
+	@FXML
+	private Button backBtn;
 
-    @FXML
-    private Button reviewExamBtn;
+	@FXML
+	private ComboBox<String> coursesComboBox;
 
-    @FXML
-    private TextField scoreTextField;
+	@FXML
+	private Pane createExamForm;
 
-    @FXML
-    private Button setScoreBtn;
+	@FXML
+	private TableColumn<Question, Integer> examViewIdColumn;
 
-    @FXML
-    private TextField setTimeTextField;
+	@FXML
+	private TableColumn<Question, Integer> examViewQuestioColumn;
 
-    @FXML
-    private Button showQuestionView;
+	@FXML
+	private ComboBox<String> professionsComboBox;
 
-    @FXML
-    private Label testIdLabel;
-	
+	@FXML
+	private TableColumn<Question, Integer> questionIdViewColumn;
+
+	@FXML
+	private TableColumn<Question, String> questionTextColumn;
+
+	@FXML
+	private TableView<Question> questionViewTABLE;
+
+	@FXML
+	private TableView<Question> examViewTable;
+
+	@FXML
+	private Button removeQuestionBtn;
+
+	@FXML
+	private Button reviewExamBtn;
+
+	@FXML
+	private TextField scoreTextField;
+
+	@FXML
+	private Button setScoreBtn;
+
+	@FXML
+	private TableColumn<Question, Integer> examViewScoreColumn;
+
+	@FXML
+	private TextField setTimeTextField;
+
+	@FXML
+	private Button showQuestionView;
+
+	@FXML
+	private Label testIdLabel;
+
 	@FXML
 	private Label errLabel;
-
 
 	@FXML
 	void btnSelectCourse(ActionEvent event) {
@@ -99,6 +102,139 @@ public class createExamController implements Initializable {
 
 	@FXML
 	void btnSelectProfession(ActionEvent event) {
+
+	}
+
+	@FXML
+	public void reviewExam(ActionEvent event) {
+		Platform.runLater(() -> {
+			// review the exam
+			// check if the exam is valid
+			if (questions.size() == 0) {
+				errLabel.setText("Please add questions to the exam");
+				return;
+			}
+			if (setTimeTextField.getText().isEmpty()) {
+				errLabel.setText("Please set the time of the exam");
+				return;
+			}
+			// check if the exam time is valid
+			if (!setTimeTextField.getText().matches("[0-9]+")) {
+				errLabel.setText("Please enter a valid time");
+				return;
+			}
+			// check if the exam time is valid
+			if (Integer.parseInt(setTimeTextField.getText()) < 1) {
+				errLabel.setText("Please enter a valid time");
+				return;
+			}
+			// check if the exam time is valid
+			if (Integer.parseInt(setTimeTextField.getText()) > 120) {
+				errLabel.setText("Please enter a valid time");
+				return;
+			}
+			// check if the exam time is valid
+			if (Integer.parseInt(setTimeTextField.getText()) % 5 != 0) {
+				errLabel.setText("Please enter a valid time");
+				return;
+			}
+			// check if the exam time is valid
+			if (Integer.parseInt(setTimeTextField.getText()) > 120) {
+				errLabel.setText("Please enter a valid time");
+				return;
+			}
+			// check if the exam time is valid
+			if (Integer.parseInt(setTimeTextField.getText()) < 1) {
+				errLabel.setText("Please enter a valid time");
+				return;
+			}
+			// check if the exam time is valid
+			if (Integer.parseInt(setTimeTextField.getText()) < 1) {
+				errLabel.setText("Please enter a valid time");
+				return;
+			}
+			Exam exam = new Exam(coursesComboBox.getValue(), questions, lecturer,
+					Integer.parseInt(setTimeTextField.getText()), professionsComboBox.getValue());
+
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/review_exam.fxml")); // specify the path to
+																								// the
+			// main screen FXML file
+			Parent parent = null;
+			try {
+				parent = loader.load();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Scene mainScene = new Scene(parent);
+
+			// Get the main screen's controller and pass the ChatClient and lecturer
+			// instances to it
+			ReviewExamController controller = loader.getController();
+			controller.setClient(client);
+			controller.setExam(exam);
+			controller.setDataTable();
+			// Get the Stage information
+			Stage window = (Stage) reviewExamBtn.getScene().getWindow();
+			window.setScene(mainScene);
+			window.show();
+
+		});
+	}
+
+	@FXML
+	public void setScoreQuestion(ActionEvent event) {
+		Platform.runLater(() -> {
+			// set the score of the selected question
+			Question question = examViewTable.getSelectionModel().getSelectedItem();
+			if (question == null) {
+				errLabel.setText("Please select a question");
+				return;
+			}
+			// update the question score column on table
+			questions.remove(question);
+
+			// set the score of the question
+			question.setScore(Integer.parseInt(scoreTextField.getText()));
+			questions.add(question);
+			examViewTable.getItems().clear();
+			examViewTable.getItems().addAll(questions);
+		});
+
+	}
+
+	@FXML
+	public void removeQuetsionFromExam(ActionEvent event) {
+
+		Platform.runLater(() -> {
+			// remove the selected question from the exam view table
+			Question question = examViewTable.getSelectionModel().getSelectedItem();
+			if (question == null) {
+				errLabel.setText("Please select a question");
+				return;
+			}
+			// remove the question from the exam view table
+			question.setScore(0);
+			questions.remove(question);
+			examViewTable.getItems().clear();
+			examViewTable.getItems().addAll(questions);
+		});
+
+	}
+
+	@FXML
+	public void addToExamView(ActionEvent event) {
+		Platform.runLater(() -> {
+			// add the selected question to the exam view table
+			Question question = questionViewTABLE.getSelectionModel().getSelectedItem();
+			if (question == null) {
+				errLabel.setText("Please select a question");
+				return;
+			}
+			// add the question to the exam view table
+			questions.add(question);
+			examViewTable.getItems().clear();
+			examViewTable.getItems().addAll(questions);
+		});
 
 	}
 
@@ -130,7 +266,6 @@ public class createExamController implements Initializable {
 		window.show();
 	}
 
-
 	@FXML
 	public void showQuestionView(ActionEvent event) {
 		// show the question view table
@@ -141,7 +276,7 @@ public class createExamController implements Initializable {
 			e.printStackTrace();
 		}
 		String course = coursesComboBox.getValue().toString();
-		if (course==null) {
+		if (course == null) {
 			errLabel.setText("Please select a subject and course");
 			return;
 		}
@@ -153,69 +288,65 @@ public class createExamController implements Initializable {
 		}
 	}
 
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
-				
-        professionsComboBox.setOnMouseClicked(event -> {
-            System.out.println(professionsComboBox.getValue());
-            // add some subjects to the comboBox
-            Request request = new Request("getSubjects", null);
-            try {
+
+		professionsComboBox.setOnMouseClicked(event -> {
+			System.out.println(professionsComboBox.getValue());
+			// add some subjects to the comboBox
+			Request request = new Request("getSubjects", null);
+			try {
 				client.openConnection();
-                client.sendToServer(request);
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        });
+				client.sendToServer(request);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 
-        coursesComboBox.setOnMouseClicked(event -> {
-            // add some courses to the comboBox depending on the subject currently selected
-            String subject = professionsComboBox.getValue();
-            if (subject != null && !subject.equals("")) {
-                Request request = new Request("getCourses", subject);
-                try {
+		coursesComboBox.setOnMouseClicked(event -> {
+			// add some courses to the comboBox depending on the subject currently selected
+			String subject = professionsComboBox.getValue();
+			if (subject != null && !subject.equals("")) {
+				Request request = new Request("getCourses", subject);
+				try {
 					client.openConnection();
-                    client.sendToServer(request);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+					client.sendToServer(request);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 
-        });
-
+		});
 
 		questionIdViewColumn.setCellValueFactory(new PropertyValueFactory<>("questionID"));
-    	questionTextColumn.setCellValueFactory(new PropertyValueFactory<>("questionDescription"));
-
+		questionTextColumn.setCellValueFactory(new PropertyValueFactory<>("questionDescription"));
+		examViewIdColumn.setCellValueFactory(new PropertyValueFactory<>("questionID"));
+		examViewQuestioColumn.setCellValueFactory(new PropertyValueFactory<>("questionDescription"));
+		examViewScoreColumn.setCellValueFactory(new PropertyValueFactory<>("score"));
 
 	}
 
+	public void upadteQuestionViewTable(ArrayList<Question> questionsArray) {
 
-
-
-		public void upadteQuestionViewTable(ArrayList<Question> questionsArray) {
 		questionViewTABLE.getItems().clear();
 		questionViewTABLE.getItems().addAll(questionsArray);
 
-
 	}
 
+	public void updateSubjectsComboBox(ArrayList<String> subjects) {
+		Platform.runLater(() -> {
+			ObservableList<String> list = FXCollections.observableArrayList(subjects);
+			professionsComboBox.setItems(list);
+		});
+	}
 
-	    public void updateSubjectsComboBox(ArrayList<String> subjects) {
-        Platform.runLater(() -> {
-            ObservableList<String> list = FXCollections.observableArrayList(subjects);
-            professionsComboBox.setItems(list);
-        });
-    }
-
-    public void updateCoursesComboBox(ArrayList<String> courses) {
-        Platform.runLater(() -> {
-            ObservableList<String> list = FXCollections.observableArrayList(courses);
-            coursesComboBox.setItems(list);
-        });
+	public void updateCoursesComboBox(ArrayList<String> courses) {
+		Platform.runLater(() -> {
+			ObservableList<String> list = FXCollections.observableArrayList(courses);
+			coursesComboBox.setItems(list);
+		});
 
 	}
 

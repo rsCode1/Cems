@@ -17,6 +17,7 @@ public class Question implements Serializable {
     private String subject;
     private String author;
     private int authorID;
+    private int score;
 
     public Question(String questionDescription, String answer1, String answer2, String answer3, String answer4, int correctAnswer, int courseId,int authorID ,String author) {
         this.questionDescription = questionDescription;
@@ -109,7 +110,12 @@ public Question(String questionDescription, String answer1, String answer2, Stri
     public String getCourseName() {
         return courseName;
     }
-
+    public int getScore() {
+        return score;
+    }
+    public int setScore(int score) {
+        return this.score = score;
+    }
 
 
 }
