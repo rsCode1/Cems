@@ -60,6 +60,9 @@ public class EnterIdForTestController {
     			ShowStudentTestScreen(test);
     			
     		}
+    		else {
+    			errTxt.setText("Wrong Id, please try again");
+    		}
     		
     	}
 
@@ -99,7 +102,7 @@ public class EnterIdForTestController {
 				Stage window = (Stage) starttestBtn.getScene().getWindow();
 				InExamController inExamController=loader.getController();
 				inExamController.setTest(test);
-				inExamController.setStudentAndClient(student ,client);
+				inExamController.setStudentAndClient(student ,client,inExamController);
 				inExamController.setStudentInTest();
 				inExamController.setFirstPage();
 				window.setScene(new Scene(root));
@@ -115,7 +118,7 @@ public class EnterIdForTestController {
     }
     public void SetLectureNotes() {
     	lecnotesArea.setText(test.getStudentNotes());
-    	
+    	testLbl.setText("Welcome to " + test.getCourseName() + " Test");
     }
     
     

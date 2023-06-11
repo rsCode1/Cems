@@ -14,6 +14,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import gui.ServerStartScreenController;
+import logic.AddedTime;
 import logic.LogInInfo;
 import logic.LoggedUsers;
 import logic.Question;
@@ -22,6 +23,7 @@ import logic.StudentInTest;
 import logic.Test;
 import logic.TestApplyInfo;
 import logic.TestCode;
+import logic.TestSourceTime;
 import logic.Users;
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
@@ -67,12 +69,11 @@ public class EchoServer extends AbstractServer {
 				case "GetExam" :
 					getExam( (TestCode) request.getRequestParam(),client);
 					break;
-				//case "StartTest" :
-					//startTest( (TestApplyInfo) request.getRequestParam(),client);
-					//break;
 				case "SubmitExam" :
 					submitTest( (StudentInTest) request.getRequestParam(),client);
 					break;
+				case "CheckIfDurationChanged":
+					checkIfDurationChanged((TestSourceTime) request.getRequestParam(),client);
 				// Add more case statements for other request types
 			}
 		}
@@ -151,26 +152,7 @@ public class EchoServer extends AbstractServer {
 			
 			
 		}
-		
-	/*	private  void startTest( TestApplyInfo testApplyInfo, ConnectionToClient client) {
-			Statement stmt;
-			boolean ret=false;
-			try {
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root","Aa123456");
-			String studentId1= '"' + String.valueOf(testApplyInfo.getId())+'"';
-			String  code1= '"' + String.valueOf(testApplyInfo.getCode())+'"';
-			String str = "SELECT * FROM cems.students_applying_for_test_list list Where " +  "list.code=" + code1 + "AND list.stdID=" +studentId1 +";";
-			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(str);
-	 		if (rs.next()) 
-	 		////client.sendtoclient
-	 			ret=true;
-	 		rs.close();
-	 		return ret;
-			}
-			catch (SQLException e) {e.printStackTrace();}
-			return ret;////client.sendtoclient
-		}*/
+	
 		//returns Question list if testid Existed in DataBase else null
 		private  Question[] getTestQuestions(Connection conn,int testid,int Size) {
 			Question[] qLst=new Question[Size];
@@ -205,7 +187,8 @@ public class EchoServer extends AbstractServer {
 			
 		}
 		public void submitTest(StudentInTest studentInTest,ConnectionToClient client) {
-			Statement stmt;
+			Statement stmt,stmt2;
+			String str2 ="UPDATE `cems`.`students_applying_for_test_list` SET `submitted` = '1' WHERE (`stdId` = '"+studentInTest.getStudentId() +" ') and (`testId` = '"+ studentInTest.getTestId() +"');";
 			String str;
 			String studentId= '"' + String.valueOf(studentInTest.getStudentId()) +'"';
 			String testId= '"' + String.valueOf(studentInTest.getTestId()) +'"';
@@ -221,13 +204,60 @@ public class EchoServer extends AbstractServer {
 				    stmt.executeUpdate(str);
 				    str="";
 					}
+				stmt2 = conn.createStatement();
+				stmt2.executeUpdate(str2);
+				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
+			
+			
+			
 		}
-
+		
+		private void checkIfDurationChanged(TestSourceTime testSourcetime , ConnectionToClient client) {
+			String str;
+			int currentD=testSourcetime.getSourceTime();
+			AddedTime added = new AddedTime();
+			added.setAdded(0);
+			str ="SELECT test.duration FROM cems.test test WHERE idTest=" +testSourcetime.getTestId() + ";";
+			Statement stmt;
+			try {
+				Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root","Aa123456");
+				stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(str);
+				if(rs.next()) {
+					currentD=rs.getInt(1);
+				}
+				rs.close();
+				if(currentD != testSourcetime.getSourceTime()) {
+					added.setAdded(currentD - testSourcetime.getSourceTime());
+					try {
+						client.sendToClient(added);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} else
+					try {
+						client.sendToClient(added);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				client.sendToClient(added);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		//gets test Data from DataBase and puts it in Test Object and returns it;
 		private Test getTest(Connection conn,int testid) {
 			ArrayList<Integer> studentsIdForTest = new ArrayList<>();
@@ -242,15 +272,15 @@ public class EchoServer extends AbstractServer {
 	 			test= new Test(rs.getString(7),rs.getInt(2),rs.getString(4),rs.getInt(3),rs.getInt(1));
 			}
 	 		rs.close();
-	 		str="SELECT list.stdId FROM cems.students_applying_for_test_list list WHERE testId=" +testid + ";";
+	 		ResultSet rs2;
+	 		str = "SELECT list.stdId FROM cems.students_applying_for_test_list list WHERE testId = " + testid + " AND submitted = 0;";
 	 		Statement stmt2 = conn.createStatement();
-	 		rs = stmt2.executeQuery(str);
-	 		while (rs.next()) {
-	 			studentsIdForTest.add(rs.getInt(1));
+	 		rs2 = stmt2.executeQuery(str);
+	 		while (rs2.next()) {
+	 			studentsIdForTest.add(rs2.getInt(1));
 			}
-	 		rs.close();
+	 		rs2.close();
 	 		test.setStudentsIdForTest(studentsIdForTest);
- 		    rs.close();
 	 		return test;
 			}
 			catch (SQLException e) {e.printStackTrace();}

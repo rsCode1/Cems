@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import logic.AddedTime;
 import logic.Test;
 import logic.Users;
 
@@ -26,7 +27,7 @@ public class ChatClient extends AbstractClient
 {
   private LoginScreenController loginScreecontroller;
   private TakeExamController takeExamController;
-
+  private InExamController inExamController;
   private String ip = "";
   private int portServer;
   // Instance variables **********************************************
@@ -61,18 +62,18 @@ public class ChatClient extends AbstractClient
           System.out.println(user.getRole());
       } 
   else if(msg instanceof Test ) {
-	  System.out.println("I arruved at h.m.f.s");
 	  Test test= (Test) msg ;
 	  try {
-		  System.out.println("I arruved at h.m.f.s2");
 		  takeExamController.ShowStudentEnterIdScreen(test);
-		  System.out.println("I arruved at h.m.f.s2");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.out.println("catch in chat client catch");
 			e.printStackTrace();
 		}
 	  
+  }
+  else if(msg instanceof AddedTime) {
+	  AddedTime added= (AddedTime) msg;
+	  inExamController.setAdded(added);
   }
    else {
           System.out.println("Received message of type: " + msg.getClass());
@@ -84,6 +85,9 @@ public class ChatClient extends AbstractClient
   }
   public void setTakeExamController(TakeExamController controller) {
 	    this.takeExamController = controller;
+	  }
+  public void setInExamController(InExamController controller) {
+	    this.inExamController = controller;
 	  }
 
   /**

@@ -85,7 +85,7 @@ public class TakeExamController {
     			client.openConnection();
     			if (client.isConnected()) {
     				client.sendToServer(new Request("GetExam", testCode));
-    				//errMes1.setText("Code is wrong!, please try again!");
+    				errMes1.setText("Code is wrong!, please try again!");
     			} else {
     				System.out.println("Not connected to server.");
     			}

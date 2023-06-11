@@ -6,15 +6,21 @@ import client.ChatClient;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import logic.AddedTime;
 import logic.Question;
 import logic.Request;
 import logic.StudentInTest;
 import logic.Test;
+import logic.TestSourceTime;
 import logic.Users;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -27,8 +33,17 @@ public class InExamController {
 	private Test test;
 	private int selectedAns;
 	private int answeredNum=0;
-	private boolean locked=true;
+	private boolean locked=false;
+    public AddedTime getAdded() {
+		return added;
+	}
 
+
+	public void setAdded(AddedTime added) {
+		this.added = added;
+	}
+
+	private AddedTime added=new AddedTime();
 
 	
 	public void setTest(Test test){
@@ -51,9 +66,10 @@ public class InExamController {
 		studentInTest = new StudentInTest (student.getId(), test.getCourseName(), test.getQuesSize());
 	}*/
 	
-	public void setStudentAndClient(Users Student,ChatClient client) {
+	public void setStudentAndClient(Users Student,ChatClient client,InExamController controller) {
     	this.student=Student;
     	this.client=client;
+    	this.client.setInExamController(controller);
     }
 	
 	@FXML
@@ -211,18 +227,43 @@ public class InExamController {
     	selectedAns=4;
     	ansNum.setText(answeredNum + "");
     }
-
+ 
     
-
+   
     @FXML
     void submit(ActionEvent event) {
-    	try {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ApproveSubmit.fxml"));
+		Parent root;
+		try {
+		
+			root = loader.load();
+			//Stage window = (Stage) subBtn.getScene().getWindow();
+			Stage window = new Stage();
+			ApproveSubmitController controller=loader.getController();
+			//controller.setTest(test);
+			controller.setStudentAndClient(student ,client,studentInTest,this.getController());
+			window.setScene(new Scene(root));
+			window.show();
+		    }
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    }
+
+    	/*try {
 			client.sendToServer(new Request("SubmitExam", studentInTest));
+			int index = test.getStudentsIdForTest().indexOf(student.getId());
+			test.getStudentsIdForTest().remove(index);
 			System.out.println("Submitted");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
+    }
+    public void CloseWindow() {
+    	Stage currentStage = (Stage) nextBtn.getScene().getWindow();
+        currentStage.close();
+    	
     }
     
     public InExamController getController() {
@@ -241,7 +282,7 @@ public class InExamController {
     	qNum.setText((questionIndex+1) + "");
     	qSize.setText(test.getQuesSize() + "");
     	scoreTxt.setText("Points Number : " +test.getqLst()[questionIndex].getScore());
-    	crsName.setText(test.getCourseName() + "Test");
+    	crsName.setText(test.getCourseName() + " Test");
     	//timeTxt.setText("Remaining Time: "+test.getDuration()+" M");
     }
     private void updateTimerLabel(int timeInSeconds) {
@@ -258,6 +299,7 @@ public class InExamController {
     private Thread timeThread;
     boolean addedTime=false;
     private void startTimer(int timeInSeconds,int duration) {
+    	TestSourceTime testSourceTime = new TestSourceTime(test.getDuration(),test.getTestId());
         stopThread = false; // Reset stopThread flag
         timeThread = new Thread(() -> {
             try {
@@ -265,8 +307,22 @@ public class InExamController {
                 while (remainingTime >= 0 && !stopThread) {
                 	if( remainingTime <=60 && addedTime==false ) {
                 		//checkIfDurationChanged
-                		//if yes re
-                		addedTime=true;
+                		//if yes then
+                		//addedTime=true;
+                		try {
+                			client.openConnection();
+                			if (client.isConnected()) {
+                				client.sendToServer(new Request("CheckIfDurationChanged", testSourceTime));
+                				if(added.getAdded() != 0) {
+                					remainingTime += added.getAdded() *60;
+                					addedTime=true;
+                				}
+                			} else {
+                				System.out.println("Not connected to server.");
+                			}
+                		} catch (IOException e) {
+                			e.printStackTrace();
+                		}
                 	}
                     updateTimerLabel(remainingTime);
                     Thread.sleep(1000);
@@ -284,7 +340,7 @@ public class InExamController {
         timeThread.start();
     }
 
-    private void stopTimer() {
+    public void stopTimer() {
         stopThread = true;
         if (timeThread != null) {
             timeThread.interrupt();
