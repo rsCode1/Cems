@@ -32,7 +32,7 @@
             <Font name="Calibri" size="16.0" />
          </font>
       </Label>
-      <Button layoutX="23.0" layoutY="682.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="74.0" text="back" />
+      <Button fx:id="backBtn" layoutX="23.0" layoutY="682.0" mnemonicParsing="false" onAction="#goBack" prefHeight="35.0" prefWidth="74.0" text="back" />
       <Button fx:id="saveExamBtn" layoutX="856.0" layoutY="581.0" mnemonicParsing="false" onAction="#saveExam" prefHeight="69.0" prefWidth="175.0" style="-fx-background-color: #37da83;" text="Save exam">
          <effect>
             <DropShadow height="50.31" radius="23.9225" width="47.38">
