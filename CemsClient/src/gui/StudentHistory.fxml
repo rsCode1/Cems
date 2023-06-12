@@ -14,7 +14,7 @@
             <Font size="22.0" />
          </font>
       </Label>
-      <Button fx:id="btnBacktoHome" layoutX="14.0" layoutY="21.0" mnemonicParsing="false" onMouseClicked="#ReturnBack" text="Back" />
+      <Button fx:id="btnBacktoHome" layoutX="14.0" layoutY="21.0" mnemonicParsing="false" onAction="#ReturnBack" text="Back" />
       <TableView fx:id="TestTableView" layoutX="14.0" layoutY="102.0" prefHeight="360.0" prefWidth="342.0">
         <columns>
           <TableColumn fx:id="tbcCourse" prefWidth="100.0" text="Course" />
