@@ -134,20 +134,20 @@ public class createExamController implements Initializable {
 				errLabel.setText("Please enter a valid time");
 				return;
 			}
-			 // check if the sum of question scores is 100
-	        int scoreSum = 0;
-	        for (Question question : questions) {
-	            scoreSum += question.getScore();
-	        }
-	        if (scoreSum != 100) {
-	            errLabel.setText("The sum of question scores must be 100");
-	            return;
-	        }
+			// check if the sum of question scores is 100
+			int scoreSum = 0;
+			for (Question question : questions) {
+				scoreSum += question.getScore();
+			}
+			if (scoreSum != 100) {
+				errLabel.setText("The sum of question scores must be 100");
+				return;
+			}
 			Exam exam = new Exam(coursesComboBox.getValue(), questions, lecturer,
 					Integer.parseInt(setTimeTextField.getText()), professionsComboBox.getValue());
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/review_exam.fxml")); // specify the path to
-																								// the
+																									// the
 			// main screen FXML file
 			Parent parent = null;
 			try {
@@ -237,7 +237,7 @@ public class createExamController implements Initializable {
 	@FXML
 	void backToMainScreen(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LecturerPage.fxml")); // specify the path to the
-																							// main screen FXML file
+																								// main screen FXML file
 		Parent parent = null;
 		try {
 			parent = loader.load();
@@ -266,17 +266,25 @@ public class createExamController implements Initializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String course = coursesComboBox.getValue().toString();
-		if (course == null) {
-			errLabel.setText("Please select a subject and course");
-			return;
-		}
-		Request request = new Request("getQuestions", course);
-		try {
-			client.sendToServer(request);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Platform.runLater(() -> {
+			// add some subjects to the comboBox
+			if (professionsComboBox.getValue() == null || coursesComboBox.getValue() == null) {
+				errLabel.setText("Please select a subject and course");
+				return;
+			}
+			errLabel.setText("");
+			String subject = professionsComboBox.getValue().toString();
+			String course = coursesComboBox.getValue().toString();
+
+			Request request = new Request("getQuestions", course);
+			try {
+				client.sendToServer(request);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		});
+
 	}
 
 	@Override
