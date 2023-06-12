@@ -1,20 +1,28 @@
 package server;
 // This file contains material supporting section 3.7 of the textbook:
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 // "Object Oriented Software Engineering" and is issued under the open-source
 // license found at www.lloseng.com
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.mysql.cj.jdbc.Blob;
+
 import gui.ServerStartScreenController;
 import logic.AddedTime;
+import logic.FileDownloadInfo;
 import logic.LogInInfo;
 import logic.LoggedUsers;
 import logic.Question;
@@ -74,9 +82,42 @@ public class EchoServer extends AbstractServer {
 					break;
 				case "CheckIfDurationChanged":
 					checkIfDurationChanged((TestSourceTime) request.getRequestParam(),client);
+				case "DownloadManualExam":
+				   downloadManuelExam((FileDownloadInfo) request.getRequestParam(),client);
 				// Add more case statements for other request types
 			}
 		}
+	}
+	private void downloadManuelExam(FileDownloadInfo fileDownloadInfo, ConnectionToClient client) {
+		String sql = "SELECT file_data FROM cems.manueltests WHERE testId = ?";
+	    PreparedStatement statement;
+	    
+        try {
+        	Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root","Aa123456");
+        	statement = conn.prepareStatement(sql);
+        	statement.setInt(1, fileDownloadInfo.getCourseId());
+	    ResultSet result = statement.executeQuery();
+	    if (result.next()) {
+	        Blob fileData = (Blob) result.getBlob("file_data");
+	        InputStream inputStream = fileData.getBinaryStream();
+	        File outputFile = new File(fileDownloadInfo.getFileDownloadPath());
+	        OutputStream outputStream = new FileOutputStream(outputFile);
+	        byte[] buffer = new byte[4096];
+	        int bytesRead = -1;
+	        while ((bytesRead = inputStream.read(buffer)) != -1) {
+	            outputStream.write(buffer, 0, bytesRead);
+	        }
+
+	        System.out.println("File downloaded successfully!");
+	        outputStream.close();
+	    } else {
+	        System.out.println("File not found!");
+	    }
+        
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}	
+		
 	}
 
 	private void checkUserLogin(LogInInfo loginInfo, ConnectionToClient client) {
@@ -146,10 +187,10 @@ public class EchoServer extends AbstractServer {
 						e.printStackTrace();
 					}
 				}
-			
 			}
-			catch (SQLException e) {e.printStackTrace();} 
-			
+			catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();}
 			
 		}
 	
