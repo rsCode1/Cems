@@ -68,11 +68,11 @@ public class StudentHistoryController {
     	  DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yy");  
           LocalDateTime now = LocalDateTime.now();  
           lblDate.setText("Date : " + dtf.format(now));
-          
-    	 try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydatabase", "localhost", "password")) {
-            
+     
+    	 try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+				"Aa123456")) {
     		 String query="SELECT course,testName,grade FROM testcompletebystudent WHERE status='completed' AND StudentID=?";
-    		 PreparedStatement statement = connection.prepareStatement(query);
+    		 PreparedStatement statement = conn.prepareStatement(query);
     	        statement.setInt(1, this.student.getId());
     	        ResultSet resultSet = statement.executeQuery();
     	        while (resultSet.next()) {

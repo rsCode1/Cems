@@ -5,8 +5,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="410.0" prefWidth="626.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="410.0" prefWidth="626.0" styleClass="background" stylesheets="@../../style/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
       <Text layoutX="61.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="title test name and more detils" wrappingWidth="290.77777099609375" />
@@ -14,8 +13,8 @@
       <Label layoutX="481.0" layoutY="17.0" prefHeight="17.0" prefWidth="38.0" text="subject" />
       <Label layoutX="55.0" layoutY="307.0" prefHeight="16.0" prefWidth="136.0" text="time pass from start:" />
       <Label layoutX="61.0" layoutY="339.0" prefHeight="16.0" prefWidth="136.0" text="00:00:00" />
-      <Button layoutX="279.0" layoutY="312.0" mnemonicParsing="false" text="submit" />
-      <Button layoutX="223.0" layoutY="224.0" mnemonicParsing="false" text="uppload test" />
+      <Button layoutX="463.0" layoutY="292.0" mnemonicParsing="false" text="submit" />
+      <Button layoutX="206.0" layoutY="222.0" mnemonicParsing="false" text="uppload test" />
       <Label layoutX="364.0" layoutY="228.0" prefHeight="16.0" prefWidth="136.0" text="path..\\" />
    </children>
 </Pane>
