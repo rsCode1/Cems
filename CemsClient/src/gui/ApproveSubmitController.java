@@ -1,7 +1,7 @@
 package gui;
 
 import java.io.IOException;
-//testing push xzzz 
+
 import client.ChatClient;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,16 +14,29 @@ import logic.StudentInTest;
 import logic.Users;
 
 public class ApproveSubmitController {
-	private StudentInTest studentInTest;
-	private ChatClient client;
-	private Users student;
-	private InExamController inExamController;
+	//private StudentInTest studentInTest;
+	//private ChatClient client;
+//	private Users student;
+	//private InExamController inExamController; 
+	private StudentManualTestController studentManualTest; 
+	private int DigOrMan;
+	public int getDigOrMan() {
+		return DigOrMan;
+	}
+	public void setDigOrMan(int digOrMan) {
+		DigOrMan = digOrMan;
+	}
 
 	public void setStudentAndClient(Users Student,ChatClient client,StudentInTest studentInTest,InExamController inExamController) {
     	this.student=Student;
     	this.client=client;
     	this.studentInTest=studentInTest;
     	this.inExamController=inExamController;
+    	}
+	public void setStudentAndClient2(Users Student,ChatClient client,StudentManualTestController Controller) {
+    	this.student=Student;
+    	this.client=client;
+    	this.studentManualTest=Controller;
     	}
 	 @FXML
 	    private Button clsBtn;
@@ -38,7 +51,7 @@ public class ApproveSubmitController {
 
     @FXML
     private Button yesBtn;
-    //testing
+
     @FXML
     void noBtnclicked(ActionEvent event) {
     	 Stage currentStage = (Stage) noBtn.getScene().getWindow();
@@ -53,6 +66,7 @@ public class ApproveSubmitController {
 
     @FXML
     void yesBtnClicked(ActionEvent event) {
+    	if(DigOrMan==0) {
     	try {
 		client.sendToServer(new Request("SubmitExam", studentInTest));
 		System.out.println("Submitted");
@@ -69,6 +83,17 @@ public class ApproveSubmitController {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
+    	}
+    	
+    	else {
+    		//send new request to server "Submit Manual exam"
+    		yesBtn.setDisable(true);
+    		noBtn.setDisable(true);
+    		lbl.setText("The Test is Submitted Succesfully!");
+    		mesTxt.setText("Good Luck!");
+    		studentManualTest.stopTimer();
+    		studentManualTest.CloseWindow();
+    	}
 
     }
     public ApproveSubmitController getController() {
