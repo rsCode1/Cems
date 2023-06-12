@@ -9,6 +9,7 @@ import gui.ConnectToServerScreenController;
 import gui.InExamController;
 import gui.LoginScreenController;
 import gui.StudentHistoryController;
+import gui.StudentManualTestController;
 import gui.TakeExamController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +27,8 @@ import ocsf.client.*;
 public class ChatClient extends AbstractClient
 
 {
+  private StudentManualTestController stdManController;
+  private String ip = "";
   private LoginScreenController loginScreecontroller;
   private TakeExamController takeExamController;
   private InExamController inExamController;
@@ -82,7 +85,9 @@ public class ChatClient extends AbstractClient
           System.out.println("Received message of type: " + msg.getClass());
       }
   }
-
+  public void setStudentManualTestController(StudentManualTestController controller) {
+	  this.stdManController=controller;
+  }
   public void setController(LoginScreenController controller) {
     this.loginScreecontroller = controller;
   }
