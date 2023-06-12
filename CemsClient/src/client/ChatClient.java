@@ -8,6 +8,7 @@ import client.*;
 import gui.ConnectToServerScreenController;
 import gui.LoginScreenController;
 import gui.ReviewExamController;
+import gui.StartExamController;
 import gui.writeQuestionController;
 import gui.createExamController;
 import gui.TimeRequestController;
@@ -16,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import logic.Exam;
 import logic.LogInInfo;
 import logic.Response;
 import logic.Users;
@@ -36,6 +38,7 @@ public class ChatClient extends AbstractClient
 	private createExamController createExamController;
 	private ReviewExamController reviewExamController;
 	private TimeRequestController TimeRequestController;
+	private StartExamController startExamController;
 
 	private String ip = "";
 	private int portServer;
@@ -90,6 +93,10 @@ public class ChatClient extends AbstractClient
 				case "ExamSaved":
 					reviewExamController.setLabel();
 					break;
+				case "getExamsByLecturer":
+					ArrayList<Exam> examsArr = (ArrayList<Exam>) response.getResponseParam();
+					startExamController.setExamsTable(examsArr);
+					break;
 			}
 
 		}
@@ -126,6 +133,9 @@ public class ChatClient extends AbstractClient
 	}
 	public void setController(TimeRequestController controller) {
 		this.TimeRequestController = controller;
+	}
+	public void setController(StartExamController controller) {
+		this.startExamController = controller;
 	}
 
 	/**

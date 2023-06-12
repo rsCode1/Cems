@@ -85,6 +85,30 @@ public class LecturerPageController {
 		});
 
 	}
+	@FXML
+	public void startExam(ActionEvent event) {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/start_exam.fxml")); // specify the path to the
+																							// new fxml file
+		Parent parent = null;
+		try {
+			parent = loader.load();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Scene nextScene = new Scene(parent);
+
+		// Get the new scene's controller and pass the ChatClient instance to it
+		StartExamController controller = loader.getController();
+		controller.setClientAndLecturer(client,lecturer);
+		controller.getExamsTable();
+		client.setController(controller);
+
+		// This line gets the Stage information
+		Stage window = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+		window.setScene(nextScene);
+		window.show();
+	}
 
 	public void setLecturerAndClient(Users lecturer, ChatClient client) {
 		this.lecturer = lecturer;

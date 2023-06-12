@@ -78,9 +78,33 @@ public class EchoServer extends AbstractServer {
 				case "saveExam":
 					saveExam((Exam) request.getRequestParam(), client);
 					break;
+				case "getExamsByLecturer":
+					getExamsByLecturer(client, (Users) request.getRequestParam());
+					break;
 
 				// Add more case statements for other request types
 			}
+		}
+	}
+
+	private void getExamsByLecturer(ConnectionToClient client, Users lecturer) {
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			System.out.println("SQL connection succeed");
+			Statement stmt = conn.createStatement();
+			String command = "SELECT exam_id,course_name,lecturer_comments,student_comments,test_time FROM exams WHERE lecturer_id = '" + lecturer.getId() + "'";
+			ResultSet rs = stmt.executeQuery(command);
+			ArrayList<Exam> exams = new ArrayList<>();
+			while (rs.next()) {
+				Exam exam = new Exam(rs.getInt("exam_id"), rs.getString("course_name"),  rs.getString("lecturer_comments"), rs.getString("student_comments"),
+						rs.getInt("test_time"));
+				exams.add(exam);
+			}
+			Response response = new Response("getExamsByLecturer", exams);
+			client.sendToClient(response);
+		} catch (SQLException | IOException e) {
+			e.printStackTrace();
 		}
 	}
 

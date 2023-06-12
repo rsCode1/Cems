@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import javafx.collections.ObservableList;
 
 public class Exam implements Serializable {
-
+    private int examId;
     private String courseName;
     private String subject;
     ArrayList<Question>  questions;
@@ -22,6 +22,15 @@ public class Exam implements Serializable {
         this.lecturer = lecturer;
         this.testTime = testTime;
         this.subject = subject;
+    }
+    
+    public Exam (int exam_id,String course_name,String lecturer_comments,String student_comments,int test_time){
+        	this.examId = exam_id;
+        	this.courseName = course_name;
+        	this.lecturerComments = lecturer_comments;
+        	this.studentComments = student_comments;
+        	this.testTime = test_time;
+
     }
 
     public String getCourseName() {
@@ -51,6 +60,12 @@ public class Exam implements Serializable {
     }
     public String getStudentComments() {
         return studentComments;
+    }
+    public void setExamId(int examId) {
+        this.examId = examId;
+    }
+    public int getExamId() {
+        return examId;
     }
 
 }
