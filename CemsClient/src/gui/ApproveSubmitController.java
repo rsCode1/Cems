@@ -14,10 +14,10 @@ import logic.StudentInTest;
 import logic.Users;
 
 public class ApproveSubmitController {
-	//private StudentInTest studentInTest;
-	//private ChatClient client;
-//	private Users student;
-	//private InExamController inExamController; 
+	private StudentInTest studentInTest;
+	private ChatClient client;
+	private Users student;
+	private InExamController inExamController; 
 	private StudentManualTestController studentManualTest; 
 	private int DigOrMan;
 	public int getDigOrMan() {
