@@ -26,6 +26,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class InExamController {
+	private  int remainingTime;
 	private StudentInTest studentInTest;
 	private ChatClient client;
 	private Users student;
@@ -34,6 +35,7 @@ public class InExamController {
 	private int selectedAns;
 	private int answeredNum=0;
 	private boolean locked=false;
+	private AddedTime added=new AddedTime();
     public AddedTime getAdded() {
 		return added;
 	}
@@ -43,7 +45,7 @@ public class InExamController {
 		this.added = added;
 	}
 
-	private AddedTime added=new AddedTime();
+	
 
 	
 	public void setTest(Test test){
@@ -242,6 +244,7 @@ public class InExamController {
 			ApproveSubmitController controller=loader.getController();
 			//controller.setTest(test);
 			controller.setStudentAndClient(student ,client,studentInTest,this.getController());
+			controller.setDigOrMan(0);
 			window.setScene(new Scene(root));
 			window.show();
 		    }
@@ -249,17 +252,8 @@ public class InExamController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		    }
-
-    	/*try {
-			client.sendToServer(new Request("SubmitExam", studentInTest));
-			int index = test.getStudentsIdForTest().indexOf(student.getId());
-			test.getStudentsIdForTest().remove(index);
-			System.out.println("Submitted");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
     }
+    
     public void CloseWindow() {
     	Stage currentStage = (Stage) nextBtn.getScene().getWindow();
         currentStage.close();
@@ -303,9 +297,9 @@ public class InExamController {
         stopThread = false; // Reset stopThread flag
         timeThread = new Thread(() -> {
             try {
-                int remainingTime = timeInSeconds;
+                remainingTime = timeInSeconds;
                 while (remainingTime >= 0 && !stopThread) {
-                	if( remainingTime <=60 && addedTime==false ) {
+                	if( remainingTime <=5 && addedTime==false ) {
                 		//checkIfDurationChanged
                 		//if yes then
                 		//addedTime=true;
@@ -329,9 +323,10 @@ public class InExamController {
                     remainingTime--;
                 }
                 
-                // Timer has finished
+                // Timer has finished/*
                 if (!stopThread) {
                 	subBtn.setDisable(true);
+                	CloseWindow();
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -342,10 +337,9 @@ public class InExamController {
 
     public void stopTimer() {
         stopThread = true;
-        if (timeThread != null) {
-            timeThread.interrupt();
-            timeThread = null;
-        }
+        remainingTime=0;
+        updateTimerLabel(remainingTime);
+    
     }
   
 

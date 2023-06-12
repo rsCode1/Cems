@@ -24,6 +24,13 @@ import logic.TestCode;
 import logic.Users;
 
 public class EnterIdForTestController {
+	private int DigOrMan;
+	public int getDigOrMan() {
+		return DigOrMan;
+	}
+	public void setDigOrMan(int digOrMan) {
+		DigOrMan = digOrMan;
+	}
 	private ChatClient client;
 	private Users student;
 	private Test test;
@@ -57,8 +64,7 @@ public class EnterIdForTestController {
     		int studentId = Integer.parseInt(id);
     		if (test.getStudentsIdForTest().contains(studentId)) {
     			errTxt.setText("Correct Id");
-    			ShowStudentTestScreen(test);
-    			
+    			ShowStudentTestScreen(test);	
     		}
     		else {
     			errTxt.setText("Wrong Id, please try again");
@@ -92,7 +98,7 @@ public class EnterIdForTestController {
 			if (test == null) {
 				errTxt.setText("Id or Code is wrong!, please try again!"); } 
 			
-			else {
+			else if (DigOrMan == 0){
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/InExam.fxml"));
 			errTxt.setText("");
 			Parent root;
@@ -114,6 +120,22 @@ public class EnterIdForTestController {
 			    }
 			
     	    }
+			else if (DigOrMan == 1){
+			  try {
+	            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/Take_manual_exam.fxml"));
+	            Parent root = loader.load();
+	            Stage window = (Stage) starttestBtn.getScene().getWindow();
+	            StudentManualTestController controller=loader.getController();
+	            controller.setStudentAndClient(student, client,controller);
+	            controller.setTest(test);
+	            controller.setWelcomeLabel();
+	            window.setScene(new Scene(root));
+				window.show();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	    }
+				
+			}
 		
     }
     public void SetLectureNotes() {
