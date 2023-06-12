@@ -66,13 +66,15 @@ public class StudentPageController {
     }
     
     @FXML
-    public void TakeExamForm() {
+    public void TakeDigitalExamForm() {
     	try {
     		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/TakeExam.fxml"));
     		Parent root = loader.load();
     		Stage stage = new Stage();
     		TakeExamController takeExamController = loader.getController();
     		takeExamController.setStudentAndClient(student, client,takeExamController);
+    		takeExamController.setDigOrMan(0);
+    		takeExamController.setLabel("Welcome to Take Digital Exam Form");
     		stage.setScene(new Scene(root));
     		stage.show();
     		} 
@@ -127,18 +129,7 @@ public class StudentPageController {
 
     @FXML
     public void ShowResults() {
-    	try {
-    		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/StudentHistory.fxml"));
-    		Parent root = loader.load();
-    		Stage stage = new Stage();
-    		StudentHistoryController SHController = loader.getController();
-    		SHController.setStudentAndClient(student, client,SHController);
-    		stage.setScene(new Scene(root));
-    		stage.show();
-    		} 
-    	catch (IOException e) {
-        e.printStackTrace();
-    	}
+        // Implement the logic of the "Results" button.
     }
 
     @FXML
