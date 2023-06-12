@@ -8,6 +8,7 @@ import client.*;
 import gui.ConnectToServerScreenController;
 import gui.InExamController;
 import gui.LoginScreenController;
+import gui.StudentHistoryController;
 import gui.TakeExamController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -28,9 +29,11 @@ public class ChatClient extends AbstractClient
   private LoginScreenController loginScreecontroller;
   private TakeExamController takeExamController;
   private InExamController inExamController;
+  private StudentHistoryController StudentHistoryController;
   private String ip = "";
   private int portServer;
   // Instance variables **********************************************
+
 
   public ChatClient(String host, int port, Object clientUI)
       throws IOException {
@@ -88,6 +91,9 @@ public class ChatClient extends AbstractClient
 	  }
   public void setInExamController(InExamController controller) {
 	    this.inExamController = controller;
+	  }
+  public void setStudentHistoryController(StudentHistoryController controller) {
+	    this.StudentHistoryController = controller;
 	  }
 
   /**

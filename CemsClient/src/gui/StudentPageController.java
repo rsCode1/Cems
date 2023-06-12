@@ -127,7 +127,18 @@ public class StudentPageController {
 
     @FXML
     public void ShowResults() {
-        // Implement the logic of the "Results" button.
+    	try {
+    		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/StudentHistory.fxml"));
+    		Parent root = loader.load();
+    		Stage stage = new Stage();
+    		StudentHistoryController SHController = loader.getController();
+    		SHController.setStudentAndClient(student, client,SHController);
+    		stage.setScene(new Scene(root));
+    		stage.show();
+    		} 
+    	catch (IOException e) {
+        e.printStackTrace();
+    	}
     }
 
     @FXML
