@@ -3,18 +3,39 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="410.0" prefWidth="626.0" styleClass="background" stylesheets="@../../style/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="410.0" prefWidth="626.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.StudentManualTestController">
+
    <children>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-      <Text layoutX="61.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="title test name and more detils" wrappingWidth="290.77777099609375" />
-      <Label layoutX="22.0" layoutY="17.0" text="title" />
-      <Label layoutX="481.0" layoutY="17.0" prefHeight="17.0" prefWidth="38.0" text="subject" />
-      <Label layoutX="55.0" layoutY="307.0" prefHeight="16.0" prefWidth="136.0" text="time pass from start:" />
-      <Label layoutX="61.0" layoutY="339.0" prefHeight="16.0" prefWidth="136.0" text="00:00:00" />
-      <Button layoutX="463.0" layoutY="292.0" mnemonicParsing="false" text="submit" />
-      <Button layoutX="206.0" layoutY="222.0" mnemonicParsing="false" text="uppload test" />
-      <Label layoutX="364.0" layoutY="228.0" prefHeight="16.0" prefWidth="136.0" text="path..\\" />
+      <Label layoutX="410.0" layoutY="29.0" prefHeight="17.0" prefWidth="114.0" text="Reameaning time:" />
+      <Label fx:id="timeLabel" layoutX="542.0" layoutY="29.0" prefHeight="17.0" prefWidth="70.0" text="00:00:00" />
+      <Button fx:id="subBtn" layoutX="474.0" layoutY="235.0" mnemonicParsing="false" onAction="#submit" text="Submit" />
+      <Button fx:id="upload" layoutX="362.0" layoutY="159.0" mnemonicParsing="false" onAction="#click_upload" text="Upload Test" />
+      <Label fx:id="selectedFileLabel" layoutX="54.0" layoutY="197.0" prefHeight="17.0" prefWidth="404.0" text=" " />
+      <Button fx:id="download" layoutX="355.0" layoutY="84.0" mnemonicParsing="false" onAction="#click_download" text="Download" />
+      <Label fx:id="downloadMes" layoutX="61.0" layoutY="118.0" prefHeight="17.0" prefWidth="290.0" />
+      <Label fx:id="crsName" layoutX="206.0" layoutY="25.0" prefHeight="17.0" prefWidth="174.0" text="Course Name Exam" textFill="#072dc4">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+      <Text layoutX="45.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To start Test please click on download :" wrappingWidth="290.13670349121094">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <Text layoutX="45.0" layoutY="177.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To upload Answers folder click on upload:" wrappingWidth="300.5366668701172">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <Text layoutX="45.0" layoutY="253.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To submit uploaded file and end test click on submit:" wrappingWidth="378.1367645263672">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
    </children>
 </Pane>

@@ -143,7 +143,22 @@ public class StudentPageController {
 
     @FXML
     public void takeManualExam() {
-        try {
+    	try {
+    		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/TakeExam.fxml"));
+    		Parent root = loader.load();
+    		Stage stage = new Stage();
+    		TakeExamController takeExamController = loader.getController();
+    		takeExamController.setStudentAndClient(student, client,takeExamController);
+    		takeExamController.setDigOrMan(1);
+    		takeExamController.setLabel("Welcome to Take Manuel Exam Form");
+    		stage.setScene(new Scene(root));
+    		stage.show();
+    		} 
+    	catch (IOException e) {
+        e.printStackTrace();
+    	}
+    	
+      /*  try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/Take_manual_exam.fxml"));
             Parent root = loader.load();
             Stage stage = new Stage();
@@ -151,7 +166,7 @@ public class StudentPageController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+    }*/
     }
     public StudentPageController getController() {
 		return this;

@@ -27,6 +27,15 @@ import logic.TestCode;
 import logic.Users;
 
 public class TakeExamController {
+	private int DigOrMan;
+	public int getDigOrMan() {
+		return DigOrMan;
+	}
+
+	public void setDigOrMan(int digOrMan) {
+		DigOrMan = digOrMan;
+	}
+
 	private ChatClient client;
 	private Users student;
 	private TestCode testCode;
@@ -37,6 +46,8 @@ public class TakeExamController {
     	this.client=client;
     	this.client.setTakeExamController(controller);
     }
+	@FXML
+    private Text lbl;
 	 
 	 @FXML
 	    private Text errMes1;
@@ -77,20 +88,38 @@ public class TakeExamController {
 
     @FXML
     void startBtnClicked(ActionEvent event) {
-    	
     	String code = codeTxt.getText() ;
     	if ( CheckApplyingInfo(code)) {
-    		TestCode testCode = new TestCode(Integer.valueOf(code));
+    		TestCode testCode = new TestCode(Integer.valueOf(code),DigOrMan);
+    		if(DigOrMan == 0) {
     		try {
     			client.openConnection();
     			if (client.isConnected()) {
     				client.sendToServer(new Request("GetExam", testCode));
     				errMes1.setText("Code is wrong!, please try again!");
-    			} else {
+    			}
+    			else {
     				System.out.println("Not connected to server.");
     			}
-    		} catch (IOException e) {
+    		}
+    		 catch (IOException e) {
     			e.printStackTrace();
+    		 }
+    		}
+    		else {
+    			try {
+        			client.openConnection();
+        			if (client.isConnected()) {
+        				client.sendToServer(new Request("GetExam", testCode));
+        				errMes1.setText("Code is wrong!, please try again!");
+        			} else {
+        				System.out.println("Not connected to server.");
+        			}
+        		} catch (IOException e) {
+        			e.printStackTrace();
+        		}
+    			
+    		}
     		}
     		/*FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/InExam.fxml")); // specify the path to the new fxml file
     		Parent root;
@@ -116,6 +145,10 @@ public class TakeExamController {
     	
     		
 
+    
+    public void setLabel(String str) {
+    	lbl.setText(str);
+    	
     }
     
     public void ShowStudentEnterIdScreen(Test test) throws IOException {
@@ -136,6 +169,7 @@ public class TakeExamController {
 				    // Get the Stage information
 				    controller.setTest(test);
 				    controller.setStudentAndClient(student, client);
+				    controller.setDigOrMan(DigOrMan);
 				   // controller.setStudentInTest();
 				    //controller.setFirstPage();
 				    controller.SetLectureNotes();
