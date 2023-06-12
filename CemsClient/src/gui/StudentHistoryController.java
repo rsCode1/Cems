@@ -112,4 +112,8 @@ public class StudentHistoryController {
     	    lblGPA.setText("Average GPA: " + average);
     }
     
+    public StudentHistoryController getController() {
+		return this;
+	}
+    
 }
