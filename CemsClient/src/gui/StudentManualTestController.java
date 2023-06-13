@@ -112,7 +112,7 @@ public class StudentManualTestController {
 			}*/
 	    }
 	    public void CloseWindow() {
-	    	Stage currentStage = (Stage) subBtn.getScene().getWindow();
+	    	Stage currentStage = (Stage) upload.getScene().getWindow();
 	        currentStage.close();
 	    	
 	    }
