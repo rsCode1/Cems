@@ -15,9 +15,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="createQuestionForm" prefHeight="734.0" prefWidth="1081.0" style="-fx-background-color: #d8bfd8;" styleClass="b" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ReviewExamController">
+<Pane fx:id="createQuestionForm" prefHeight="731.0" prefWidth="1067.0" style="-fx-background-color: #d8bfd8;" styleClass="b" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ReviewExamController">
    <children>
-      <ImageView fitHeight="758.0" fitWidth="1092.0" layoutX="-5.0" layoutY="-7.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="758.0" fitWidth="1067.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@images/background.jpeg" />
          </image>
@@ -33,7 +33,7 @@
          </font>
       </Label>
       <Button fx:id="backBtn" layoutX="23.0" layoutY="682.0" mnemonicParsing="false" onAction="#goBack" prefHeight="35.0" prefWidth="74.0" text="back" />
-      <Button fx:id="saveExamBtn" layoutX="856.0" layoutY="581.0" mnemonicParsing="false" onAction="#saveExam" prefHeight="69.0" prefWidth="175.0" style="-fx-background-color: #37da83;" text="Save exam">
+      <Button fx:id="saveExamBtn" layoutX="856.0" layoutY="573.0" mnemonicParsing="false" onAction="#saveExam" prefHeight="69.0" prefWidth="175.0" style="-fx-background-color: #37da83;" text="Save exam">
          <effect>
             <DropShadow height="50.31" radius="23.9225" width="47.38">
                <color>
@@ -72,61 +72,17 @@
       </TextArea>
       <Text layoutX="172.0" layoutY="547.0" strokeType="OUTSIDE" strokeWidth="0.0" text="lecturer comments:" wrappingWidth="114.0" />
       <Text layoutX="466.0" layoutY="548.0" strokeType="OUTSIDE" strokeWidth="0.0" text="comments for student :" wrappingWidth="174.99999999999994" />
-      <Label layoutX="50.0" layoutY="-1.0" prefHeight="58.0" prefWidth="123.0" text="Cems" textFill="#00ffbd">
-         <font>
-            <Font name="Calibri Bold" size="50.0" />
-         </font>
-         <effect>
-            <DropShadow height="38.59" radius="18.795" spread="0.53" width="38.59">
-               <input>
-                  <InnerShadow height="191.25" radius="111.0625" width="255.0">
-                     <color>
-                        <Color green="0.02631578966975212" blue="0.01798245683312416" />
-                     </color>
-                  </InnerShadow>
-               </input>
-               <color>
-                  <Color red="1.0" green="1.0" blue="1.0" />
-               </color>
-            </DropShadow>
-         </effect>
-      </Label>
       <Text fill="#018679" layoutX="397.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Exam Review" wrappingWidth="467.0">
          <font>
             <Font name="System Bold" size="39.0" />
          </font>
       </Text>
-      <TextField layoutX="254.0" layoutY="16.0" prefHeight="25.0" prefWidth="187.0" text="Home &gt; Exam creation&gt;Review" />
+      <TextField layoutX="270.0" layoutY="20.0" prefHeight="25.0" prefWidth="193.0" text="Home &gt; Exam creation &gt; Review" />
       <Button layoutX="855.0" layoutY="519.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="175.0" text="Show/Update selected">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Button>
-      <Text fill="#03573c" layoutX="453.0" layoutY="35.0" stroke="#02a894" strokeType="OUTSIDE" text="Write Questions">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Text>
-      <Text fill="#03573c" layoutX="912.0" layoutY="36.0" stroke="#02a894" strokeType="OUTSIDE" text="Grade">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Text>
-      <Text fill="#03573c" layoutX="992.0" layoutY="36.0" stroke="#02a894" strokeType="OUTSIDE" text="Statistics">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Text>
-      <Text fill="#03573c" layoutX="617.0" layoutY="35.0" stroke="#02a894" strokeType="OUTSIDE" text="Create Exams">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Text>
-      <Text fill="#03573c" layoutX="763.0" layoutY="35.0" stroke="#02a894" strokeType="OUTSIDE" text="Time Request">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Text>
       <Label layoutX="147.0" layoutY="136.0" prefHeight="35.0" prefWidth="74.0" text="Subject:" textFill="#1e1f26">
          <font>
             <Font name="Calibri" size="16.0" />
@@ -162,5 +118,44 @@
             <Font size="19.0" />
          </font>
       </Label>
+      <Label layoutX="48.0" layoutY="3.0" prefHeight="58.0" prefWidth="123.0" text="Cems" textFill="#00ffbd">
+         <font>
+            <Font name="Calibri Bold" size="50.0" />
+         </font>
+         <effect>
+            <DropShadow height="38.59" radius="18.795" spread="0.53" width="38.59">
+               <input>
+                  <InnerShadow height="191.25" radius="111.0625" width="255.0">
+                     <color>
+                        <Color green="0.02631578966975212" blue="0.01798245683312416" />
+                     </color>
+                  </InnerShadow>
+               </input>
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
+      </Label>
+      <Text fx:id="toolWriteQuestions" fill="#03573c" layoutX="525.0" layoutY="39.0" stroke="#02a894" strokeType="OUTSIDE" text="Write Questions">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="toolGrade" fill="#03573c" layoutX="875.0" layoutY="39.0" stroke="#02a894" strokeType="OUTSIDE" text="Grade">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="toolStatistics" fill="#03573c" layoutX="970.0" layoutY="39.0" stroke="#02a894" strokeType="OUTSIDE" text="Statistics">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="toolCreateExams" fill="#03573c" layoutX="710.0" layoutY="39.0" stroke="#02a894" strokeType="OUTSIDE" text="Create Exams">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
    </children>
 </Pane>

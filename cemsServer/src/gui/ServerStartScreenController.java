@@ -67,38 +67,11 @@ public class ServerStartScreenController implements Initializable   {
 	public void setServer(EchoServer server) {
 		this.server = server;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	
+	@FXML
+	public void exitApplication() {
+	    System.exit(0);
+	}
 
 
 

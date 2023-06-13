@@ -74,12 +74,15 @@ public class LecturerPageController {
 
 	@FXML
 	private Button writeQuestionBtn;
+	
+	@FXML
+	private Button TimeRequestBtn;
 
 	@FXML
 	void initialize() {
-	    toolTimeRequest.setOnMouseClicked(e -> {
-	    	showTimeRequestForm();
-	    });
+//	    toolTimeRequest.setOnMouseClicked(e -> {  make tool time request-> clickable
+//	    	showTimeRequestForm();
+//	    });
 		Platform.runLater(() -> {
 			lecturerName.setText(lecturer.getFirstName() + " " + lecturer.getLastName());
 		});
@@ -205,7 +208,7 @@ public class LecturerPageController {
 
 	}
 	@FXML
-	public void showTimeRequestForm() {
+	public void showTimeRequestForm(ActionEvent event) {
 	    FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/time_request.fxml")); // specify the path to
 	    // the new fxml file
 	    Parent parent = null;
@@ -224,7 +227,7 @@ public class LecturerPageController {
 		controller.setClientAndLecturer(this.client, lecturer);
 		client.setController(controller);
 		// Get the Stage information
-		Stage window = (Stage) toolTimeRequest.getScene().getWindow();
+		Stage window = (Stage) TimeRequestBtn.getScene().getWindow();
 		window.setScene(nextScene);
 		window.show();
 	}

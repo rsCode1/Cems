@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="createQuestionForm" prefHeight="731.0" prefWidth="1067.0" styleClass="b" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LecturerPageController">
+<Pane fx:id="createQuestionForm" prefHeight="731.0" prefWidth="1067.0" styleClass="b" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LecturerPageController">
    <children>
       <ImageView fitHeight="758.0" fitWidth="1067.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -39,9 +39,9 @@
             </DropShadow>
          </effect>
       </Label>
-      <Label layoutX="319.0" layoutY="94.0" prefHeight="58.0" prefWidth="180.0" text="Welcome" textFill="#1e1f26">
+      <Label layoutX="319.0" layoutY="94.0" prefHeight="58.0" prefWidth="180.0" text="Welcome" textFill="#018679">
          <font>
-            <Font name="Calibri" size="41.0" />
+            <Font name="Calibri Bold" size="41.0" />
          </font>
       </Label>
       <Button fx:id="logOutBtn" layoutX="14.0" layoutY="682.0" mnemonicParsing="false" onAction="#logOut" prefHeight="35.0" prefWidth="108.0" style="-fx-background-color: #FAA0A0;" text="Log-out">
@@ -52,12 +52,12 @@
                </color>
             </InnerShadow>
          </effect></Button>
-      <TableView fx:id="ongoingExamsTable" layoutX="199.0" layoutY="426.0" prefHeight="122.0" prefWidth="701.0">
+      <TableView fx:id="ongoingExamsTable" layoutX="184.0" layoutY="426.0" prefHeight="122.0" prefWidth="701.0">
          <columns>
-            <TableColumn fx:id="ongoingTableSubject" prefWidth="218.0" text="Subject" />
-            <TableColumn fx:id="ongoingTableExam" prefWidth="234.0" text="Exam" />
-            <TableColumn fx:id="ongoingTableTime" prefWidth="252.0" text="Time started" />
-            <TableColumn prefWidth="509.0" text="qustion" />
+            <TableColumn fx:id="ongoingTableSubject" prefWidth="218.0" text="Course" />
+            <TableColumn fx:id="ongoingTableExam" prefWidth="250.0" text="Exam id" />
+            <TableColumn prefWidth="73.0" text="Code" />
+            <TableColumn fx:id="ongoingTableTime" prefWidth="159.0" text="Time remaining" />
          </columns>
       </TableView>
       <Label layoutX="199.0" layoutY="391.0" prefHeight="35.0" prefWidth="114.0" text="ongoing exams:" textFill="#1e1f26">
@@ -106,12 +106,12 @@
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
-      <Text fx:id="toolWriteQuestions" fill="#03573c" layoutX="431.0" layoutY="38.0" stroke="#02a894" strokeType="OUTSIDE" text="Write Questions">
+      <Text fx:id="toolWriteQuestions" fill="#03573c" layoutX="525.0" layoutY="39.0" stroke="#02a894" strokeType="OUTSIDE" text="Write Questions">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Text fx:id="toolGrade" fill="#03573c" layoutX="890.0" layoutY="39.0" stroke="#02a894" strokeType="OUTSIDE" text="Grade">
+      <Text fx:id="toolGrade" fill="#03573c" layoutX="875.0" layoutY="39.0" stroke="#02a894" strokeType="OUTSIDE" text="Grade">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
@@ -121,27 +121,22 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Text fx:id="toolCreateExams" fill="#03573c" layoutX="593.0" layoutY="38.0" stroke="#02a894" strokeType="OUTSIDE" text="Create Exams">
+      <Text fx:id="toolCreateExams" fill="#03573c" layoutX="710.0" layoutY="39.0" stroke="#02a894" strokeType="OUTSIDE" text="Create Exams">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <Text fx:id="toolTimeRequest" fill="#03573c" layoutX="741.0" layoutY="38.0" stroke="#02a894" strokeType="OUTSIDE" text="Time Request">
+      <Label fx:id="lecturerName" layoutX="499.0" layoutY="94.0" prefHeight="58.0" prefWidth="416.0" textFill="#018679">
          <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Text>
-      <Label fx:id="lecturerName" layoutX="499.0" layoutY="94.0" prefHeight="58.0" prefWidth="416.0" textFill="#1e1f26">
-         <font>
-            <Font name="Calibri" size="41.0" />
+            <Font name="Calibri Bold" size="41.0" />
          </font>
       </Label>
-      <Button fx:id="CloseExamBtn" layoutX="199.0" layoutY="563.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="136.0" style="-fx-background-color: #f56060;" text="Close an Exam">
+      <Button fx:id="CloseExamBtn" layoutX="184.0" layoutY="563.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="136.0" style="-fx-background-color: #f56060;" text="Close an Exam">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
-      <Button fx:id="StartExamBtn1" layoutX="764.0" layoutY="563.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="136.0" style="-fx-background-color: #37da83;" text="Time Request">
+      <Button fx:id="TimeRequestBtn" layoutX="738.0" layoutY="563.0" mnemonicParsing="false" onAction="#showTimeRequestForm" prefHeight="49.0" prefWidth="147.0" style="-fx-background-color: #37da83;" text="Time Request">
          <effect>
             <InnerShadow>
                <color>
