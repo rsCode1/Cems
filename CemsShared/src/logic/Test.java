@@ -36,12 +36,11 @@ public class Test implements Serializable{
 	private int duration;
 	private String studentNotes;
 	private int quesSize;
-	public Test( String courseName, int duration, String studentNotes, int quesSize,int testId) {
+	public Test( String courseName, int duration, String studentNotes, int testId) {
 		super();
 		this.courseName = courseName;
 		this.duration = duration;
 		this.studentNotes = studentNotes;
-		this.quesSize = quesSize;
 		this.testId=testId;
 	}
 	public void setQLst(Question[] qLst) {

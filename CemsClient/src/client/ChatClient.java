@@ -54,7 +54,7 @@ public class ChatClient extends AbstractClient
    */
   public void handleMessageFromServer(Object msg) 
   {
-	
+	 //
    if (msg instanceof Users || msg==null) {
           Users user = (Users) msg;
           System.out.println(user);

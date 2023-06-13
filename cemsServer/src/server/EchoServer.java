@@ -321,16 +321,17 @@ public class EchoServer extends AbstractServer {
 		}
 		//gets test Data from DataBase and puts it in Test Object and returns it;
 		private Test getTest(Connection conn,int testid) {
+	       
 			ArrayList<Integer> studentsIdForTest = new ArrayList<>();
 			Test test=null;
 			Statement stmt;
 			try {
 			String id1= '"' + String.valueOf(testid) +'"';
-			String str = "SELECT * FROM cems.test Where idTest = " + id1 + ";";
+			String str = "SELECT * FROM exams Where exam_id =" +  id1 +";";
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(str);
 	 		if (rs.next()) {
-	 			test= new Test(rs.getString(7),rs.getInt(2),rs.getString(4),rs.getInt(3),rs.getInt(1));
+	 			test= new Test(rs.getString("course_name"),rs.getInt("test_time"),rs.getString("student_comments"),testid);
 			}
 	 		rs.close();
 	 		ResultSet rs2;
@@ -354,11 +355,11 @@ public class EchoServer extends AbstractServer {
 			int testid=-1;
 			try {
 			String code1= '"' + String.valueOf(t.getCode())+'"';
-			String str = "SELECT * FROM cems.students_applying_for_test_list list Where " +  "list.code=" + code1 + ";";
+			String str = "SELECT * FROM open_exams list Where list.code=" + code1 +";";
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(str);
 	 		if (rs.next()) 
-	 			testid= rs.getInt(2);
+	 			testid= rs.getInt("code");
 	 		rs.close();
 	 		return testid;
 			}
