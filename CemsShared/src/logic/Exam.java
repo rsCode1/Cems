@@ -14,6 +14,9 @@ public class Exam implements Serializable {
     private int testTime;
     private String lecturerComments;
     private String studentComments;
+	private int code;
+	private int time_remaning;
+	private String lecturer_name;
 
 
     public Exam( String courseName, ObservableList<Question> questions, Users lecturer, int testTime, String subject) {
@@ -32,9 +35,21 @@ public class Exam implements Serializable {
         	this.testTime = test_time;
 
     }
+    public Exam(int exam_id,String course_name,String lecturer_name,int code,int time_remaining) {
+    	this.examId = exam_id;
+    	this.courseName = course_name;
+    	this.lecturer_name=lecturer_name;
+    	this.code=code;
+    	this.time_remaning=time_remaining;
+    	
+    	
+    }
 
     public String getCourseName() {
         return courseName;
+    }
+    public String getLecturerName() {
+        return lecturer_name;
     }
     public ArrayList<Question> getQuestions() {
         return questions;
@@ -67,5 +82,14 @@ public class Exam implements Serializable {
     public int getExamId() {
         return examId;
     }
+
+	public int getExamCode() {
+		return code;
+
+	}
+
+	public int getTimeRemaining() {
+		return time_remaning;
+	}
 
 }

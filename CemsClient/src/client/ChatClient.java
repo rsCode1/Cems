@@ -6,6 +6,7 @@ package client;
 
 import client.*;
 import gui.ConnectToServerScreenController;
+import gui.LecturerPageController;
 import gui.LoginScreenController;
 import gui.ReviewExamController;
 import gui.StartExamController;
@@ -39,6 +40,7 @@ public class ChatClient extends AbstractClient
 	private ReviewExamController reviewExamController;
 	private TimeRequestController TimeRequestController;
 	private StartExamController startExamController;
+	private LecturerPageController lecturerPageController;
 
 	private String ip = "";
 	private int portServer;
@@ -96,6 +98,19 @@ public class ChatClient extends AbstractClient
 				case "getExamsByLecturer":
 					ArrayList<Exam> examsArr = (ArrayList<Exam>) response.getResponseParam();
 					startExamController.setExamsTable(examsArr);
+					startExamController.donothing(examsArr);
+					break;
+				case "getOngoingExams":
+					ArrayList<Exam> ongoingExamsArr = (ArrayList<Exam>) response.getResponseParam();
+					System.out.println("got res and sent");
+					 Exam firstExam = ongoingExamsArr.get(0);
+					System.out.println("Exam ID: " + firstExam.getExamId());
+					System.out.println("Course: " + firstExam.getCourseName());
+					System.out.println("Lecturer: " + firstExam.getLecturerName());
+					System.out.println("Code: " + firstExam.getExamCode());
+					System.out.println("Time Remaining: " + firstExam.getTimeRemaining());
+					lecturerPageController.setOngoingExamsTable(ongoingExamsArr);
+					System.out.println("got into func");
 					break;
 			}
 
@@ -137,6 +152,10 @@ public class ChatClient extends AbstractClient
 	public void setController(StartExamController controller) {
 		this.startExamController = controller;
 	}
+	public void setController(LecturerPageController controller) {
+	    this.lecturerPageController = controller;
+	}
+	
 
 	/**
 	 * This method terminates the client.

@@ -250,6 +250,8 @@ public class createExamController implements Initializable {
 		// instances to it
 		LecturerPageController controller = loader.getController();
 		controller.setLecturerAndClient(lecturer, client);
+		controller.getOngoingExamsTable();
+		client.setController(controller);
 
 		// Get the Stage information
 		Stage window = (Stage) backBtn.getScene().getWindow();

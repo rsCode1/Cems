@@ -64,7 +64,6 @@ public class LoginScreenController {
 			String Studentpath = "/gui/StudentPage.fxml";
 			String Lacturertpath = "/gui/LecturerPage.fxml";
 			String HDpath = "/gui/HDPage.fxml";
-			
 
 			if (user == null) {
 				// show error text
@@ -73,10 +72,6 @@ public class LoginScreenController {
 			} else {
 				FXMLLoader loader = null;
 				loginStatus.setText("");
-
-				
-
-
 
 				if (user.getRole() == 0) {
 					loader = new FXMLLoader(getClass().getResource(Studentpath));
@@ -92,19 +87,21 @@ public class LoginScreenController {
 				try {
 					root = loader.load();
 					Stage window = (Stage) getLoginBtn().getScene().getWindow();
-					LecturerPageController lecturerController=null;
 					if (user.getRole() == 1) {
-						lecturerController = loader.getController();
-						lecturerController.setLecturerAndClient(user, client);
+                        //call lecturer conrtoller and use method
+						LecturerPageController controller = loader.getController();
+						controller.setLecturerAndClient(user, client);
+						controller.getOngoingExamsTable();
+						client.setController(controller);
 					}
 					window.setScene(new Scene(root));
 					// Center the stage on the screen
-	                double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
-	                double screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
-	                double stageWidth = window.getWidth();
-	                double stageHeight = window.getHeight();
-	                window.setX((screenWidth - stageWidth) / 2);
-	                window.setY((screenHeight - stageHeight) / 2);
+					double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
+					double screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
+					double stageWidth = window.getWidth();
+					double stageHeight = window.getHeight();
+					window.setX((screenWidth - stageWidth) / 2);
+					window.setY((screenHeight - stageHeight) / 2);
 					window.show();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

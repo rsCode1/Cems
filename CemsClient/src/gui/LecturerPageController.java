@@ -2,6 +2,7 @@ package gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import client.ChatClient;
@@ -9,27 +10,52 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import logic.Exam;
 import logic.LogInInfo;
 import logic.Request;
 import logic.Users;
 
-public class LecturerPageController {
+public class LecturerPageController implements Initializable{
 	private Users lecturer;
 	private ChatClient client;
+    private ArrayList<Exam> ongoingExams;
+    
+    @FXML
+    private TableColumn<Exam, String> courseName;
+
+    @FXML
+    private TableColumn<Exam, Integer> examId;
+    
+    @FXML
+    private TableColumn<Exam, Integer> lecturerId;
+    
+    @FXML
+    private TableColumn<Exam, String> LecturerName;
+    
+    @FXML
+    private TableColumn<Exam, Integer> examCode;
+    
+    @FXML
+    private TableColumn<Exam, Integer> timeRem;
+    
+    @FXML
+    private TableView<Exam> ongoingExamsTable;
 
 	@FXML
 	private Button CreateExamBtn;
-	
+
 	@FXML
 	private Button CloseExamBtn;
 
@@ -45,17 +71,7 @@ public class LecturerPageController {
 	@FXML
 	private Button logOutBtn;
 
-	@FXML
-	private TableView<?> ongoingExamsTable;
 
-	@FXML
-	private TableColumn<?, ?> ongoingTableExam;
-
-	@FXML
-	private TableColumn<?, ?> ongoingTableSubject;
-
-	@FXML
-	private TableColumn<?, ?> ongoingTableTime;
 
 	@FXML
 	private Text toolCreateExams;
@@ -74,20 +90,56 @@ public class LecturerPageController {
 
 	@FXML
 	private Button writeQuestionBtn;
-	
+
 	@FXML
 	private Button TimeRequestBtn;
 
 	@FXML
-	void initialize() {
+	public void initialize(URL location, ResourceBundle resources) {
 //	    toolTimeRequest.setOnMouseClicked(e -> {  make tool time request-> clickable
 //	    	showTimeRequestForm();
 //	    });
+		
+        examId.setCellValueFactory(new PropertyValueFactory<Exam, Integer>("examId"));
+        courseName.setCellValueFactory(new PropertyValueFactory<Exam, String>("courseName"));
+        LecturerName.setCellValueFactory(new PropertyValueFactory<Exam, String>("lecturerName"));
+        examCode.setCellValueFactory(new PropertyValueFactory<Exam, Integer>("examCode"));
+        timeRem.setCellValueFactory(new PropertyValueFactory<Exam, Integer>("timeRemaining"));
+
+        
 		Platform.runLater(() -> {
 			lecturerName.setText(lecturer.getFirstName() + " " + lecturer.getLastName());
 		});
 
 	}
+	public void setLecturerAndClient(Users lecturer, ChatClient client) {
+		this.lecturer = lecturer;
+		this.client = client;
+	}
+	@FXML
+    public void getOngoingExamsTable() {
+
+        Request request = new Request("getOngoingExams",lecturer);
+        try {
+            client.sendToServer(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+	@FXML
+    public void setOngoingExamsTable(ArrayList<Exam> exam) {
+    	System.out.println("worked should update");
+    	ongoingExamsTable.getItems().clear();
+    	ongoingExamsTable.getItems().addAll(exam);
+    }
+
+    public void setExams(ArrayList<Exam> exams) {
+        this.ongoingExams = exams;
+    }
+    public ArrayList<Exam> getExams() {
+        return ongoingExams;
+    }
+
 	@FXML
 	public void startExam(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/start_exam.fxml")); // specify the path to the
@@ -103,7 +155,7 @@ public class LecturerPageController {
 
 		// Get the new scene's controller and pass the ChatClient instance to it
 		StartExamController controller = loader.getController();
-		controller.setClientAndLecturer(client,lecturer);
+		controller.setClientAndLecturer(client, lecturer);
 		controller.getExamsTable();
 		client.setController(controller);
 
@@ -113,10 +165,7 @@ public class LecturerPageController {
 		window.show();
 	}
 
-	public void setLecturerAndClient(Users lecturer, ChatClient client) {
-		this.lecturer = lecturer;
-		this.client = client;
-	}
+
 
 	@FXML
 	public void logOut(ActionEvent event) {
@@ -182,6 +231,7 @@ public class LecturerPageController {
 		window.show();
 
 	}
+
 	@FXML
 	public void showCreateExamForm(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/create_exam.fxml")); // specify the path to
@@ -196,7 +246,6 @@ public class LecturerPageController {
 		}
 		Scene nextScene = new Scene(parent);
 
-
 		// Get the new scene's controller and pass the ChatClient instance to it
 		createExamController controller = loader.getController();
 		controller.setClientAndLecturer(this.client, lecturer);
@@ -207,20 +256,20 @@ public class LecturerPageController {
 		window.show();
 
 	}
+
 	@FXML
 	public void showTimeRequestForm(ActionEvent event) {
-	    FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/time_request.fxml")); // specify the path to
-	    // the new fxml file
-	    Parent parent = null;
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/time_request.fxml")); // specify the path to
+		// the new fxml file
+		Parent parent = null;
 
-	    try {
-	        parent = loader.load();
+		try {
+			parent = loader.load();
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	    Scene nextScene = new Scene(parent);
-
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Scene nextScene = new Scene(parent);
 
 		// Get the new scene's controller and pass the ChatClient instance to it
 		TimeRequestController controller = loader.getController();
@@ -231,6 +280,8 @@ public class LecturerPageController {
 		window.setScene(nextScene);
 		window.show();
 	}
+
+	
 
 
 }

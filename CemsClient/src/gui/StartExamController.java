@@ -71,6 +71,7 @@ public class StartExamController implements Initializable {
         examsTable.getItems().addAll(exam);
     }
     public void getExamsTable() {
+
         Request request = new Request("getExamsByLecturer",lecturer);
         try {
             client.sendToServer(request);
@@ -105,12 +106,20 @@ public class StartExamController implements Initializable {
 
         // Get the main screen's controller and pass the ChatClient and lecturer
         // instances to it
-        LecturerPageController controller = loader.getController();
-        controller.setLecturerAndClient(lecturer, client);
+		LecturerPageController controller = loader.getController();
+		controller.setLecturerAndClient(lecturer, client);
+		controller.getOngoingExamsTable();
+		client.setController(controller);
 
         // Get the Stage information
         Stage window = (Stage) backBtn.getScene().getWindow();
         window.setScene(mainScene);
         window.show();
     }
+	@FXML
+    public void donothing(ArrayList<Exam> exam) {
+    	System.out.println("worked should update start");
+
+    }
+
 }

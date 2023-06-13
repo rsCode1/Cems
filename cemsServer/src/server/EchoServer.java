@@ -57,30 +57,33 @@ public class EchoServer extends AbstractServer {
 			Request request = (Request) msg;
 
 			switch (request.getRequestType()) {
-				case "LOGIN":
-					checkUserLogin((LogInInfo) request.getRequestParam(), client);
-					break;
-				case "LOGOUT":
-					logOut((LogInInfo) request.getRequestParam(), client);
-					break;
-				case "writeQuestion":
-					writeQuestion((Question) request.getRequestParam(), client);
-					break;
-				case "getSubjects":
-					getSubjects(client);
-					break;
-				case "getCourses":
-					getCourses(client, (String) request.getRequestParam());
-					break;
-				case "getQuestions":
-					getQuestions(client, (String) request.getRequestParam());
-					break;
-				case "saveExam":
-					saveExam((Exam) request.getRequestParam(), client);
-					break;
-				case "getExamsByLecturer":
-					getExamsByLecturer(client, (Users) request.getRequestParam());
-					break;
+			case "LOGIN":
+				checkUserLogin((LogInInfo) request.getRequestParam(), client);
+				break;
+			case "LOGOUT":
+				logOut((LogInInfo) request.getRequestParam(), client);
+				break;
+			case "writeQuestion":
+				writeQuestion((Question) request.getRequestParam(), client);
+				break;
+			case "getSubjects":
+				getSubjects(client);
+				break;
+			case "getCourses":
+				getCourses(client, (String) request.getRequestParam());
+				break;
+			case "getQuestions":
+				getQuestions(client, (String) request.getRequestParam());
+				break;
+			case "saveExam":
+				saveExam((Exam) request.getRequestParam(), client);
+				break;
+			case "getExamsByLecturer":
+				getExamsByLecturer(client, (Users) request.getRequestParam());
+				break;
+			case "getOngoingExams":
+				getOngoingExams(client, (Users) request.getRequestParam());
+
 
 				// Add more case statements for other request types
 			}
@@ -93,15 +96,48 @@ public class EchoServer extends AbstractServer {
 					"Aa123456");
 			System.out.println("SQL connection succeed");
 			Statement stmt = conn.createStatement();
-			String command = "SELECT exam_id,course_name,lecturer_comments,student_comments,test_time FROM exams WHERE lecturer_id = '" + lecturer.getId() + "'";
+			String command = "SELECT exam_id,course_name,lecturer_comments,student_comments,test_time FROM exams WHERE lecturer_id = '"
+					+ lecturer.getId() + "'";
 			ResultSet rs = stmt.executeQuery(command);
 			ArrayList<Exam> exams = new ArrayList<>();
 			while (rs.next()) {
-				Exam exam = new Exam(rs.getInt("exam_id"), rs.getString("course_name"),  rs.getString("lecturer_comments"), rs.getString("student_comments"),
-						rs.getInt("test_time"));
+				Exam exam = new Exam(rs.getInt("exam_id"), rs.getString("course_name"),
+						rs.getString("lecturer_comments"), rs.getString("student_comments"), rs.getInt("test_time"));
 				exams.add(exam);
 			}
 			Response response = new Response("getExamsByLecturer", exams);
+			client.sendToClient(response);
+		} catch (SQLException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void getOngoingExams(ConnectionToClient client, Users lecturer) {
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			System.out.println("SQL connection succeed Ongoing Exams!");
+			// create Table, if exist skip
+			Statement stmt = conn.createStatement();
+			String command = "CREATE TABLE IF NOT EXISTS ongoing_exams (ExamID INT PRIMARY KEY,Course VARCHAR(45),Lecturer VARCHAR(45),LecturerID int,Code INT,Time_Remaining INT)";
+			stmt.executeUpdate(command);
+
+			String command1 = "SELECT ExamID,Course,Lecturer,Code,Time_Remaining FROM ongoing_exams WHERE LecturerID = '" 
+					+ lecturer.getId() + "'";
+			ResultSet rs = stmt.executeQuery(command1);
+			ArrayList<Exam> exams = new ArrayList<>();
+			while (rs.next()) {
+				Exam exam = new Exam(rs.getInt("ExamID"), rs.getString("Course"), rs.getString("Lecturer"),
+						rs.getInt("Code"), rs.getInt("Time_Remaining"));
+				System.out.println("Exam ID: " + exam.getExamId());
+				System.out.println("Course: " + exam.getCourseName());
+				System.out.println("Lecturer: " + exam.getLecturerName());
+				System.out.println("Code: " + exam.getExamCode());
+				System.out.println("Time Remaining: " + exam.getTimeRemaining());
+				exams.add(exam);
+
+			}
+			Response response = new Response("getOngoingExams", exams);
 			client.sendToClient(response);
 		} catch (SQLException | IOException e) {
 			e.printStackTrace();
@@ -117,16 +153,14 @@ public class EchoServer extends AbstractServer {
 			Statement stmt = conn.createStatement();
 			String command = "INSERT INTO exams (course_name,lecturer_id,lecturer_comments,student_comments,test_time) VALUES ('"
 					+ exam.getCourseName() + "','" + exam.getLecturer().getId() + "','" + exam.getLecturerComments()
-					+ "','"
-					+ exam.getStudentComments() + "','" + exam.getTestTime() + "')";
+					+ "','" + exam.getStudentComments() + "','" + exam.getTestTime() + "')";
 			stmt.executeUpdate(command, Statement.RETURN_GENERATED_KEYS);
 			ResultSet rs = stmt.getGeneratedKeys();
 			rs.next();
 			int examId = rs.getInt(1);
 
-
-			//just now remembered that i can use prepared statements ):
-			//wasted ton of time on this
+			// just now remembered that i can use prepared statements ):
+			// wasted ton of time on this
 
 			PreparedStatement stmt2;
 			// now, insert the exam's questions into the exam_questions table
@@ -252,8 +286,8 @@ public class EchoServer extends AbstractServer {
 			String command = "INSERT INTO questions (question_text,answer1,answer2,answer3,answer4,correct_answer,course_id,lecturer_id,lecturer_name) VALUES ('"
 					+ question.getQuestionDescription() + "','" + question.getAnswer1() + "','" + question.getAnswer2()
 					+ "','" + question.getAnswer3() + "','" + question.getAnswer4() + "','"
-					+ question.getCorrectAnswer()
-					+ "','" + courseId + "','" + question.getAuthorID() + "','" + question.getAuthor() + "')";
+					+ question.getCorrectAnswer() + "','" + courseId + "','" + question.getAuthorID() + "','"
+					+ question.getAuthor() + "')";
 			stmt.executeUpdate(command);
 
 		} catch (Exception ex) {
