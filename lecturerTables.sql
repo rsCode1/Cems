@@ -66,7 +66,7 @@ CREATE TABLE `exam_questions` (
 
 LOCK TABLES `exam_questions` WRITE;
 /*!40000 ALTER TABLE `exam_questions` DISABLE KEYS */;
-INSERT INTO `exam_questions` VALUES (7,3,5),(7,7,10);
+INSERT INTO `exam_questions` VALUES (7,3,5),(7,7,10),(8,8,11),(9,5,55),(9,6,5),(10,7,11),(11,5,5),(12,3,5),(13,2,55),(13,12,45),(14,5,45),(14,6,55),(15,3,10),(15,7,45),(15,13,45),(16,2,45),(16,12,55);
 /*!40000 ALTER TABLE `exam_questions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -87,7 +87,7 @@ CREATE TABLE `exams` (
   PRIMARY KEY (`exam_id`),
   KEY `lecturer_id` (`lecturer_id`),
   CONSTRAINT `exams_ibfk_1` FOREIGN KEY (`lecturer_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -96,8 +96,33 @@ CREATE TABLE `exams` (
 
 LOCK TABLES `exams` WRITE;
 /*!40000 ALTER TABLE `exams` DISABLE KEYS */;
-INSERT INTO `exams` VALUES (7,'Quantum Mechanics',2,'hello','there',100);
+INSERT INTO `exams` VALUES (7,'Quantum Mechanics',2,'hello','there',100),(8,'Calculus 1',2,'','',25),(9,'Physical Chemistry',2,'gg','gg',30),(10,'Quantum Mechanics',2,'','',115),(11,'Physical Chemistry',2,'dsadas','dsadsa',7),(12,'Quantum Mechanics',2,'111','11',11),(13,'Calculus 2',2,'weee','weee',100),(14,'Physical Chemistry',2,'hhh','hhhhhh',55),(15,'Quantum Mechanics',2,'lectuer','student',150),(16,'Calculus 2',2,'sss','sss',150);
 /*!40000 ALTER TABLE `exams` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `open_exams`
+--
+
+DROP TABLE IF EXISTS `open_exams`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `open_exams` (
+  `exam_id` int NOT NULL,
+  `code` int DEFAULT NULL,
+  `test_time` int DEFAULT NULL,
+  PRIMARY KEY (`exam_id`),
+  CONSTRAINT `open_exams_ibfk_1` FOREIGN KEY (`exam_id`) REFERENCES `exams` (`exam_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `open_exams`
+--
+
+LOCK TABLES `open_exams` WRITE;
+/*!40000 ALTER TABLE `open_exams` DISABLE KEYS */;
+/*!40000 ALTER TABLE `open_exams` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -124,7 +149,7 @@ CREATE TABLE `questions` (
   CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
   CONSTRAINT `questions_ibfk_2` FOREIGN KEY (`lecturer_id`) REFERENCES `users` (`id`),
   CONSTRAINT `questions_chk_1` CHECK ((`correct_answer` between 1 and 4))
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -133,7 +158,7 @@ CREATE TABLE `questions` (
 
 LOCK TABLES `questions` WRITE;
 /*!40000 ALTER TABLE `questions` DISABLE KEYS */;
-INSERT INTO `questions` VALUES (2,'dsadsadsa','dsadsa','dsadsa','dsa','dsadsa',1,2,2,'Jane Smith'),(3,'helllooo','answer11','answer22','answer33','answer44',1,4,2,'Jane Smith'),(4,'heeeeee','2131231','sdadwa','xz ','    cxzcxz',4,10,2,'Jane Smith'),(5,'heleleleolpwe','aaa','bbb','ccc','ddd',3,8,2,'Jane Smith'),(6,'dsadsa','dsadsa','dsadsa','dsadsa','dsadsa',2,8,2,'Jane Smith'),(7,'dsadsa','dsa','dsa','dsa','dsa',2,4,2,'Jane Smith'),(8,'dsadsa','dsadsa','dsadsa','dsa','dasdsadsa',4,1,2,'Jane Smith'),(9,'test','a','b','c','d',3,12,2,'Jane Smith'),(10,'test2','aaaaaa','bbbbb','cccc','ddddd',2,15,2,'Jane Smith'),(11,'ttttt','aadsads','adsacxv','432432','342432',3,12,2,'Jane Smith');
+INSERT INTO `questions` VALUES (2,'dsadsadsa','dsadsa','dsadsa','dsa','dsadsa',1,2,2,'Jane Smith'),(3,'helllooo','answer11','answer22','answer33','answer44',1,4,2,'Jane Smith'),(4,'heeeeee','2131231','sdadwa','xz ','    cxzcxz',4,10,2,'Jane Smith'),(5,'heleleleolpwe','aaa','bbb','ccc','ddd',3,8,2,'Jane Smith'),(6,'dsadsa','dsadsa','dsadsa','dsadsa','dsadsa',2,8,2,'Jane Smith'),(7,'dsadsa','dsa','dsa','dsa','dsa',2,4,2,'Jane Smith'),(8,'dsadsa','dsadsa','dsadsa','dsa','dasdsadsa',4,1,2,'Jane Smith'),(9,'test','a','b','c','d',3,12,2,'Jane Smith'),(10,'test2','aaaaaa','bbbbb','cccc','ddddd',2,15,2,'Jane Smith'),(11,'ttttt','aadsads','adsacxv','432432','342432',3,12,2,'Jane Smith'),(12,'2+2=?','1','2','3','4',4,2,2,'Jane Smith'),(13,'dsadsa','dsadas','dsadsa','adssd','asdads',2,4,2,'Jane Smith'),(14,'helllllooo','1','2','3','4',3,12,2,'Jane Smith');
 /*!40000 ALTER TABLE `questions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -187,7 +212,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'John','Doe','jdo','123',0,0),(2,'Jane','Smith','jsm','456',1,1),(3,'Tom','Johnson','tjo','789',0,2),(4,'Sue','Davis','sda','321',0,0),(5,'Bob','Miller','bmi','654',0,1),(6,'Alice','Brown','abr','987',0,2),(7,'James','Taylor','jta','213',0,0),(8,'Emma','Thomas','eth','546',0,1),(9,'David','White','dwh','879',0,2),(10,'Sophia','Harris','sha','132',0,0),(11,'Daniel','Clark','dcl','465',0,1),(12,'Grace','Rodriguez','gro','798',0,2),(13,'Jack','Lewis','jle','312',0,0),(14,'Ella','Walker','ewa','564',0,1),(15,'Michael','Hall','mha','897',0,2);
+INSERT INTO `users` VALUES (1,'John','Doe','jdo','123',0,0),(2,'Jane','Smith','jsm','456',1,1),(3,'Tom','Johnson','tjo','789',0,2),(4,'Sue','Davis','sda','321',0,0),(5,'Bob','Miller','bmi','654',1,1),(6,'Alice','Brown','abr','987',0,2),(7,'James','Taylor','jta','213',0,0),(8,'Emma','Thomas','eth','546',0,1),(9,'David','White','dwh','879',0,2),(10,'Sophia','Harris','sha','132',0,0),(11,'Daniel','Clark','dcl','465',0,1),(12,'Grace','Rodriguez','gro','798',0,2),(13,'Jack','Lewis','jle','312',0,0),(14,'Ella','Walker','ewa','564',0,1),(15,'Michael','Hall','mha','897',0,2);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -200,4 +225,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-11 23:38:19
+-- Dump completed on 2023-06-13 23:13:16
