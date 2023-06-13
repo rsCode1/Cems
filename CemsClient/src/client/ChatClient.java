@@ -28,7 +28,6 @@ public class ChatClient extends AbstractClient
 
 {
   private StudentManualTestController stdManController;
-  private String ip = "";
   private LoginScreenController loginScreecontroller;
   private TakeExamController takeExamController;
   private InExamController inExamController;

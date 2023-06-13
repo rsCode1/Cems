@@ -33,6 +33,7 @@ import logic.TestApplyInfo;
 import logic.TestCode;
 import logic.TestSourceTime;
 import logic.Users;
+
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 
@@ -88,6 +89,9 @@ public class EchoServer extends AbstractServer {
 			}
 		}
 	}
+	
+	
+	
 	private void downloadManuelExam(FileDownloadInfo fileDownloadInfo, ConnectionToClient client) {
 		String sql = "SELECT file_data FROM cems.manueltests WHERE testId = ?";
 	    PreparedStatement statement;
