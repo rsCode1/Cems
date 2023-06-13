@@ -17,6 +17,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import logic.AddedTime;
+import logic.DownloadManualExaminController;
 import logic.Test;
 import logic.Users;
 
@@ -79,6 +80,10 @@ public class ChatClient extends AbstractClient
   else if(msg instanceof AddedTime) {
 	  AddedTime added= (AddedTime) msg;
 	  inExamController.setAdded(added);
+  }
+  else if(msg instanceof DownloadManualExaminController ) {
+	  DownloadManualExaminController finfo=   ( DownloadManualExaminController) msg;
+	  stdManController.setDownloadFile(finfo);
   }
    else {
           System.out.println("Received message of type: " + msg.getClass());

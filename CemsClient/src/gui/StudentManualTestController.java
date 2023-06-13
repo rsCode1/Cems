@@ -12,6 +12,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import logic.AddedTime;
+import logic.DownloadManualExaminController;
 import logic.FileDownloadInfo;
 import logic.Request;
 import logic.Test;
@@ -28,16 +29,20 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.io.IOException;
 import java.sql.Blob;
 
 // try push
 public class StudentManualTestController {
+	private DownloadManualExaminController downloadFile;
 	private String ToUploadPath;
 	private  int remainingTime;
 	private boolean StartedTime=false;
@@ -56,6 +61,12 @@ public class StudentManualTestController {
     }
 
 
+	public DownloadManualExaminController getDownloadFile() {
+		return downloadFile;
+	}
+	public void setDownloadFile(DownloadManualExaminController downloadFile) {
+		this.downloadFile = downloadFile;
+	}
 	public void setAdded(AddedTime added) {
 		this.added = added;
 	}
@@ -85,7 +96,7 @@ public class StudentManualTestController {
 	    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ApproveSubmit.fxml"));
 			Parent root;
 			try {
-			
+			     
 				root = loader.load();
 				//Stage window = (Stage) subBtn.getScene().getWindow();
 				Stage window = new Stage();
@@ -112,7 +123,8 @@ public class StudentManualTestController {
 			}*/
 	    }
 	    public void CloseWindow() {
-	    	Stage currentStage = (Stage) upload.getScene().getWindow();
+	    	Button closeButton = new Button("Close Window");
+	    	Stage currentStage = (Stage) closeButton.getScene().getWindow();
 	        currentStage.close();
 	    	
 	    }
@@ -145,12 +157,29 @@ public class StudentManualTestController {
 	        			client.openConnection();
 	        			if (client.isConnected()) {
 	        				client.sendToServer(new Request("DownloadManualExam", fileDownloadinfo));
+	        				ServerSocket servsock = new ServerSocket(4444);
+	        				 File myFile = new File(fileDownloadinfo.getFileDownloadPath());
+	        				      Socket sock = servsock.accept();
+	        				      byte[] mybytearray = new byte[4096];
+	        				      int bytesRead = -1;
+	        				      BufferedInputStream bis = new BufferedInputStream(new FileInputStream(myFile));
+	        				      while(bytesRead=bis.read(mybytearray, 0, mybytearray.length) !=-1) {
+	        				      
+	        				      OutputStream os = sock.getOutputStream();
+	        				      os.write(mybytearray, 0, mybytearray.length);}
+	        				      os.flush();
+	        				      sock.close();
+	        				      servsock.close();
+	        			        }
+
+	        			    System.out.println("File downloaded successfully!");
+	        			  //  outputStream.close();
 	        	            downloadMes.setText("downloaded successfully to " + path);
 	        				if(StartedTime == false) {
 	        	        		startTimer(test.getDuration() * 60,test.getDuration());
 	        	        		StartedTime=true;}
 	        			}
-	        		}
+	           // }
 	        		catch (IOException e) {
 	        			e.printStackTrace();}
 	        	}

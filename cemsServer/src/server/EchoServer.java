@@ -1,11 +1,13 @@
 package server;
 // This file contains material supporting section 3.7 of the textbook:
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.Socket;
 
 // "Object Oriented Software Engineering" and is issued under the open-source
 // license found at www.lloseng.com
@@ -22,6 +24,7 @@ import com.mysql.cj.jdbc.Blob;
 
 import gui.ServerStartScreenController;
 import logic.AddedTime;
+import logic.DownloadManualExaminController;
 import logic.FileDownloadInfo;
 import logic.LogInInfo;
 import logic.LoggedUsers;
@@ -104,8 +107,21 @@ public class EchoServer extends AbstractServer {
 	    if (result.next()) {
 	        Blob fileData = (Blob) result.getBlob("file_data");
 	        InputStream inputStream = fileData.getBinaryStream();
-	        File outputFile = new File(fileDownloadInfo.getFileDownloadPath());
-	        OutputStream outputStream = new FileOutputStream(outputFile);
+	        Socket sock = new Socket("127.0.0.1", 4444);
+	        byte[] mybytearray = new byte[1024];
+	        File file = new File("C:\\123.docx");
+	        String FileName= file.getName();
+	        FileOutputStream fos = new FileOutputStream(fileDownloadInfo.getFileDownloadPath());
+	        BufferedOutputStream bos = new BufferedOutputStream(fos);
+	        int bytesRead = inputStream.read(mybytearray, 0, mybytearray.length);
+	        bos.write(mybytearray, 0, bytesRead);
+	        bos.close();
+	        sock.close();
+	        //DownloadManualExaminController DMIC = new DownloadManualExaminController(inputStream);
+	       // client.sendToClient(DMIC);
+	        
+	     /*  File outputFile = new File(fileDownloadInfo.getFileDownloadPath());
+	      //  OutputStream outputStream = new FileOutputStream(outputFile);
 	        byte[] buffer = new byte[4096];
 	        int bytesRead = -1;
 	        while ((bytesRead = inputStream.read(buffer)) != -1) {
@@ -113,7 +129,7 @@ public class EchoServer extends AbstractServer {
 	        }
 
 	        System.out.println("File downloaded successfully!");
-	        outputStream.close();
+	        outputStream.close();*/
 	    } else {
 	        System.out.println("File not found!");
 	    }
