@@ -45,7 +45,7 @@ public class EchoServer extends AbstractServer {
 
 	@Override
 	public void handleMessageFromClient//
-	(Object msg, ConnectionToClient client) throws SQLException
+	(Object msg, ConnectionToClient client) 
 
 	{
 
@@ -75,9 +75,6 @@ public class EchoServer extends AbstractServer {
 				case "getCourses":
 					getCourses(client, (String) request.getRequestParam());
 					break;
-				case "SEARCH-STUDENT-BY-ID":
-					searchStudent((String) request.getRequestParam(), client);
-					break;
 				case "SearchExam":
 					searchExam((Request) request.getRequestParam(), client);
 					break;
@@ -100,7 +97,12 @@ public class EchoServer extends AbstractServer {
 				case "SendStudentIDtenth":
 					try {
 
-						importStudentDataTenths((String) request.getRequestParam(), client);
+						try {
+							importStudentDataTenths((String) request.getRequestParam(), client);
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						System.out.println(
 								"in getcourseID in server got " + (String) request.getRequestParam().toString());
 					} catch (IOException e) {
@@ -112,7 +114,12 @@ public class EchoServer extends AbstractServer {
 				case "SendLectuerIDtenth":
 					try {
 
-						importLectuerDataTenths((String) request.getRequestParam(), client);
+						try {
+							importLectuerDataTenths((String) request.getRequestParam(), client);
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						System.out.println(
 								"in getcourseID in server got " + (String) request.getRequestParam().toString());
 					} catch (IOException e) {
@@ -163,12 +170,11 @@ public class EchoServer extends AbstractServer {
 					ImportTwoStudentsSGrades((ArrayList<String>) request.getRequestParam(), client);
 					break;
 				case "GetTwoLectureGrades":
-						ImportTwoLectuerGrades((ArrayList<String>) request.getRequestParam(), client);
+					ImportTwoLectuerGrades((ArrayList<String>) request.getRequestParam(), client);
 					break;
 				case "GetTwoCourseGrades":
-						ImportTwoCourseGrades((ArrayList<String>) request.getRequestParam(), client);
+					ImportTwoCourseGrades((ArrayList<String>) request.getRequestParam(), client);
 					break;
-
 
 			}
 
@@ -179,9 +185,9 @@ public class EchoServer extends AbstractServer {
 	private void ImportTwoStudentsSGrades(ArrayList<String> requestParam, ConnectionToClient client) {
 		ArrayList<Grades> firstIDGrades = new ArrayList<Grades>();
 		ArrayList<Grades> secondIDGrades = new ArrayList<Grades>();
-		ArrayList<ArrayList<Grades>> alldata=new ArrayList<ArrayList<Grades>>();
-		System.out.println("in echo server import2ids,first id: "+requestParam.get(0)+"second id: "+requestParam.get(1));
-		
+		ArrayList<ArrayList<Grades>> alldata = new ArrayList<ArrayList<Grades>>();
+		System.out.println(
+				"in echo server import2ids,first id: " + requestParam.get(0) + "second id: " + requestParam.get(1));
 
 		try {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
@@ -191,11 +197,11 @@ public class EchoServer extends AbstractServer {
 			String command = String.format("SELECT * FROM cems.grades WHERE studentID=%s", requestParam.get(0));
 			ResultSet rs = stmt.executeQuery(command);
 			while (rs.next()) {
-				String examID = rs.getString("examID");
-				String studentID = rs.getString("studentID");
-				String courseID = rs.getString("courseID");
+				int examID = rs.getInt("examID");
+				int studentID = rs.getInt("studentID");
+				int courseID = rs.getInt("courseID");
 				int grade = rs.getInt("grade");
-				String lecturerID = rs.getString("lectuerID");
+				int lecturerID = rs.getInt("lectuerID");
 				Grades grades = new Grades(examID, studentID, courseID, grade, lecturerID);
 				firstIDGrades.add(grades);
 
@@ -204,18 +210,17 @@ public class EchoServer extends AbstractServer {
 			String command1 = String.format("SELECT * FROM cems.grades WHERE studentID=%s", requestParam.get(1));
 			ResultSet rs2 = stmnt2.executeQuery(command1);
 			while (rs2.next()) {
-				String examID = rs2.getString("examID");
-				String studentID = rs2.getString("studentID");
-				String courseID = rs2.getString("courseID");
-				int grade = rs2.getInt("grade");
-				String lecturerID = rs2.getString("lectuerID");
+				int examID = rs.getInt("examID");
+				int studentID = rs.getInt("studentID");
+				int courseID = rs.getInt("courseID");
+				int grade = rs.getInt("grade");
+				int lecturerID = rs.getInt("lectuerID");
 				Grades grades2 = new Grades(examID, studentID, courseID, grade, lecturerID);
 				secondIDGrades.add(grades2);
 
 			}
 			alldata.add(firstIDGrades);
 			alldata.add(secondIDGrades);
-			
 
 			client.sendToClient(new Response("Get2IDSGradesStudent", alldata));
 		} catch (Exception ex) {
@@ -224,12 +229,13 @@ public class EchoServer extends AbstractServer {
 		}
 
 	}
+
 	private void ImportTwoCourseGrades(ArrayList<String> requestParam, ConnectionToClient client) {
 		ArrayList<Grades> firstIDGrades = new ArrayList<Grades>();
 		ArrayList<Grades> secondIDGrades = new ArrayList<Grades>();
-		ArrayList<ArrayList<Grades>> alldata=new ArrayList<ArrayList<Grades>>();
-		System.out.println("in echo server import2ids,first id: "+requestParam.get(0)+"second id: "+requestParam.get(1));
-		
+		ArrayList<ArrayList<Grades>> alldata = new ArrayList<ArrayList<Grades>>();
+		System.out.println(
+				"in echo server import2ids,first id: " + requestParam.get(0) + "second id: " + requestParam.get(1));
 
 		try {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
@@ -239,11 +245,11 @@ public class EchoServer extends AbstractServer {
 			String command = String.format("SELECT * FROM cems.grades WHERE courseID=%s", requestParam.get(0));
 			ResultSet rs = stmt.executeQuery(command);
 			while (rs.next()) {
-				String examID = rs.getString("examID");
-				String studentID = rs.getString("studentID");
-				String courseID = rs.getString("courseID");
+				int examID = rs.getInt("examID");
+				int studentID = rs.getInt("studentID");
+				int courseID = rs.getInt("courseID");
 				int grade = rs.getInt("grade");
-				String lecturerID = rs.getString("lectuerID");
+				int lecturerID = rs.getInt("lectuerID");
 				Grades grades = new Grades(examID, studentID, courseID, grade, lecturerID);
 				firstIDGrades.add(grades);
 
@@ -252,18 +258,17 @@ public class EchoServer extends AbstractServer {
 			String command1 = String.format("SELECT * FROM cems.grades WHERE courseID=%s", requestParam.get(1));
 			ResultSet rs2 = stmnt2.executeQuery(command1);
 			while (rs2.next()) {
-				String examID = rs2.getString("examID");
-				String studentID = rs2.getString("studentID");
-				String courseID = rs2.getString("courseID");
-				int grade = rs2.getInt("grade");
-				String lecturerID = rs2.getString("lectuerID");
+				int examID = rs.getInt("examID");
+				int studentID = rs.getInt("studentID");
+				int courseID = rs.getInt("courseID");
+				int grade = rs.getInt("grade");
+				int lecturerID = rs.getInt("lectuerID");
 				Grades grades2 = new Grades(examID, studentID, courseID, grade, lecturerID);
 				secondIDGrades.add(grades2);
 
 			}
 			alldata.add(firstIDGrades);
 			alldata.add(secondIDGrades);
-			
 
 			client.sendToClient(new Response("Get2IDSGradesCourse", alldata));
 		} catch (Exception ex) {
@@ -272,12 +277,13 @@ public class EchoServer extends AbstractServer {
 		}
 
 	}
+
 	private void ImportTwoLectuerGrades(ArrayList<String> requestParam, ConnectionToClient client) {
 		ArrayList<Grades> firstIDGrades = new ArrayList<Grades>();
 		ArrayList<Grades> secondIDGrades = new ArrayList<Grades>();
-		ArrayList<ArrayList<Grades>> alldata=new ArrayList<ArrayList<Grades>>();
-		System.out.println("in echo server import2ids,first id: "+requestParam.get(0)+"second id: "+requestParam.get(1));
-		
+		ArrayList<ArrayList<Grades>> alldata = new ArrayList<ArrayList<Grades>>();
+		System.out.println(
+				"in echo server import2ids,first id: " + requestParam.get(0) + "second id: " + requestParam.get(1));
 
 		try {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
@@ -287,11 +293,11 @@ public class EchoServer extends AbstractServer {
 			String command = String.format("SELECT * FROM cems.grades WHERE lectuerID=%s", requestParam.get(0));
 			ResultSet rs = stmt.executeQuery(command);
 			while (rs.next()) {
-				String examID = rs.getString("examID");
-				String studentID = rs.getString("studentID");
-				String courseID = rs.getString("courseID");
+				int examID = rs.getInt("examID");
+				int studentID = rs.getInt("studentID");
+				int courseID = rs.getInt("courseID");
 				int grade = rs.getInt("grade");
-				String lecturerID = rs.getString("lectuerID");
+				int lecturerID = rs.getInt("lectuerID");
 				Grades grades = new Grades(examID, studentID, courseID, grade, lecturerID);
 				firstIDGrades.add(grades);
 
@@ -300,18 +306,17 @@ public class EchoServer extends AbstractServer {
 			String command1 = String.format("SELECT * FROM cems.grades WHERE lectuerID=%s", requestParam.get(1));
 			ResultSet rs2 = stmnt2.executeQuery(command1);
 			while (rs2.next()) {
-				String examID = rs2.getString("examID");
-				String studentID = rs2.getString("studentID");
-				String courseID = rs2.getString("courseID");
-				int grade = rs2.getInt("grade");
-				String lecturerID = rs2.getString("lectuerID");
+			int examID = rs.getInt("examID");
+				int studentID = rs.getInt("studentID");
+				int courseID = rs.getInt("courseID");
+				int grade = rs.getInt("grade");
+				int lecturerID = rs.getInt("lectuerID");
 				Grades grades2 = new Grades(examID, studentID, courseID, grade, lecturerID);
 				secondIDGrades.add(grades2);
 
 			}
 			alldata.add(firstIDGrades);
 			alldata.add(secondIDGrades);
-			
 
 			client.sendToClient(new Response("Get2IDSGradesLectuer", alldata));
 		} catch (Exception ex) {
@@ -368,7 +373,7 @@ public class EchoServer extends AbstractServer {
 
 						Statement st = conn.createStatement();
 						int updateStmt = st.executeUpdate(
-								String.format("UPDATE exams SET time = time + %d WHERE examID = %s", extraTime,
+								String.format("UPDATE exams SET time = time + %d WHERE exam_id = %s", extraTime,
 										examID));
 						Statement statment = conn.createStatement();
 						int rowsAffected = statment
@@ -397,36 +402,6 @@ public class EchoServer extends AbstractServer {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-	}
-
-	private void searchStudent(String studentid, ConnectionToClient client) {
-		ArrayList<String> studentList = new ArrayList<String>();
-
-		try {
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
-					"Aa123456");
-			Statement stmt = conn.createStatement();
-			String command = String.format("SELECT * FROM cems.studentdata WHERE sID= '%s' AND status='completed'",
-					studentid);
-			ResultSet rs = stmt.executeQuery(command);
-
-			while (rs.next()) {
-				studentList.add(rs.getString("grade"));
-				System.out.println(rs.getString("grade").toString());
-
-			}
-			try {
-				client.sendToClient(new Response("RETURN-STUDENT-GRADES", studentList));
-			} catch (IOException e) {
-
-				e.printStackTrace();
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 	}
 
 	// same as getSubjects but for courses
@@ -466,13 +441,13 @@ public class EchoServer extends AbstractServer {
 				ResultSet rs = stmt.executeQuery(command); // send student data to the client
 
 				while (rs.next()) {
-					// get fields from resultSet
-					String exemID1 = rs.getString("examID");
-					String studentID1 = rs.getString("studentID");
-					String courseID1 = rs.getString("courseID");
+					int exemID1 = rs.getInt("examID");
+					int studentID1 = rs.getInt("studentID");
+					int courseID1 = rs.getInt("courseID");
 					int grade1 = rs.getInt("grade");
-					String lecturerID1 = rs.getString("lectuerID");
-					grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lecturerID1));
+					int lecturerID1 = rs.getInt("lectuerID");
+					grades.add(new Grades(exemID1,studentID1,
+							courseID1, grade1, lecturerID1));
 
 				}
 			} else {
@@ -481,12 +456,13 @@ public class EchoServer extends AbstractServer {
 
 				while (rs.next()) {
 					// get fields from resultSet
-					String exemID1 = rs.getString("examID");
-					String studentID1 = rs.getString("studentID");
-					String courseID1 = rs.getString("courseID");
+					int exemID1 = rs.getInt("examID");
+					int studentID1 = rs.getInt("studentID");
+					int courseID1 = rs.getInt("courseID");
 					int grade1 = rs.getInt("grade");
-					String lecturerID1 = rs.getString("lectuerID");
-					grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lecturerID1));
+					int lecturerID1 = rs.getInt("lectuerID");
+					grades.add(new Grades(exemID1,studentID1,
+							courseID1, grade1, lecturerID1));
 				}
 			}
 
@@ -510,12 +486,13 @@ public class EchoServer extends AbstractServer {
 
 				while (rs.next()) {
 					// get fields from resultSet
-					String exemID1 = rs.getString("examID");
-					String studentID1 = rs.getString("studentID");
-					String courseID1 = rs.getString("courseID");
+					int exemID1 = rs.getInt("examID");
+					int studentID1 = rs.getInt("studentID");
+					int courseID1 = rs.getInt("courseID");
 					int grade1 = rs.getInt("grade");
-					String lecturerID1 = rs.getString("lectuerID");
-					grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lecturerID1));
+					int lecturerID1 = rs.getInt("lectuerID");
+					grades.add(new Grades(exemID1, studentID1,
+							courseID1, grade1, lecturerID1));
 
 				}
 			} else {
@@ -524,12 +501,13 @@ public class EchoServer extends AbstractServer {
 
 				while (rs.next()) {
 					// get fields from resultSet
-					String exemID1 = rs.getString("examID");
-					String studentID1 = rs.getString("studentID");
-					String courseID1 = rs.getString("courseID");
+					int exemID1 = rs.getInt("examID");
+					int studentID1 = rs.getInt("studentID");
+					int courseID1 = rs.getInt("courseID");
 					int grade1 = rs.getInt("grade");
-					String lecturerID1 = rs.getString("lectuerID");
-					grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lecturerID1));
+					int lecturerID1 = rs.getInt("lectuerID");
+					grades.add(new Grades(exemID1, studentID1,
+							courseID1, grade1,lecturerID1));
 				}
 			}
 
@@ -552,13 +530,13 @@ public class EchoServer extends AbstractServer {
 
 				while (rs.next()) {
 					// get fields from resultSet
-					String exemID1 = rs.getString("examID");
-					String studentID1 = rs.getString("studentID");
-					String courseID1 = rs.getString("courseID");
+					int exemID1 = rs.getInt("examID");
+					int studentID1 = rs.getInt("studentID");
+					int courseID1 = rs.getInt("courseID");
 					int grade1 = rs.getInt("grade");
-					String lecturerID1 = rs.getString("lectuerID");
-					grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lecturerID1));
-
+					int lecturerID1 = rs.getInt("lectuerID");
+					grades.add(new Grades(exemID1, studentID1,
+							courseID1, grade1, lecturerID1));
 				}
 			} else {
 				String command = String.format("SELECT * FROM grades WHERE lectuerID=" + gID);
@@ -566,12 +544,13 @@ public class EchoServer extends AbstractServer {
 				////
 				while (rs.next()) {
 					// get fields from resultSet
-					String exemID1 = rs.getString("examID");
-					String studentID1 = rs.getString("studentID");
-					String courseID1 = rs.getString("courseID");
+					int exemID1 = rs.getInt("examID");
+					int studentID1 = rs.getInt("studentID");
+					int courseID1 = rs.getInt("courseID");
 					int grade1 = rs.getInt("grade");
-					String lectuerID1 = rs.getString("lectuerID");
-					grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lectuerID1));
+					int lecturerID1 = rs.getInt("lectuerID");
+					grades.add(new Grades(exemID1, studentID1,
+							courseID1, grade1, lecturerID1));
 				}
 			}
 
@@ -594,12 +573,13 @@ public class EchoServer extends AbstractServer {
 
 				while (rs.next()) {
 					// get fields from resultSet
-					String exemID1 = rs.getString("examID");
-					String studentID1 = rs.getString("studentID");
-					String courseID1 = rs.getString("courseID");
+					int exemID1 = rs.getInt("examID");
+					int studentID1 = rs.getInt("studentID");
+					int courseID1 = rs.getInt("courseID");
 					int grade1 = rs.getInt("grade");
-					String lecturerID1 = rs.getString("lectuerID");
-					grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lecturerID1));
+					int lecturerID1 = rs.getInt("lectuerID");
+					grades.add(new Grades(exemID1, studentID1,
+							courseID1, grade1, lecturerID1));
 
 				}
 			} else {
@@ -608,12 +588,13 @@ public class EchoServer extends AbstractServer {
 				////
 				while (rs.next()) {
 					// get fields from resultSet
-					String exemID1 = rs.getString("examID");
-					String studentID1 = rs.getString("studentID");
-					String courseID1 = rs.getString("courseID");
+					int exemID1 = rs.getInt("examID");
+					int studentID1 = rs.getInt("studentID");
+					int courseID1 = rs.getInt("courseID");
 					int grade1 = rs.getInt("grade");
-					String lectuerID1 = rs.getString("lectuerID");
-					grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lectuerID1));
+					int lecturerID1 = rs.getInt("lectuerID");
+					grades.add(new Grades(exemID1, studentID1,
+							courseID1, grade1, lecturerID1));
 				}
 			}
 
@@ -638,25 +619,26 @@ public class EchoServer extends AbstractServer {
 
 				while (rs.next()) {
 					// get fields from resultSet
-					String exemID1 = rs.getString("examID");
-					String studentID1 = rs.getString("studentID");
-					String courseID1 = rs.getString("courseID");
+					int exemID1 = rs.getInt("examID");
+					int studentID1 = rs.getInt("studentID");
+					int courseID1 = rs.getInt("courseID");
 					int grade1 = rs.getInt("grade");
-					String lecturerID1 = rs.getString("lectuerID");
-					grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lecturerID1));
+					int lecturerID1 = rs.getInt("lectuerID");
+					grades.add(new Grades(exemID1, studentID1,
+							courseID1, grade1, lecturerID1));
 
 				}
 			} else {
 				String command = String.format("SELECT *  FROM grades WHERE courseID=" + gID);
 				ResultSet rs = stmt.executeQuery(command);// send lecture to the client
 				while (rs.next()) {
-					// get fields from resultSet
-					String exemID1 = rs.getString("examID");
-					String studentID1 = rs.getString("studentID");
-					String courseID1 = rs.getString("courseID");
+					int exemID1 = rs.getInt("examID");
+					int studentID1 = rs.getInt("studentID");
+					int courseID1 = rs.getInt("courseID");
 					int grade1 = rs.getInt("grade");
-					String lecturerID1 = rs.getString("lectuerID");
-					grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lecturerID1));
+					int lecturerID1 = rs.getInt("lectuerID");
+					grades.add(new Grades(exemID1, studentID1,
+							courseID1, grade1, lecturerID1));
 
 				}
 			}
@@ -684,17 +666,17 @@ public class EchoServer extends AbstractServer {
 			ResultSet rs = stmt.executeQuery(command);// send lecture to the client
 			while (rs.next()) {
 				// get fields from resultSet
-				String exemID1 = rs.getString("examID");
-				String studentID1 = rs.getString("studentID");
-				String courseID1 = rs.getString("courseID");
+				int exemID1 = rs.getInt("examID");
+				int studentID1 = rs.getInt("studentID");
+				int courseID1 = rs.getInt("courseID");
 				int grade1 = rs.getInt("grade");
-				String lecturerID1 = rs.getString("lectuerID");
-				grades.add(new Grades(exemID1, studentID1, courseID1, grade1, lecturerID1));
-				System.out.println("11");
-			}
+				int lecturerID1 = rs.getInt("lectuerID");
+				grades.add(new Grades(exemID1, studentID1,
+							courseID1, grade1, lecturerID1));
 
 			client.sendToClient(new Response("ImportCourseDatatenths", grades));
 			System.out.println("sent to client");
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -898,4 +880,4 @@ public class EchoServer extends AbstractServer {
 			System.out.println("ERROR - Could not listen for clients!");
 		}
 	}
-}///original
+}

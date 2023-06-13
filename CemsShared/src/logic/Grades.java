@@ -3,52 +3,55 @@ package logic;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Grades implements Serializable, Comparable<Grades> {
-	String examID;
-	String studentID;
-	String courseID;
+public class Grades implements Serializable {
+	int examID;
+	int studentID;
+	int courseID;
 	int grade;
-	String lectuerID;
+	int lectuerID;
+	
+	
 
 	public String getLectuerID() {
-		return lectuerID;
+		return String.valueOf(lectuerID);
 	}
 
 	public void setLectuerID(String lectuerID) {
-		this.lectuerID = lectuerID;
+		this.lectuerID = Integer.parseInt(lectuerID);
 	}
 
 	public String getExamID() {
-		return examID;
+		return String.valueOf(examID);
 	}
 
 	public void setExamID(String examID) {
-		this.examID = examID;
+		this.examID = Integer.parseInt(examID);
 	}
 
 	public String getStudentID() {
-		return studentID;
+		return String.valueOf(courseID);
 	}
 
 	public String getCourseID() {
-		return courseID;
+		return String.valueOf(courseID);
 	}
 
 	public void setCourseID(String courseID) {
-		this.courseID = courseID;
+		this.courseID = Integer.parseInt(courseID);
 	}
 
 	public int getGrade() {
 		return grade;
 	}
+	
 
-	public Grades(String examID, String studentID, String courseID, int grade, String lectuerID) {
-		super();
-		this.examID = examID;
-		this.studentID = studentID;
-		this.courseID = courseID;
+	public Grades(int examID, int studentID, int courseID, int grade, int lectuerID) {
+
+		this.examID =(examID);
+		this.studentID = (studentID);
+		this.courseID = (courseID);
 		this.grade = grade;
-		this.lectuerID = lectuerID;
+		this.lectuerID = (lectuerID);
 	}
 
 	public void setGrade(int grade) {
@@ -56,15 +59,15 @@ public class Grades implements Serializable, Comparable<Grades> {
 	}
 
 	public void setStudentID(String studentID) {
-		this.studentID = studentID;
+		this.studentID = Integer.parseInt(studentID);
 	}
 
 	public String getCourseName() {
-		return courseID;
+		return String.valueOf(courseID);
 	}
 
 	public void setCourseName(String courseName) {
-		this.courseID = courseName;
+		this.courseID = Integer.parseInt(courseName);
 	}
 
 	@Override
@@ -73,15 +76,5 @@ public class Grades implements Serializable, Comparable<Grades> {
 				+ "]";
 	}
 
-	@Override
-	public int compareTo(Grades o) {
-
-		if (this.getGrade() == (o.getGrade()) && (this.getStudentID().equals(o.getStudentID()))
-				&& (this.getCourseName().equals(o.getCourseName()))
-				&& (this.getLectuerID().equals(o.getLectuerID()) && this.getExamID().equals(o.getExamID())))
-			return 1;
-		else
-			return 0;
-	}
-
+	
 }

@@ -3,8 +3,14 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Array;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import client.ChatClient;
@@ -25,6 +31,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -55,6 +62,7 @@ public class HDController implements Initializable {
 	private TreeSet<String> infoSelecttionArray = new TreeSet<String>();
 	private String whoToShow;
 	private String test;
+
 	private ArrayList<String> generalGradesArray = new ArrayList<String>();
 
 	public void SetHeadOfDepartment(Users Hod, ChatClient client) {
@@ -71,35 +79,48 @@ public class HDController implements Initializable {
 	}
 
 	@FXML
-	private Button btn;
-
+	private Label emptyLecturerIDLabel;
 	@FXML
-	private Label checkedWholbl;
+	private Label emptyCourseIDLabel;
 	@FXML
-	private Label wholbl1;
-	@FXML
-	private RadioButton medianrb;
-	@FXML
-	private Label tt11;
-	@FXML
-	private RadioButton gparb;
-	@FXML
-	private RadioButton examrb;
-	@FXML
-	private RadioButton deistributionrb;
-	@FXML
-	private RadioButton studentrb;
-
-	@FXML
-	private RadioButton lecturerrb;
-	@FXML
-	private Label errlbl;
-
-	@FXML
-	private RadioButton courserb1;
-
+	private Label emptyStudentIDLabel;
 	@FXML
 	private ResourceBundle resources;
+	@FXML
+	private Label sdlabelStudent;
+	@FXML
+	private Label sdlabellecturer;
+	@FXML
+	private Label sdlabelCourse;
+	@FXML
+	private TextField sdlabelStudentnumber;
+	@FXML
+	private TextField sdlabelLecturerNumber;
+	@FXML
+	private TextField sdlabelCourseNumber;
+	@FXML
+	private TextField sdlabelStudentnumber1;
+
+	@FXML
+	private TextField sdlabelCourseNumber1;
+	@FXML
+	private TextField Median_LECTextArea1;
+
+	
+
+	@FXML
+	private TextField GPA_STUtextArea1;
+	@FXML
+	private TextField median_STUtextArea1;
+	
+
+	@FXML
+	private TextField GPA_GradestextArea1;
+	@FXML
+	private TextField Median_GradestextArea1;
+
+	
+
 	@FXML
 	private Label testlbl;
 	@FXML
@@ -133,7 +154,13 @@ public class HDController implements Initializable {
 	@FXML
 	private Button ApproveBTN;
 	@FXML
-	private TextField RequestExamIDText;////////////////////
+	private Button studentResetBTN;
+	@FXML
+	private Button lecturerResetBTN;
+	@FXML
+	private Button courseResetBTN;
+	@FXML
+	private TextField RequestExamIDText;
 
 	@FXML
 	private Button refreshButton;
@@ -147,6 +174,8 @@ public class HDController implements Initializable {
 
 	@FXML
 	private Button ShowStudentBTN;
+	@FXML
+	private Button Showcoursetbl;
 
 	@FXML
 	private TextField GPA_LECtextArea;
@@ -170,6 +199,8 @@ public class HDController implements Initializable {
 
 	@FXML
 	private TextField median_STUtextArea;
+	@FXML
+	private TextField sdlabelLecturerNumber1;
 
 	@FXML
 	private TextField ID_STUtextArea;
@@ -179,6 +210,8 @@ public class HDController implements Initializable {
 
 	@FXML
 	private TextField median_GradesTextArea;
+	@FXML
+	private TextField median_GradesTextArea1;
 
 	@FXML
 	private TextField ID_GradetextArea;
@@ -186,6 +219,16 @@ public class HDController implements Initializable {
 	private TextField EnterLectuerName;
 	@FXML
 	private TextField CourseName;
+	@FXML
+	private TextField EnterCourseID;
+	@FXML
+	private TextField secondStudentID;
+	@FXML
+	private TextField secondLecturerID;
+	@FXML
+	private TextField secondCourseID;
+	@FXML
+	private TextField GPA_LECtextArea1;
 
 	@FXML
 	private TableColumn<RequestTime, String> IDColumn;
@@ -205,48 +248,69 @@ public class HDController implements Initializable {
 	private BarChart<String, Number> barChartCourse;
 	@FXML
 	private BarChart<String, Number> generalScreenBarChart;
-	private ToggleGroup toggleGroup;
+	@FXML
+	private BarChart<String, Number> testBarChart;
+	@FXML
+	private TextField NumberOfTestLectuer;
+	@FXML
+	private TextField NumberOfTestStudent;
+	@FXML
+	private TextField NumberOfTestCourse;
+	@FXML
+	private Button comparebtn;
+	@FXML
+	private TextField id1;
+	@FXML
+	private TextField id2;
 	@FXML
 	private Label tt22;
 	@FXML
 	private AnchorPane anchorpane;
+	@FXML
+	private Button showAllLecbtn;
+	@FXML
+	private Button showAllcoursebtn;
 
+	@FXML
+	private Button showAllstudentbtn;
+	@FXML
+	private Button showLecturertentsButton;
+	@FXML
+	private Button showStudentTenthsButton;
+	@FXML
+	private Button compareinLecturer;
+	@FXML
+	private Button compareinCourse;
+	@FXML
+	private Button compareinStudent;
+
+	@FXML
+	private Button showCourseTenthsButton;
+	private int StudentCount = 0;
+	private int LectuerCount = 0;
+	private int CourseCount = 0;
+	
+	/**
+	 * Data initialization on screens
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		toggleGroup = new ToggleGroup();
-		studentrb.setToggleGroup(toggleGroup);
-		lecturerrb.setToggleGroup(toggleGroup);
-		courserb1.setToggleGroup(toggleGroup);
-		examrb.setToggleGroup(toggleGroup);
 
-		// Create bar chart
+		barChartCourse.setTitle("test course");
+		CategoryAxis xAxisCourse = (CategoryAxis) barChartCourse.getXAxis();
+		xAxisCourse.setLabel("exam id");
+		NumberAxis yAxisCourse = (NumberAxis) barChartCourse.getYAxis();
+		yAxisCourse.setLabel("grade");
 
-		// Set chart title and axis labels
-		generalScreenBarChart.setTitle("Sample Bar Chart");
-		CategoryAxis xAxis = (CategoryAxis) generalScreenBarChart.getXAxis();
-		xAxis.setLabel("Category");
-		NumberAxis yAxis = (NumberAxis) generalScreenBarChart.getYAxis();
-		yAxis.setLabel("Value");
-
-		// TableView<RequestTime> requests = new TableView<>();
-		// TableColumn<RequestTime, String> idColumn = new TableColumn<>("Request ID");
 		IDColumn.setCellValueFactory(new PropertyValueFactory<>("requestID"));
-		// TableColumn<RequestTime, String> examIdColumn = new TableColumn<>("exam ID");
+
 		ExamIdColumn.setCellValueFactory(new PropertyValueFactory<>("examID"));
-		// TableColumn<RequestTime, String> requestedByColumn = new
-		// TableColumn<>("Requested By");
+
 		RequestedByColumn.setCellValueFactory(new PropertyValueFactory<>("requestedBy"));
-		// TableColumn<RequestTime, Integer> extraTimeColumn = new TableColumn<>("Extra
-		// Time");
+
 		ExtraTimeColumn.setCellValueFactory(new PropertyValueFactory<>("extraTime"));
-		// TableColumn<RequestTime, String> reasonColumn = new TableColumn<>("Reason");
+
 		ReasonColumn.setCellValueFactory(new PropertyValueFactory<>("reason"));
-		/*
-		 * requests.getColumns().add(idColumn); requests.getColumns().add(examIdColumn);
-		 * requests.getColumns().add(requestedByColumn);
-		 * requests.getColumns().add(extraTimeColumn);
-		 * requests.getColumns().add(reasonColumn);
-		 */
 
 		try {
 			client = new ChatClient("localhost", 5555, this);
@@ -303,6 +367,13 @@ public class HDController implements Initializable {
 
 	}
 
+	/**
+	 * The function updates the additional time for the test
+	 * after the department head approves the request
+	 * @param requestList ArrayList<RequestTime>
+	 * @return void
+	 */
+	
 	@FXML
 	public void UpdateRequestTime(ArrayList<RequestTime> requestList) {
 		Platform.runLater(() -> {
@@ -312,6 +383,12 @@ public class HDController implements Initializable {
 
 	}
 
+	/**
+	 * The function is activated when the head of the department approves the time
+	 * request,
+	 * pops up a confirmation message and deletes the information from the DB
+	 * @param ActionEvent event
+	 */
 	@FXML
 	public void ApproveRequestTime(ActionEvent event) {
 		Request request = new Request("APPROVE", RequestExamIDText.getText());
@@ -336,6 +413,11 @@ public class HDController implements Initializable {
 
 	}
 
+	/**
+	 * The function is activated when the head of the department rejects the time
+	 * request,
+	 * pops up a rejection message and deletes the information from the DB
+	 */
 	@FXML
 	public void RejectRequestTime(ActionEvent event) {
 		Request request = new Request("REJECT", RequestExamIDText.getText());
@@ -364,13 +446,16 @@ public class HDController implements Initializable {
 
 		refreshTable1();
 	}
-
+	/**
+	 * while pressing refresh table ,connect to server and get the current time requests,and put them in the table
+	 */
 	public void refreshTable1() {
 
 		try {
 
 			client.openConnection();
 			if (client.isConnected()) {
+
 				client.sendToServer(new Request("GET-EXTRA-TIME-REQUEST", null));
 
 			} else {
@@ -382,6 +467,11 @@ public class HDController implements Initializable {
 
 	}
 
+	/**
+	 * The function pops a message on the screen when the
+	 * department head approves the request
+	 * @param String name that will be displayed in the poopup
+	 */
 	public void showpPopupApprove(String username) {
 
 		System.out.println("in popupApprove");
@@ -405,22 +495,12 @@ public class HDController implements Initializable {
 				e.printStackTrace();
 			}
 
-			/*
-			 * Stage popupStage = new Stage(); popupStage.setTitle("Pop-up Window");
-			 * popupStage.setWidth(200); popupStage.setHeight(200);
-			 * popupStage.initModality(Modality.APPLICATION_MODAL); VBox popupContent = new
-			 * VBox(); popupContent.setAlignment(Pos.CENTER); Label messageLabel = new
-			 * Label("Request Approve! " + username + "@braude.ac.il");
-			 * messageLabel.setAlignment(Pos.TOP_CENTER); messageLabel.setPadding(new
-			 * Insets(10)); Button closeButton = new Button("Close");
-			 * closeButton.setAlignment(Pos.CENTER); closeButton.setOnAction(e ->
-			 * popupStage.close()); popupContent.getChildren().addAll(messageLabel,
-			 * closeButton); Scene popupScene = new Scene(popupContent);
-			 * popupStage.setScene(popupScene); popupStage.show();
-			 */
 		});
 	}
-
+	/**
+	 * The function pops up a message on the screen that the request has 
+	 * been rejected as the head of the department clicks on rejecting a request
+	 */
 	public void showpPopupReject() {
 		Platform.runLater(() -> {
 
@@ -440,37 +520,341 @@ public class HDController implements Initializable {
 				e.printStackTrace();
 			}
 
-			/*
-			 * Stage popupStage = new Stage(); popupStage.setTitle("Pop-up Window");
-			 * popupStage.setWidth(200); popupStage.setHeight(200);
-			 * popupStage.initModality(Modality.APPLICATION_MODAL); VBox popupContent = new
-			 * VBox(); popupContent.setAlignment(Pos.CENTER); Label messageLabel = new
-			 * Label("Request Rejected!! " + username + "@braude.ac.il");
-			 * messageLabel.setAlignment(Pos.TOP_CENTER); messageLabel.setPadding(new
-			 * Insets(10)); Button closeButton = new Button("Close");
-			 * closeButton.setAlignment(Pos.CENTER); closeButton.setOnAction(e ->
-			 * popupStage.close()); popupContent.getChildren().addAll(messageLabel,
-			 * closeButton); Scene popupScene = new Scene(popupContent);
-			 * popupStage.setScene(popupScene); popupStage.show();
-			 */
 		});
 	}
-
-	public void ShowGradeStatistics(ActionEvent event) {
+	/**
+	 * Display the information in a histogram according to division into tenths
+	 * checks for input rror(empty fields)
+	 * @param ActionEvent event
+	 * send to server the request for the grades of the required info' and then this will activate another function that will divide the grades into tenths
+	 * using import__NAME__statisticstenths method
+	 * the function wll call correct function according to the fxid of the button that calls it
+	 */
+	@FXML
+	public void showtenths(ActionEvent event) {
+		System.out.println("showtenths");
 
 		try {
 			client.openConnection();
-			if (client.isConnected()) {
-				client.sendToServer(new Request("SendID", LectuerID.getText()));
-				client.sendToServer(new Request("SendID", LectuerID.getText()));
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			if (event.getSource() == showLecturertentsButton) {
+				if (LectuerID.getText().isEmpty()) {//error handeling
+					LectuerID.setStyle("-fx-border-color: rgb(255,0,0);-fx-border-width: 2px;");
+					LectuerID.setPromptText("please enter lecturer ID");
+					emptyLecturerIDLabel.setText("Please enter lecturer ID!");
+					emptyLecturerIDLabel.setStyle("-fx-background-color:#F24444;-fx-background-radius: 100px;");
+					emptyLecturerIDLabel.setVisible(true);
+				} else {
+					emptyLecturerIDLabel.setText("");//reset the style
+					emptyLecturerIDLabel.setStyle("-fx-background-color:#000000;-fx-background-radius: 100px;");
+					emptyLecturerIDLabel.setVisible(false);
+					LectuerID.setStyle("-fx-border-width: 0px;");
+					if (client.isConnected()) {
+						System.out.println("chose lecturer tenths");
+						client.sendToServer(new Request("SendLectuerIDtenth", LectuerID.getText()));
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} else {
+						System.out.println("Not connected to server.");
+					}
 				}
-			} else {
-				System.out.println("Not connected to server.");
+			}
+
+			if (event.getSource() == showCourseTenthsButton) {
+				if (ID_GradetextArea.getText().isEmpty()) {
+
+					ID_GradetextArea
+							.setStyle("-fx-border-color: rgb(255,0,0);-fx-border-width: 2px;");
+					ID_GradetextArea.setPromptText("please enter Course ID");
+
+					emptyCourseIDLabel.setText("Please enter Course ID!");
+					emptyCourseIDLabel.setStyle("-fx-background-color:#F24444;-fx-background-radius: 100px;");
+					emptyCourseIDLabel.setVisible(true);
+
+				} else {
+					emptyCourseIDLabel.setText("");
+					emptyCourseIDLabel.setStyle("-fx-background-color:#000000;-fx-background-radius: 100px;");
+					emptyCourseIDLabel.setVisible(false);
+					ID_GradetextArea.setStyle("-fx-border-width: 0px;");
+
+					System.out.println("chose button correctly");
+					client.openConnection();
+					if (client.isConnected()) {
+						client.sendToServer(new Request("SendCourseIDtenth", ID_GradetextArea.getText()));
+						System.out.println("sent to server");
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} else {
+						System.out.println("Not connected to server.");
+					}
+				}
+			}
+
+			if (event.getSource() == showStudentTenthsButton) {
+				if (ID_STUtextArea.getText().isEmpty()) {
+
+					ID_STUtextArea
+							.setStyle("-fx-border-color: rgb(255,0,0);-fx-border-width: 2px;");
+					ID_STUtextArea.setPromptText("please enter Student ID");
+					emptyStudentIDLabel.setText("Please enter Student ID!");
+					emptyStudentIDLabel.setStyle("-fx-background-color:#F24444;-fx-background-radius: 100px;");
+					emptyStudentIDLabel.setVisible(true);
+
+				} else {
+					emptyStudentIDLabel.setText("");
+					emptyStudentIDLabel.setStyle("-fx-background-color:#000000;-fx-background-radius: 100px;");
+					emptyStudentIDLabel.setVisible(false);
+					ID_STUtextArea.setStyle("-fx-border-width: 0px;");
+
+					if (client.isConnected()) {
+						client.sendToServer(new Request("SendStudentIDtenth", ID_STUtextArea.getText()));
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					} else {
+						System.out.println("Not connected to server.");
+
+					}
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+	/**
+	 * Delete all information from the course's information screen 
+	 * when you click the "Reset table" button
+	 * reset styles
+	 */
+	@FXML
+	public void resetTableCourse(ActionEvent event) {
+		barChartCourse.getData().clear();
+		// coureseIDsArray.clear();
+		CourseCount = 0;
+		median_GradesTextArea.setText("");
+		GPA_GradestextArea.setText("");
+		sdlabelCourseNumber.setText("");
+		ID_GradetextArea.setText("");
+		CourseName.setText("");
+		emptyCourseIDLabel.setText("");
+		emptyCourseIDLabel.setStyle("-fx-background-color:#000000;-fx-background-radius: 100px;");
+		emptyCourseIDLabel.setVisible(false);
+		ID_GradetextArea.setStyle("-fx-border-width: 0px;");
+		median_GradesTextArea1.setText("");
+		GPA_GradestextArea1.setText("");
+		sdlabelCourseNumber1.setText("");
+		
+		NumberOfTestCourse.setText("");
+
+		
+		
+
+	}
+	/**
+	 * Delete all information from the lecturer's information screen 
+	 * when you click the "Reset table" button
+	 * reset styles
+	 */
+	@FXML
+	public void resetTableLecturer(ActionEvent event) {
+		LectuerCount = 0;
+		barChartLec.getData().clear();
+		// lecturerIDsArray.clear();
+		LectuerName.setText("");// show empty file text
+		GPA_LECtextArea.setText("");// show empty file text
+		Median_LECTextArea.setText("");// show empty file text
+		LectuerID.setText("");
+		sdlabelLecturerNumber.setText("");
+		emptyLecturerIDLabel.setText("");
+		emptyLecturerIDLabel.setStyle("-fx-background-color:#000000;-fx-background-radius: 100px;");
+		emptyLecturerIDLabel.setVisible(false);
+		LectuerID.setStyle("-fx-border-width: 0px;");
+		
+		sdlabelLecturerNumber1.setText("");
+		GPA_LECtextArea1.setText("");
+		
+		Median_LECTextArea1.setText("");
+		NumberOfTestLectuer.setText("");
+		
+
+	}
+	/**
+	 * Delete all information from the student's information screen 
+	 * when you click the "Reset table" button
+	 * reset styles
+	 * @param ActionEvent event
+	 */
+	@FXML
+	public void resetTableStudent(ActionEvent event) {
+		StudentCount = 0;
+		barChartStud.getData().clear();
+		// studentsIDsArray.clear();
+		StudentName.setText("");// show empty file text
+		GPA_STUtextArea.setText("");// show empty file text
+		median_STUtextArea.setText("");// show empty file text
+		sdlabelStudentnumber.setText("");
+		ID_STUtextArea.setText("");
+		emptyStudentIDLabel.setText("");
+		emptyStudentIDLabel.setStyle("-fx-background-color:#000000;-fx-background-radius: 100px;");
+		emptyStudentIDLabel.setVisible(false);
+		ID_STUtextArea.setStyle("-fx-border-width: 0px;");
+		sdlabelStudentnumber.setText("");
+		sdlabelStudentnumber1.setText("");
+		GPA_STUtextArea.setText("");
+		GPA_STUtextArea1.setText("");
+		median_STUtextArea.setText("");
+		median_STUtextArea1.setText("");
+		NumberOfTestStudent.setText("");
+		
+
+	}
+
+	/**
+	 * The function is called by the "show statistics" button on
+	 * each screen. The function brings information about grades according to
+	 * the screen from which it was called
+	 * @param ActionEvent event
+	 */
+	@FXML
+	public void ShowGradeStatistics(ActionEvent event) throws InterruptedException, IOException {
+
+		try {
+			client.openConnection();
+			if (event.getSource() == ShowLectuerBTN) {
+				if (LectuerID.getText().isEmpty()) {
+
+					LectuerID.setStyle("-fx-border-color: rgb(255,0,0);-fx-border-width: 2px;");
+					LectuerID.setPromptText("please enter lecturer ID");
+					emptyLecturerIDLabel.setText("Please enter lecturer ID!");
+					emptyLecturerIDLabel.setStyle("-fx-background-color:#F24444;-fx-background-radius: 100px;");
+					emptyLecturerIDLabel.setVisible(true);
+
+				}
+
+				else {
+					emptyLecturerIDLabel.setText("");
+					emptyLecturerIDLabel.setStyle("-fx-background-color:#000000;-fx-background-radius: 100px;");
+					emptyLecturerIDLabel.setVisible(false);
+					LectuerID.setStyle("-fx-border-width: 0px;");
+					if (client.isConnected()) {
+						client.sendToServer(new Request("SendLectuerID", LectuerID.getText()));
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} else {
+						System.out.println("Not connected to server.");
+					}
+				}
+			}
+			if (event.getSource() == showAllcoursebtn) { // AllDataToCourse
+				ID_GradetextArea.setText("");
+				if (client.isConnected()) {
+					client.sendToServer(new Request("SendCourseID", null));
+					Thread.sleep(1000);
+
+				} else {
+					System.out.println("Not connected to server.");
+
+				}
+			}
+			if (event.getSource() == showAllstudentbtn) { // AllDataToCourse
+				ID_STUtextArea.setText("");
+				if (client.isConnected()) {
+					client.sendToServer(new Request("SendStudentID", null));
+					Thread.sleep(1000);
+
+				} else {
+					System.out.println("Not connected to server.");
+
+				}
+			}
+			if (event.getSource() == showAllLecbtn) { // AllDataToCourse
+				LectuerID.setText("");
+				if (client.isConnected()) {
+					client.sendToServer(new Request("SendLectuerID", null));
+					Thread.sleep(1000);
+
+				} else {
+					System.out.println("Not connected to server.");
+
+				}
+			}
+			// ! check if fied is epmty if yes the put error
+			if (event.getSource() == ShowCourseBTN) {
+				if (ID_GradetextArea.getText().isEmpty()) {
+
+					ID_GradetextArea
+							.setStyle("-fx-border-color: rgb(255,0,0);-fx-border-width: 2px;");
+					ID_GradetextArea.setPromptText("please enter Course ID");
+
+					emptyCourseIDLabel.setText("Please enter Course ID!");
+					emptyCourseIDLabel.setStyle("-fx-background-color:#F24444;-fx-background-radius: 100px;");
+					emptyCourseIDLabel.setVisible(true);
+
+				} else {
+					emptyCourseIDLabel.setText("");
+					emptyCourseIDLabel.setStyle("-fx-background-color:#000000;-fx-background-radius: 100px;");
+					emptyCourseIDLabel.setVisible(false);
+					ID_GradetextArea.setStyle("-fx-border-width: 0px;");
+
+					System.out.println("chose button correctly");
+					client.openConnection();
+					if (client.isConnected()) {
+						client.sendToServer(new Request("SendCourseID", ID_GradetextArea.getText()));
+						System.out.println("sent to server");
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} else {
+						System.out.println("Not connected to server.");
+					}
+				}
+			}
+
+			if (event.getSource() == ShowStudentBTN) {
+				if (ID_STUtextArea.getText().isEmpty()) {
+
+					ID_STUtextArea
+							.setStyle("-fx-border-color: rgb(255,0,0);-fx-border-width: 2px;");
+					ID_STUtextArea.setPromptText("please enter Student ID");
+					emptyStudentIDLabel.setText("Please enter Student ID!");
+					emptyStudentIDLabel.setStyle("-fx-background-color:#F24444;-fx-background-radius: 100px;");
+					emptyStudentIDLabel.setVisible(true);
+
+				} else {
+					emptyStudentIDLabel.setText("");
+					emptyStudentIDLabel.setStyle("-fx-background-color:#000000;-fx-background-radius: 100px;");
+					emptyStudentIDLabel.setVisible(false);
+					ID_STUtextArea.setStyle("-fx-border-width: 0px;");
+
+					if (client.isConnected()) {
+						client.sendToServer(new Request("SendStudentID", ID_STUtextArea.getText()));
+						Thread.sleep(1000);
+
+					} else {
+						System.out.println("Not connected to server.");
+
+					}
+
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -478,52 +862,187 @@ public class HDController implements Initializable {
 
 	}
 
-	public void ImportLectueGradeStatistics(ArrayList<Grades> msg) {
-		XYChart.Series<String, Number> series = new XYChart.Series<>();
-		// Create data series
+	/**
+	 * Receives information about lecturer grades and displays on the screen
+	 * @param msg
+	 */
+	public void ImportLectuerStatistics(ArrayList<Grades> msg) {
+		ArrayList<Integer> justGrades = new ArrayList<>();
+		int i = 0;
+		int currentGrade = 0;
 		for (Grades grade : msg) {
-			int i = 0;
-			series.getData().add(new XYChart.Data<>("", msg.get(i).getGrade()));
-			i++;
+
+			currentGrade = (int) msg.get(i++).getGrade();
+			justGrades.add(currentGrade);
 		}
+		handleAddDataToChart(justGrades, barChartLec);
 		LectuerName.setText(msg.get(0).getCourseName());// show course name
 		GPA_LECtextArea.setText(String.valueOf(calcAVG(msg)));// show the avarge
 		Median_LECTextArea.setText(String.valueOf(calcMedian(msg)));// shoe median
-		// Add series to BarChart
-		barChartLec.getData().add(series);
+		DecimalFormat decimalFormat = new DecimalFormat("#.00");
+		String formatNumber = decimalFormat.format(calculateStandardDeviation(msg));
+		sdlabelLecturerNumber.setText(formatNumber);
+		NumberOfTestLectuer.setText(String.valueOf(msg.size()));// show the number of test
+
+	}
+	/**
+	 * Receives information about lecturer grades and displays on the screen, divided to tenths
+	 * @param msg
+	 */
+	public void ImportLectuerStatisticsTenths(ArrayList<Grades> msg) {
+		ArrayList<Integer> justGrades = new ArrayList<>();
+		int i = 0;
+		int currentGrade = 0;
+		for (Grades grade : msg) {
+
+			currentGrade = (int) msg.get(i++).getGrade();
+			justGrades.add(currentGrade);
+		}
+		handleAddDataToChartTents(justGrades, barChartLec);
+		LectuerName.setText(msg.get(0).getCourseName());// show course name
+		GPA_LECtextArea.setText(String.valueOf(calcAVG(msg)));// show the avarge
+		Median_LECTextArea.setText(String.valueOf(calcMedian(msg)));// shoe median
+		DecimalFormat decimalFormat = new DecimalFormat("#.00");
+		String formatNumber = decimalFormat.format(calculateStandardDeviation(msg));
+		sdlabelLecturerNumber.setText(formatNumber);
 
 	}
 
+	/**
+	 * Receives information about student grades and displays on the screen
+	 * 
+	 * @param msg
+	 */
 	public void ImportStudentGradeStatistics(ArrayList<Grades> msg) {
-		XYChart.Series<String, Number> series = new XYChart.Series<>();
+		StudentCount++;
+		ArrayList<Integer> justGrades = new ArrayList<>();
+		int i = 0;
+		int currentGrade = 0;
 		for (Grades grade : msg) {
-			int i = 0;
-			series.getData().add(new XYChart.Data<>("", msg.get(i).getGrade()));
-			i++;
+
+			currentGrade = (int) msg.get(i++).getGrade();
+			justGrades.add(currentGrade);
 		}
-		StudentName.setText(msg.get(0).getCourseName());// show course name
+
+		handleAddDataToChart(justGrades, barChartStud);
+		System.out.println("BDIKAAA" + StudentCount);
+		if (StudentCount == 1) {// if we take data about one student
+			StudentName.setText(msg.get(0).getCourseName());// show course name
+		}
 		GPA_STUtextArea.setText(String.valueOf(calcAVG(msg)));// show the avarge
 		median_STUtextArea.setText(String.valueOf(calcMedian(msg)));// shoe median
-		// Add series to BarChart
-		barChartStud.getData().add(series);
+		DecimalFormat decimalFormat = new DecimalFormat("#.00");
+		String formatNumber = decimalFormat.format(calculateStandardDeviation(msg));
+		sdlabelStudentnumber.setText(formatNumber);
+		NumberOfTestStudent.setText(String.valueOf(msg.size()));// show the number of test
+
+	}
+	/**
+	 *  Receives information about student grades and displays on the screen,divided to tenths
+	 * @param msg
+	 */
+	public void ImportStudentGradeStatisticsTenths(ArrayList<Grades> msg) {
+		StudentCount++;
+
+		ArrayList<Integer> justGrades = new ArrayList<>();
+		int i = 0;
+		int currentGrade = 0;
+		for (Grades grade : msg) {
+
+			currentGrade = (int) msg.get(i++).getGrade();
+			justGrades.add(currentGrade);
+		}
+
+		handleAddDataToChartTents(justGrades, barChartStud);
+		System.out.println("BDIKAAA" + StudentCount);
+		if (StudentCount == 1) {// if we take data about one student
+			StudentName.setText(msg.get(0).getCourseName());// show course name
+		}
+		GPA_STUtextArea.setText(String.valueOf(calcAVG(msg)));// show the avarge
+		median_STUtextArea.setText(String.valueOf(calcMedian(msg)));// shoe median
+		DecimalFormat decimalFormat = new DecimalFormat("#.00");
+		String formatNumber = decimalFormat.format(calculateStandardDeviation(msg));
+		sdlabelStudentnumber.setText(formatNumber);
 
 	}
 
+	/**
+	 * receives information about course grades and displays on the screen
+	 * @param msg
+	 */
 	public void ImportCourseGradeStatistics(ArrayList<Grades> msg) {
-		XYChart.Series<String, Number> series = new XYChart.Series<>();
-		for (Grades grade : msg) {
-			int i = 0;
+		ArrayList<Integer> justGrades = new ArrayList<>();
+		int currentGrade = 0;
 
-			series.getData().add(new XYChart.Data<>("exam" + i + 1, msg.get(i).getGrade()));
-			i++;
-		}
+		int i = 0;
 		CourseName.setText(msg.get(0).getCourseName());// show course name
 		GPA_GradestextArea.setText(String.valueOf(calcAVG(msg)));// show the avarge
 		median_GradesTextArea.setText(String.valueOf(calcMedian(msg)));// shoe median
-		// Add series to BarChart
-		barChartCourse.getData().add(series);
+		DecimalFormat decimalFormat = new DecimalFormat("#.00");
+		String formatNumber = decimalFormat.format(calculateStandardDeviation(msg));
+		sdlabelCourseNumber.setText(formatNumber);
+		NumberOfTestCourse.setText(String.valueOf(msg.size()));// show the number of test
 
+		for (Grades grade : msg) {
+
+			currentGrade = (int) msg.get(i++).getGrade();
+			justGrades.add(currentGrade);
+		}
+		handleAddDataToChart(justGrades, barChartCourse);
 	}
+/**
+ * receives information about course grades and displays on the screen,divided to tenths
+ * @param msg
+ */
+	public void ImportCourseGradeStatisticstenths(ArrayList<Grades> msg) {
+		ArrayList<Integer> justGrades = new ArrayList<>();
+		int currentGrade = 0;
+
+		int i = 0;
+		CourseName.setText(msg.get(0).getCourseName());// show course name
+		GPA_GradestextArea.setText(String.valueOf(calcAVG(msg)));// show the avarge
+		median_GradesTextArea.setText(String.valueOf(calcMedian(msg)));// shoe median
+		DecimalFormat decimalFormat = new DecimalFormat("#.00");
+		String formatNumber = decimalFormat.format(calculateStandardDeviation(msg));
+		sdlabelCourseNumber.setText(formatNumber);
+
+		for (Grades grade : msg) {
+
+			currentGrade = (int) msg.get(i++).getGrade();
+			justGrades.add(currentGrade);
+		}
+		handleAddDataToChartTents(justGrades, barChartCourse);
+	}
+	/**
+	 *get the array of the grades of the exams
+	  that we want to calculate and return the standard deviation
+	  @param ArrayList<Grades> grades
+	  @return standard deviation as double
+	 */
+	public double calculateStandardDeviation(ArrayList<Grades> grades) {
+		double avg, mean;
+		double sum = 0;
+		double standard_deviation = 0;
+		for (Grades grade : grades) {// caculate the mean
+			sum += grade.getGrade();
+		}
+		avg = sum / grades.size();
+		sum = 0;
+		for (Grades grade : grades) { // calculate the new mean
+			sum = sum + Math.pow(grade.getGrade() - avg, 2);
+		}
+		mean = sum / grades.size();
+		standard_deviation = Math.sqrt(mean);
+
+		return standard_deviation;
+	}
+
+	/**
+	 *get the array of the grades of the exams
+	  that we want to calculate and return the avarage of then
+	  @param ArrayList<Grades> msg
+	  @returns avg of grades as double
+	 */
 
 	public double calcAVG(ArrayList<Grades> msg) {
 		int sum = 0;
@@ -534,232 +1053,385 @@ public class HDController implements Initializable {
 		return avg;
 	}
 
-	public double calcAVG1(ArrayList<String> msg) {
-		int sum = 0;
-		int temp;
-		int avg=0;
-		try {
-		for (String number : msg) {
-			temp = Integer.valueOf(number);
-			sum = sum + temp;
+	/**
+	 *get the array of the grades of the exams
+	  that we want to calculate and return the median
+	  @param ArrayList<Grades> grades
+	  @returns median of the grades as double
+	 */
+	public double calcMedian(ArrayList<Grades> grades) {/// 1 2 3 6 7 8
+		int[] justgrades = new int[grades.size()];
+		int i = 0;
+		for (Grades grade : grades) {
+			justgrades[i] = grades.get(i).getGrade();
+			i++;
 		}
-		avg = sum / msg.size();}
-		catch (Exception e) {
-			
+		Arrays.sort(justgrades);
+
+		double medianIndex = 0;
+		if (justgrades.length % 2 == 0) {
+			int val1 = justgrades[justgrades.length / 2 - 1];
+			int val2 = justgrades[(justgrades.length / 2)];
+			medianIndex = (val1 + val2) / 2;
+
 		}
-		return avg;
-	}
 
-	public double calcMedian(ArrayList<Grades> grades) {
-		double median;
-		int medianIndex = grades.size() / 2;
-
-		if (grades.size() % 2 == 0) {
-			int medianValue1 = grades.get(medianIndex - 1).getGrade();
-			int medianValue2 = grades.get(medianIndex).getGrade();
-			median = (medianValue1 + medianValue2) / 2.0;
-		} else {
-			median = grades.get(medianIndex).getGrade();
+		else {
+			medianIndex = justgrades[justgrades.length / 2];
 		}
-		return median;
+		return medianIndex;
 
 	}
 
-	@FXML
-	public void pressInfoRadioButton(ActionEvent event) {
-		if (medianrb.isSelected()) {// if median radio button is selected we add to the array the word median to
-									// search in the sql
-			infoSelecttionArray.add("median");
-
-		} else {// if not or unselectedd we remove it
-			infoSelecttionArray.remove("median");
-		}
-		if (gparb.isSelected()) {
-			infoSelecttionArray.add("GPA");
-		} else {
-			infoSelecttionArray.remove("GPA");
-		}
-		if (deistributionrb.isSelected()) {
-			infoSelecttionArray.add("Distribution");
-		} else {
-			infoSelecttionArray.remove("Distribution");
-		}
-		checkinfolLabel.setText(infoSelecttionArray.toString());
-	}
-
-	@FXML
-	public void pressfromRadioButtonLecturer(ActionEvent event) {
-		tt11.setText("Lecturer");
-		whoToShow = "lecturer";
-		wholbl1.setText("enter Lecturer name:");
-
-	}
-
-	@FXML
-	public void pressfromRadioButtonExam(ActionEvent event) {
-		tt11.setText("Exam");
-		whoToShow = "examID";
-		wholbl1.setText("enter Exam ID:");
-
-	}
-
-	@FXML
-	public void pressfromRadioButtonStudent(ActionEvent event) {
-		tt11.setText("student");
-		whoToShow = "Student";
-		wholbl1.setText("enter student name:");
-	}
-
-	@FXML
-	public void pressfromRadioButtonCourse(ActionEvent event) {
-		tt11.setText("course");
-		whoToShow = "course";
-		wholbl1.setText("enter course name:");
-	}
-
-	@FXML
-	public void pressShowResultButton(ActionEvent event) {
-		Platform.runLater(() -> {
-			String sqlQueryString = "SELECT";
-			String currentStyle = selectionNameTxtField.getStyle();
-
-			// check if any info was selected:
-			if (gparb.isSelected() == false && medianrb.isSelected() == false
-					&& deistributionrb.isSelected() == false) {
-				errlbl.setStyle("-fx-text-fill: white;-fx-background-color: red;-fx-background-radius:10px;");
-				errlbl.setText("please select atleast 1 value!");
-				errlbl.setAlignment(Pos.CENTER);
-				errlbl.setVisible(true);
-
-			} else {
-				errlbl.setVisible(false);
-
-			}
-			// check if any info was selected:
-			if (lecturerrb.isSelected() == false && studentrb.isSelected() == false && courserb1.isSelected() == false
-					&& examrb.isSelected() == false) {
-				checkedWholbl.setStyle("-fx-text-fill: white;-fx-background-color: red;-fx-background-radius:10px;");
-				checkedWholbl.setText("please select atleast 1 value!");
-				checkedWholbl.setAlignment(Pos.CENTER);
-				checkedWholbl.setVisible(true);
-
-			} else {
-				checkedWholbl.setVisible(false);
-
-			}
-			if (selectionNameTxtField.getText().isBlank()) {
-				selectionNameTxtField.setStyle("-fx-border-width:2px;-fx-border-color:red;");
-				selectionNameTxtField.setPromptText("please enter a value!");
-			} else {
-				selectionNameTxtField.setStyle("-fx-border-width:0px;-fx-border-color:white");
-			}
-
-			for (String info : infoSelecttionArray) {
-				sqlQueryString = sqlQueryString + " " + info + " ,";
-			}
-			sqlQueryString = sqlQueryString.substring(0, sqlQueryString.length() - 1);
-			sqlQueryString = sqlQueryString + "where " + whoToShow + " = " + selectionNameTxtField.getText();
-
-			tt22.setText(sqlQueryString);
-			// end of error handeling
-
-			// start of logic
-
-			/**
-			 * i want to get the query and send it to the server and get in return a grades
-			 * array
-			 * 
-			 * 
-			 * 
-			 * 
-			 */
-
-			/// getting exam sql query for student
-			/*
-			 * if (lecturerrb.isSelected()) {
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 
-			 * try { client.openConnection(); if (client.isConnected()) {
-			 * client.sendToServer(new Request("SearchExam", request));
-			 * 
-			 * } } catch (IOException e1) { // TODO Auto-generated catch block
-			 * e1.printStackTrace(); }
-			 * 
-			 * }
-			 */
-			if (studentrb.isSelected()) {
-				String studentid = selectionNameTxtField.getText();// student id
-				String querytosend = "SELECT grade FROM cems.studentsData where sID=" + studentid + "";
-
-				try {
-					client.openConnection();
-					if (client.isConnected()) {
-						client.sendToServer(new Request("SEARCH-STUDENT-BY-ID", studentid));
-
-					}
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-				tt11.setText(generalGradesArray.toString());
-				if (medianrb.isSelected()) {
-					double median = calcAVG1(generalGradesArray);
-					String medianstr = String.valueOf(median);
-					medianTxtField.setText(medianstr);
-
-				}
-				if (deistributionrb.isSelected()) {
-
-				}
-			}
-
-			/*
-			 * if (courserb1.isSelected()) {
-			 * 
-			 * try { client.openConnection(); if (client.isConnected()) {
-			 * client.sendToServer(new Request("SearchExam", ));
-			 * 
-			 * 
-			 * } } catch (IOException e1) { // TODO Auto-generated catch block
-			 * e1.printStackTrace(); }
-			 * 
-			 * } if (examrb.isSelected()) {
-			 * 
-			 * String examid=selectionNameTxtField.getText();//exam id
-			 * 
-			 * try { client.openConnection(); if (client.isConnected()) {
-			 * client.sendToServer(new Request("SearchExam", ));
-			 * 
-			 * 
-			 * } } catch (IOException e1) { // TODO Auto-generated catch block
-			 * e1.printStackTrace(); }
-			 * 
-			 * }
-			 */});
-
-	}
-
-	@FXML
-	private void handleAddDataButton() {
+	/***
+	 * updaute the bar chart of the grade statistics
+	 * @param ArrayList<Integer> grades, BarChart chart
+	 **/
+	private void handleAddDataToChart(ArrayList<Integer> grades, BarChart chart) {
 		// Create data series
-		XYChart.Series<String, Number> series = new XYChart.Series<>();
-		series.setName("Series");
+		Platform.runLater(() -> {
+			XYChart.Series<String, Number> series = new XYChart.Series<>();
+			series.setName("Series");
+			int[] grades1 = new int[grades.size()];
+			int i = 0;
+			for (int i1 : grades) {
+				grades1[i] = grades.get(i);
+				i++;
 
-		// Add data points to series
-		series.getData().add(new XYChart.Data<>("Category 1", 10));
-		series.getData().add(new XYChart.Data<>("Category 2", 30));
-		series.getData().add(new XYChart.Data<>("Category 3", 30));
-		series.getData().add(new XYChart.Data<>("Category 4", 40));
-		series.getData().add(new XYChart.Data<>("Category 5", 50));
-		series.getData().add(new XYChart.Data<>("Category 6", 60));
+			}
+			// Add data points to series
+			for (i = 0; i < grades.size(); i++) {
 
-		// Add series to the bar chart
-		ObservableList<XYChart.Series<String, Number>> data = FXCollections.observableArrayList();
-		data.add(series);
-		generalScreenBarChart.setData(data);
+				series.getData().add(new XYChart.Data<>("exam" + i + 1, grades1[i]));
+			}
+
+			// Add series to the bar chart
+			ObservableList<XYChart.Series<String, Number>> data = FXCollections.observableArrayList();
+			data.add(series);
+			chart.setStyle("-fx-bar-fill:red;");
+
+			chart.setData(data);
+
+		});
+
 	}
+	/**
+	 * Add data to the bar chart accourding to the chart we want to change
+	 * 
+	 * @param ArrayList<Integer> grades, BarChart chart
+	 */
+	private void handleAddDataToChartTents(ArrayList<Integer> grades, BarChart chart) {
+		// Create data series
+		Platform.runLater(() -> {
+			XYChart.Series<String, Number> series = new XYChart.Series<>();
+			series.setName("tenths");
+			Map<String, Integer> gradeCountMap = divideToTenths(grades);
+
+			for (Map.Entry<String, Integer> entry : gradeCountMap.entrySet()) {
+				series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+			}
+
+			// Add series to the bar chart
+			ObservableList<XYChart.Series<String, Number>> data = FXCollections.observableArrayList();
+			data.add(series);
+			chart.setData(data);
+			chart.setStyle("-fx-bar-fill:white;");
+
+			if (chart == barChartLec) {
+				chart.setData(data);
+			}
+		});
+
+	}
+
+	/**
+	 * this function gets arraylist of grades and divides them to tenths
+	 * stores in dictionery for example:
+	 * "1-10":2
+	 * "11-20":3
+	 * and so on according to the grades
+	 * 
+	 * @param grades
+	 * @return Map<String, Integer>
+	 *         dictionery as described above
+	 */
+
+	public Map<String, Integer> divideToTenths(ArrayList<Integer> grades) {
+		Map<String, Integer> gradeCountMap = new TreeMap<>();// creating a dictionery to save the grades tenths
+		for (int i = 0; i < 10; i++) {// initializing the dictionery with ranges and 0's
+			gradeCountMap.put(((i * 10) + 1) + "-" + ((i + 1) * 10), 0);
+		}
+
+		for (int grade : grades) {
+			for (Map.Entry<String, Integer> entry : gradeCountMap.entrySet()) {
+				String[] bounds = entry.getKey().split("-");// to get lower bound and upper bound
+				int lowerBound = Integer.parseInt(bounds[0]);// converting the lower bound to integer
+				int upperBound = Integer.parseInt(bounds[1]);//
+
+				if (grade >= lowerBound && grade <= upperBound) {
+					gradeCountMap.put(entry.getKey(), entry.getValue() + 1);
+					break; // No need to check the remaining ranges
+				}
+			}
+		}
+
+		return gradeCountMap;
+	}
+	/**
+	 * import data for the compare action
+	 *  when the head of department press on ""compare to:" button
+	 * @param ActionEvent event
+	 */
+	@FXML
+	public void CompareTwoIDS(ActionEvent event) {
+		ArrayList<String> idsToCompare = new ArrayList<>();
+
+		if (event.getSource() == compareinStudent) {// btnCompareTwoStudents) {
+			if(secondStudentID.getText().isEmpty()){
+				secondStudentID.setStyle("-fx-border-color:red;-fx-border-width:2px;");
+			}else{
+				secondStudentID.setStyle("-fx-border-width:0px;");
+			}
+			try {
+				client.openConnection();
+				if (client.isConnected()) {
+
+					idsToCompare.add(ID_STUtextArea.getText());
+					idsToCompare.add(secondStudentID.getText());
+					System.out.println(idsToCompare.toString());
+
+					client.sendToServer(new Request("GetTwoStudentsGrades", idsToCompare));
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				} else {
+					System.out.println("Not connected to server.");
+
+				}
+
+			} catch (IOException exception) {
+			}
+
+		}
+		if (event.getSource() == compareinCourse) {// btnCompareTwoStudents) {
+			if(secondCourseID.getText().isEmpty()){
+				secondCourseID.setStyle("-fx-border-color:red;-fx-border-width:2px;");
+			}else{
+				secondCourseID.setStyle("-fx-border-width:0px;");
+			}
+			try {
+				client.openConnection();
+				if (client.isConnected()) {
+
+					idsToCompare.add(ID_GradetextArea.getText());
+					idsToCompare.add(secondCourseID.getText());
+					System.out.println(idsToCompare.toString());
+
+					client.sendToServer(new Request("GetTwoCourseGrades", idsToCompare));
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				} else {
+					System.out.println("Not connected to server.");
+
+				}
+
+			} catch (IOException exception) {
+			}
+
+		}
+		if (event.getSource() == compareinLecturer) {// btnCompareTwoStudents) {
+			if(secondLecturerID.getText().isEmpty()){
+				secondLecturerID.setStyle("-fx-border-color:red;-fx-border-width:2px;");
+			}else{
+				secondLecturerID.setStyle("-fx-border-width:0px;");
+			}
+			try {
+				client.openConnection();
+				if (client.isConnected()) {
+
+					idsToCompare.add(LectuerID.getText());
+					idsToCompare.add(secondLecturerID.getText());
+					System.out.println(idsToCompare.toString());
+
+					client.sendToServer(new Request("GetTwoLectureGrades", idsToCompare));
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				} else {
+					System.out.println("Not connected to server.");
+				}
+
+			} catch (IOException exception) {
+			}
+
+		}
+
+	}
+	/**
+	 * Gets information about the two students we want to compare,
+	 *  compares their data and displays on the screen
+	 * @param ArrayList<Grades> grades, ArrayList<Grades> grades2
+	 */
+	public void compareTwoStudents(ArrayList<Grades> grades, ArrayList<Grades> grades2) {
+
+		for (Grades g : grades) {
+
+			System.out.println("back in controller1" + g.toString());
+		}
+		for (Grades g2 : grades2) {
+			System.out.println("back in controller2" + g2.toString());
+		}
+
+		Platform.runLater(() -> {
+			XYChart.Series<String, Number> series = new XYChart.Series<>();
+			series.setName(grades.get(0).getStudentID());
+			XYChart.Series<String, Number> series2 = new XYChart.Series<>();
+			series2.setName(grades2.get(0).getStudentID());
+
+			for (Grades grade : grades) {
+				series.getData().add(new XYChart.Data<>(grade.getExamID(), grade.getGrade()));
+			}
+			for (Grades grade : grades2) {
+				series2.getData().add(new XYChart.Data<>(grade.getExamID(), grade.getGrade()));
+			}
+			// Add series to the bar chart
+			ObservableList<XYChart.Series<String, Number>> data = FXCollections.observableArrayList();
+			data.add(series);
+			data.add(series2);
+
+			barChartStud.setData(data);
+			barChartStud.setData(data);
+			DecimalFormat decimalFormat = new DecimalFormat("#.00");
+			String formatNumber = decimalFormat.format(calculateStandardDeviation(grades));
+			sdlabelStudentnumber.setText(formatNumber);
+			String formatNumber1 = decimalFormat.format(calculateStandardDeviation(grades2));
+			sdlabelStudentnumber1.setText(formatNumber1);
+			GPA_STUtextArea.setText(String.valueOf(calcAVG(grades)));
+			GPA_STUtextArea1.setText(String.valueOf(calcAVG(grades2)));
+			median_STUtextArea.setText(String.valueOf(calcMedian(grades)));
+			median_STUtextArea1.setText(String.valueOf(calcMedian(grades2)));
+			if(grades.size()<grades2.size()){
+				NumberOfTestStudent.setText(String.valueOf(grades.size()));
+			}else{
+				NumberOfTestStudent.setText(String.valueOf(grades2.size()));
+			}
+			
+
+		});
+
+	}
+	/**
+	 * Gets information about the two lectuers we want to compare,
+	 *  compares their data and displays on the screen
+	 * @param ArrayList<Grades> grades, ArrayList<Grades> grades2
+	 */
+	public void compareTwoLectuers(ArrayList<Grades> grades, ArrayList<Grades> grades2) {
+
+		for (Grades g : grades) {
+
+			System.out.println("back in controller1" + g.toString());
+		}
+		for (Grades g2 : grades2) {
+			System.out.println("back in controller2" + g2.toString());
+		}
+
+		Platform.runLater(() -> {
+			XYChart.Series<String, Number> series = new XYChart.Series<>();
+			series.setName(grades.get(0).getStudentID());
+			XYChart.Series<String, Number> series2 = new XYChart.Series<>();
+			series2.setName(grades2.get(0).getStudentID());
+
+			for (Grades grade : grades) {
+				series.getData().add(new XYChart.Data<>(grade.getExamID(), grade.getGrade()));
+			}
+			for (Grades grade : grades2) {
+				series2.getData().add(new XYChart.Data<>(grade.getExamID(), grade.getGrade()));
+			}
+			// Add series to the bar chart
+			ObservableList<XYChart.Series<String, Number>> data = FXCollections.observableArrayList();
+			data.add(series);
+			data.add(series2);
+			barChartLec.setData(data);
+			DecimalFormat decimalFormat = new DecimalFormat("#.00");
+			String formatNumber = decimalFormat.format(calculateStandardDeviation(grades));
+			sdlabelLecturerNumber.setText(formatNumber);
+			String formatNumber1 = decimalFormat.format(calculateStandardDeviation(grades2));
+			sdlabelLecturerNumber1.setText(formatNumber1);
+			GPA_LECtextArea.setText(String.valueOf(calcAVG(grades)));
+			GPA_LECtextArea1.setText(String.valueOf(calcAVG(grades2)));
+			Median_LECTextArea.setText(String.valueOf(calcMedian(grades)));
+			Median_LECTextArea1.setText(String.valueOf(calcMedian(grades2)));
+						if(grades.size()<grades2.size()){
+				NumberOfTestLectuer.setText(String.valueOf(grades.size()));
+			}else{
+				NumberOfTestLectuer.setText(String.valueOf(grades2.size()));
+			}
+
+		});
+
+	}
+	/**
+	 * Gets information about the two courses we want to compare,
+	 *  compares their data and displays on the screen
+	 * @param ArrayList<Grades> grades, ArrayList<Grades> grades2
+	 */
+	public void compareTwoCourses(ArrayList<Grades> grades, ArrayList<Grades> grades2) {
+
+		for (Grades g : grades) {
+
+			System.out.println("back in controller1" + g.toString());
+		}
+		for (Grades g2 : grades2) {
+			System.out.println("back in controller2" + g2.toString());
+		}
+
+		Platform.runLater(() -> {
+			XYChart.Series<String, Number> series = new XYChart.Series<>();
+			series.setName(grades.get(0).getStudentID());
+			XYChart.Series<String, Number> series2 = new XYChart.Series<>();
+			series2.setName(grades2.get(0).getStudentID());
+
+			for (Grades grade : grades) {
+				series.getData().add(new XYChart.Data<>(grade.getExamID(), grade.getGrade()));
+			}
+			for (Grades grade : grades2) {
+				series2.getData().add(new XYChart.Data<>(grade.getExamID(), grade.getGrade()));
+			}
+			// Add series to the bar chart
+			ObservableList<XYChart.Series<String, Number>> data = FXCollections.observableArrayList();
+			data.add(series);
+			data.add(series2);
+			barChartCourse.setData(data);
+			DecimalFormat decimalFormat = new DecimalFormat("#.00");
+			String formatNumber = decimalFormat.format(calculateStandardDeviation(grades));
+			sdlabelCourseNumber.setText(formatNumber);
+			String formatNumber1 = decimalFormat.format(calculateStandardDeviation(grades2));
+			sdlabelCourseNumber1.setText(formatNumber1);
+			GPA_GradestextArea.setText(String.valueOf(calcAVG(grades)));
+			GPA_GradestextArea1.setText(String.valueOf(calcAVG(grades2)));
+			median_GradesTextArea.setText(String.valueOf(calcMedian(grades)));
+			median_GradesTextArea1.setText(String.valueOf(calcMedian(grades2)));
+			if(grades.size()<grades2.size()){
+				NumberOfTestCourse.setText(String.valueOf(grades.size()));
+			}else{
+				NumberOfTestCourse.setText(String.valueOf(grades2.size()));
+			}
+
+		});
+
+	}
+
 }
