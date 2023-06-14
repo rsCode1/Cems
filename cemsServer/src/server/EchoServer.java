@@ -359,7 +359,7 @@ public class EchoServer extends AbstractServer {
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(str);
 	 		if (rs.next()) {
-	 			test= new Test(rs.getString("course_name"),rs.getInt("test_time"),rs.getString("student_comments"),testid);
+	 			test= new Test(rs.getString("course_name"),rs.getInt("test_time"),rs.getString("student_comments"),testid,rs.getInt("lecturer_id"));
 			}
 	 		rs.close();
 	 		ResultSet rs2;
