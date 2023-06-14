@@ -74,6 +74,7 @@ public class StartExamController implements Initializable {
 
         Request request = new Request("getExamsByLecturer",lecturer);
         try {
+            client.openConnection();
             client.sendToServer(request);
         } catch (IOException e) {
             e.printStackTrace();
