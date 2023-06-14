@@ -8,6 +8,7 @@ public class Test implements Serializable{
 	private String courseName;
 	private int testId;
 	private int lecturerId;
+	private int courseId;
 	private ArrayList<Integer> studentsIdForTest = new ArrayList<>();
 	public ArrayList<Integer> getStudentsIdForTest() {
 		return studentsIdForTest;
@@ -40,13 +41,14 @@ public class Test implements Serializable{
 	private int duration;
 	private String studentNotes;
 	private int quesSize;
-	public Test( String courseName, int duration, String studentNotes, int testId , int lecturerId) {
+	public Test( String courseName, int duration, String studentNotes, int testId , int lecturerId,int courseId) {
 		super();
 		this.courseName = courseName;
 		this.duration = duration;
 		this.studentNotes = studentNotes;
 		this.testId=testId;
 		this.lecturerId=lecturerId;
+		this.courseId=courseId;
 	}
 	public void setQLst(ArrayList<Question> qLst) {
 		this.qLst=qLst;
@@ -56,6 +58,10 @@ public class Test implements Serializable{
 		this.quesSize=quesSize;
 		
 	}
+	public int getCourseId() {
+        return courseId;
+    }
+   
 	
 
 }

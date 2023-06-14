@@ -11,6 +11,7 @@ public class StudentInTest implements Serializable {
 	private int qesSize;
 	private int [] quesIdArr;
 	private int lecturerId;
+	private int courseId;
 	
 	public int[] getQuesIdArr() {
 		return quesIdArr;
@@ -20,18 +21,22 @@ public class StudentInTest implements Serializable {
 		this.quesIdArr = quesIdArr;
 	}
 
-	public StudentInTest( int studentId ,String CourseName,int qesSize,int testId ,int lecturerId) {
+	public StudentInTest( int studentId ,String CourseName,int qesSize,int testId ,int lecturerId,int courseId) {
 		this.studentId = studentId;
 		this.CourseName = CourseName;
 		this.qesSize = qesSize;
 		this.testId= testId;
 		this.lecturerId=lecturerId;
+		this.courseId=courseId;
 		ansArr= new int [qesSize];
 		for(int i=0 ; i< qesSize; i++) {
 			ansArr[i]=0;
 		}
 		quesIdArr = new int [qesSize];
 	}
+	public int getCourseId() {
+			return courseId;
+		}
 	public int getScore() {
 			return score;
 		}

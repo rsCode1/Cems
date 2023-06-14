@@ -278,7 +278,7 @@ public class EchoServer extends AbstractServer {
 		}
 		
 		public void submitTest(StudentInTest studentInTest,ConnectionToClient client) {
-			Statement stmt;
+			Statement stmt,stmt2;
 			String str;
 			String studentId= '"' + String.valueOf(studentInTest.getStudentId()) +'"';
 			String testId= '"' + String.valueOf(studentInTest.getTestId()) +'"';
@@ -294,10 +294,16 @@ public class EchoServer extends AbstractServer {
 				    stmt.executeUpdate(str);
 				    str="";
 					}
+				String str2="INSERT INTO `cems`.`grades` (`examId`, `studentId`, `courseID`, `grade`, `lecturerID`, `courseName`)";
+				str2+=" VALUES ('"+studentInTest.getTestId()  + "', '" + studentInTest.getStudentId() + "', '"+ studentInTest.getCourseId() +"', '" + studentInTest.getScore();
+				str2+="', '" + studentInTest.getLecturerId() + "', '" +studentInTest.getCourseName() +"');";
+				stmt2 = conn.createStatement();
+				stmt2.executeUpdate(str2);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
 			
 			
 			
@@ -359,7 +365,7 @@ public class EchoServer extends AbstractServer {
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(str);
 	 		if (rs.next()) {
-	 			test= new Test(rs.getString("course_name"),rs.getInt("test_time"),rs.getString("student_comments"),testid,rs.getInt("lecturer_id"));
+	 			test= new Test(rs.getString("course_name"),rs.getInt("test_time"),rs.getString("student_comments"),testid,rs.getInt("lecturer_id"),rs.getInt("course_id"));
 			}
 	 		rs.close();
 	 		ResultSet rs2;
