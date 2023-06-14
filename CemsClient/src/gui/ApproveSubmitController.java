@@ -11,9 +11,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import logic.Request;
 import logic.StudentInTest;
+import logic.Test;
 import logic.Users;
 
 public class ApproveSubmitController {
+	private Test test;
 	private StudentInTest studentInTest;
 	private ChatClient client;
 	private Users student;
@@ -27,11 +29,12 @@ public class ApproveSubmitController {
 		DigOrMan = digOrMan;
 	}
 
-	public void setStudentAndClient(Users Student,ChatClient client,StudentInTest studentInTest,InExamController inExamController) {
+	public void setStudentAndClient(Users Student,ChatClient client,StudentInTest studentInTest,InExamController inExamController,Test test) {
     	this.student=Student;
     	this.client=client;
     	this.studentInTest=studentInTest;
     	this.inExamController=inExamController;
+		this.test=test;
     	}
 	public void setStudentAndClient2(Users Student,ChatClient client,StudentManualTestController Controller) {
     	this.student=Student;
@@ -68,6 +71,11 @@ public class ApproveSubmitController {
     void yesBtnClicked(ActionEvent event) {
     	if(DigOrMan==0) {
     	try {
+		int score=0;
+		for(int i=0; i<test.getQuesSize();i++){
+            if(test.getqLst().get(i).getcAns() == studentInTest.getAnswer(i))
+			score+=test.getqLst().get(i).getScore();	
+			}
 		client.sendToServer(new Request("SubmitExam", studentInTest));
 		System.out.println("Submitted");
 		//Stage currentStage = (Stage) noBtn.getScene().getWindow();
@@ -78,8 +86,10 @@ public class ApproveSubmitController {
 		mesTxt.setText("Good Luck!");
         inExamController.stopTimer();
         inExamController.CloseWindow();
-        System.out.println("arrived");
-	} catch (IOException e) {
+		
+		}
+
+	    catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}

@@ -261,7 +261,7 @@ public class EchoServer extends AbstractServer {
 		 			ansArr[1]=rs.getString("answer2");
 		 			ansArr[2]=rs.getString("answer3");
 		 			ansArr[3]=rs.getString("answer4");
-		 			qLst.add(new Question(rs.getString("question_text"),ansArr,rs.getInt("score"),rs.getInt("question_id")));
+		 			qLst.add(new Question(rs.getString("question_text"),ansArr,rs.getInt("score"),rs.getInt("question_id"),rs.getInt("correct_answer")));
 		 			i++;
 		 			f=true;
 				}

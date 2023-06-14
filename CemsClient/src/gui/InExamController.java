@@ -55,7 +55,7 @@ public class InExamController {
 	
 	
 	 public void setStudentInTest() {
-		 this.studentInTest= new StudentInTest (student.getId(),test.getCourseName(),test.getQuesSize(),test.getTestId());
+		 this.studentInTest= new StudentInTest (student.getId(),test.getCourseName(),test.getQuesSize(),test.getTestId(),test.getLecturerId());
 		 int[] quesId= new int[test.getQuesSize()];
 		 for(int i =0 ; i<test.getQuesSize();i++) {
 			 quesId[i]=test.getqLst().get(i).getQuesId();
@@ -243,7 +243,7 @@ public class InExamController {
 			Stage window = new Stage();
 			ApproveSubmitController controller=loader.getController();
 			//controller.setTest(test);
-			controller.setStudentAndClient(student ,client,studentInTest,this.getController());
+			controller.setStudentAndClient(student ,client,studentInTest,this.getController(),test);
 			controller.setDigOrMan(0);
 			window.setScene(new Scene(root));
 			window.show();

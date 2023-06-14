@@ -31,6 +31,9 @@ public class Test implements Serializable{
 	public int getQuesSize() {
 		return quesSize;
 	}
+	public int getLecturerId() {
+        return lecturerId;
+    }
 	public String getStudentNotes() {
 		return studentNotes;
 	}
