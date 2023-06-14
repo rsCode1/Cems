@@ -361,7 +361,7 @@ public class EchoServer extends AbstractServer {
 			Statement stmt;
 			try {
 			String id1=  String.valueOf(testid) ;
-			String str = "SELECT * FROM exams Where exam_id =" +  id1 +";";
+			String str = "SELECT * FROM exams e, courses c WHERE e.exam_id=" + id1 + " AND e.course_name = c.course_name;";
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(str);
 	 		if (rs.next()) {
