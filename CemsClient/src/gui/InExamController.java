@@ -55,7 +55,7 @@ public class InExamController {
 	
 	
 	 public void setStudentInTest() {
-		 this.studentInTest= new StudentInTest (student.getId(),test.getCourseName(),test.getQuesSize(),test.getTestId(),test.getLecturerId());
+		 this.studentInTest= new StudentInTest (student.getId(),test.getCourseName(),test.getQuesSize(),test.getTestId(),test.getLecturerId(),test.getCourseId());
 		 int[] quesId= new int[test.getQuesSize()];
 		 for(int i =0 ; i<test.getQuesSize();i++) {
 			 quesId[i]=test.getqLst().get(i).getQuesId();

@@ -76,6 +76,7 @@ public class ApproveSubmitController {
             if(test.getqLst().get(i).getcAns() == studentInTest.getAnswer(i))
 			score+=test.getqLst().get(i).getScore();	
 			}
+		studentInTest.setScore(score);
 		client.sendToServer(new Request("SubmitExam", studentInTest));
 		System.out.println("Submitted");
 		//Stage currentStage = (Stage) noBtn.getScene().getWindow();
