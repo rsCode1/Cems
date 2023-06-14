@@ -58,7 +58,7 @@ public class InExamController {
 		 this.studentInTest= new StudentInTest (student.getId(),test.getCourseName(),test.getQuesSize(),test.getTestId());
 		 int[] quesId= new int[test.getQuesSize()];
 		 for(int i =0 ; i<test.getQuesSize();i++) {
-			 quesId[i]=test.getqLst()[i].getQuesId();
+			 quesId[i]=test.getqLst().get(i).getQuesId();
 		 }
 		 this.studentInTest.setQuesId(quesId);
 	 }
@@ -150,13 +150,13 @@ public class InExamController {
         	if (answer==3) {ansBtn3.setSelected(true);}
         	if (answer==4) {ansBtn4.setSelected(true);}
     	}
-    	qtxt.setText(test.getqLst()[questionIndex].getqTxt());
-    	ans1Txt.setText(test.getqLst()[questionIndex].getAnsTxt()[0]);
-    	ans2Txt.setText(test.getqLst()[questionIndex].getAnsTxt()[1]);
-    	ans3Txt.setText(test.getqLst()[questionIndex].getAnsTxt()[2]);
-    	ans4Txt.setText(test.getqLst()[questionIndex].getAnsTxt()[3]);
+    	qtxt.setText(test.getqLst().get(questionIndex).getqTxt());
+    	ans1Txt.setText(test.getqLst().get(questionIndex).getAnsTxt()[0]);
+    	ans2Txt.setText(test.getqLst().get(questionIndex).getAnsTxt()[1]);
+    	ans3Txt.setText(test.getqLst().get(questionIndex).getAnsTxt()[2]);
+    	ans4Txt.setText(test.getqLst().get(questionIndex).getAnsTxt()[3]);
     	qNum.setText((questionIndex+1) + "");
-    	scoreTxt.setText("Points Number : " +test.getqLst()[questionIndex].getScore());
+    	scoreTxt.setText("Points Number : " +test.getqLst().get(questionIndex).getScore());
     	
     }
     
@@ -178,13 +178,13 @@ public class InExamController {
         	if (answer==3) {ansBtn3.setSelected(true);}
         	if (answer==4) {ansBtn4.setSelected(true);}
     	}
-    	qtxt.setText(test.getqLst()[questionIndex].getqTxt());
-    	ans1Txt.setText(test.getqLst()[questionIndex].getAnsTxt()[0]);
-    	ans2Txt.setText(test.getqLst()[questionIndex].getAnsTxt()[1]);
-    	ans3Txt.setText(test.getqLst()[questionIndex].getAnsTxt()[2]);
-    	ans4Txt.setText(test.getqLst()[questionIndex].getAnsTxt()[3]);
+    	qtxt.setText(test.getqLst().get(questionIndex).getqTxt());
+    	ans1Txt.setText(test.getqLst().get(questionIndex).getAnsTxt()[0]);
+    	ans2Txt.setText(test.getqLst().get(questionIndex).getAnsTxt()[1]);
+    	ans3Txt.setText(test.getqLst().get(questionIndex).getAnsTxt()[2]);
+    	ans4Txt.setText(test.getqLst().get(questionIndex).getAnsTxt()[3]);
     	qNum.setText((questionIndex+1) + "");
-    	scoreTxt.setText("Points Number : " +test.getqLst()[questionIndex].getScore());
+    	scoreTxt.setText("Points Number : " +test.getqLst().get(questionIndex).getScore());
     }
 
     @FXML
@@ -268,14 +268,14 @@ public class InExamController {
 		//startTimer(timeInSeconds);
     	startTimer(test.getDuration() * 60,test.getDuration());
     	questionIndex=0;
-    	qtxt.setText(test.getqLst()[questionIndex].getqTxt());
-    	ans1Txt.setText(test.getqLst()[questionIndex].getAnsTxt()[0]);
-    	ans2Txt.setText(test.getqLst()[questionIndex].getAnsTxt()[1]);
-    	ans3Txt.setText(test.getqLst()[questionIndex].getAnsTxt()[2]);
-    	ans4Txt.setText(test.getqLst()[questionIndex].getAnsTxt()[3]);
+    	qtxt.setText(test.getqLst().get(questionIndex).getqTxt());
+    	ans1Txt.setText(test.getqLst().get(questionIndex).getAnsTxt()[0]);
+    	ans2Txt.setText(test.getqLst().get(questionIndex).getAnsTxt()[1]);
+    	ans3Txt.setText(test.getqLst().get(questionIndex).getAnsTxt()[2]);
+    	ans4Txt.setText(test.getqLst().get(questionIndex).getAnsTxt()[3]);
     	qNum.setText((questionIndex+1) + "");
     	qSize.setText(test.getQuesSize() + "");
-    	scoreTxt.setText("Points Number : " +test.getqLst()[questionIndex].getScore());
+    	scoreTxt.setText("Points Number : " +test.getqLst().get(questionIndex).getScore());
     	crsName.setText(test.getCourseName() + " Test");
     	//timeTxt.setText("Remaining Time: "+test.getDuration()+" M");
     }

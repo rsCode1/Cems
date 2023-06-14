@@ -3,26 +3,26 @@ package logic;
 import java.io.Serializable;
 
 public class TestApplyInfo  implements Serializable {
-	private int id;
-	private int code;
-
-	public TestApplyInfo( int code ,int id) {
+	private int studentId;
+	private int testId;
+	public TestApplyInfo(int studentId, int testId) {
 		super();
-		this.code = code;
-		this.id=id;
+		this.studentId = studentId;
+		this.testId = testId;
 	}
-	
-	
-	public void setId(int id) {
-		this.id = id;
+	public int getStudentId() {
+		return studentId;
+	}
+	public void setStudentId(int studentId) {
+		this.studentId = studentId;
+	}
+	public int getTestId() {
+		return testId;
+	}
+	public void setTestId(int testId) {
+		this.testId = testId;
 	}
 
-
-	public int getId() {
-		return id;
-	}
-	public int getCode() {
-		return code;
-	}
+	
 
 }

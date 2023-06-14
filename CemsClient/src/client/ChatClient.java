@@ -4,6 +4,7 @@
 
 package client;
 
+import logic.Response;
 import client.*;
 import gui.ConnectToServerScreenController;
 import gui.InExamController;
@@ -54,41 +55,60 @@ public class ChatClient extends AbstractClient
    */
   public void handleMessageFromServer(Object msg) 
   {
-	 //
-   if (msg instanceof Users || msg==null) {
-          Users user = (Users) msg;
-          System.out.println(user);
-          try {
-			loginScreecontroller.ShowUserWelcomeScreen(user);
-			loginScreecontroller.setUser(user);;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-          System.out.println(user.getRole());
-      } 
-  else if(msg instanceof Test ) {
-	  Test test= (Test) msg ;
-	  try {
+	 if (msg instanceof Response) {
+       Response response = (Response) msg;
+    	 switch (response.getResponseType()) {
+				  case "LOGIN":
+				  	login((Users) response.getResponseParam());
+					  break; 
+          case "GetExam":
+           getExam((Test) response.getResponseParam());
+           break;
+          case "AddedTime":
+            AddedTime added= (AddedTime) response.getResponseParam();
+            inExamController.setAdded(added);
+            break;
+
+
+
+
+
+
+          }
+         }
+        }
+   
+       
+       
+  
+ /*  else if(msg instanceof DownloadManualExaminController ) {
+	  DownloadManualExaminController finfo=   ( DownloadManualExaminController) msg;
+	  stdManController.setDownloadFile(finfo);
+  }*/
+  
+
+  private void getExam(Test test){
+    try {
 		  takeExamController.ShowStudentEnterIdScreen(test);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	  
   }
-  else if(msg instanceof AddedTime) {
-	  AddedTime added= (AddedTime) msg;
-	  inExamController.setAdded(added);
-  }
-  else if(msg instanceof DownloadManualExaminController ) {
-	  DownloadManualExaminController finfo=   ( DownloadManualExaminController) msg;
-	  stdManController.setDownloadFile(finfo);
-  }
-   else {
-          System.out.println("Received message of type: " + msg.getClass());
-      }
-  }
+  private void login(Users user) {
+
+		System.out.println(user);
+		try {
+			loginScreecontroller.ShowUserWelcomeScreen(user);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(user.getRole());
+
+	}
+
+
   public void setStudentManualTestController(StudentManualTestController controller) {
 	  this.stdManController=controller;
   }

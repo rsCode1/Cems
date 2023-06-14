@@ -61,16 +61,30 @@ public class EnterIdForTestController {
     void StartTestClicked(ActionEvent event) {
     	String id = idField.getText();
     	if(CheckApplyingInfo(id)) {
+    	try{
     		int studentId = Integer.parseInt(id);
+    		TestApplyInfo testApplyInfo= new TestApplyInfo(student.getId(),test.getTestId());
     		if (test.getStudentsIdForTest().contains(studentId)) {
     			errTxt.setText("Correct Id");
+    			client.sendToServer(new Request("AddStudentToInExamList", testApplyInfo));
     			ShowStudentTestScreen(test);	
     		}
+			else{
+				errTxt.setText("Already submitted!");
+			}
+    	}
+    		catch (IOException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+    		
+    	}
     		else {
     			errTxt.setText("Wrong Id, please try again");
     		}
     		
-    	}
+    		
+    	
 
     }
     public boolean CheckApplyingInfo(String code ){
@@ -84,8 +98,8 @@ public class EnterIdForTestController {
     		errTxt.setText("Please Enter Numbers only for id.");  
 	    	ret=false;
 	    }
-    	else if(code.length() != 9) {
-    		errTxt.setText("Please Enter 9 Numbers for id.");  
+    	else if(!code.equals(String.valueOf(student.getId()))) {
+    		errTxt.setText("Wrong Id, please try again");  
     		ret=false;
     	}
     	

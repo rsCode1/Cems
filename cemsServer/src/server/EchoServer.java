@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 import com.mysql.cj.jdbc.Blob;
 
+import logic.Response;
 import gui.ServerStartScreenController;
 import logic.AddedTime;
 import logic.DownloadManualExaminController;
@@ -86,15 +87,40 @@ public class EchoServer extends AbstractServer {
 					break;
 				case "CheckIfDurationChanged":
 					checkIfDurationChanged((TestSourceTime) request.getRequestParam(),client);
+					break;
 				case "DownloadManualExam":
 				   downloadManuelExam((FileDownloadInfo) request.getRequestParam(),client);
+				    break;
+				case"AddStudentToInExamList":
+					addStudentToInExamList((TestApplyInfo) request.getRequestParam() ,client);
+					break;
 				// Add more case statements for other request types
 			}
 		}
 	}
 	
+	private void addStudentToInExamList(TestApplyInfo testApplyInfo,ConnectionToClient client) {
+		Statement stmt;
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root","Aa123456");
+			stmt = conn.createStatement();
+			String str = "INSERT INTO `cems`.`student_inexam` (`student_id`, `exam_id`) VALUES ('" + testApplyInfo.getStudentId()+ "', '"+testApplyInfo.getTestId() + "');" ;
+			stmt.executeUpdate(str);
+			str="";
+			System.out.println("Added student to student_inexam list");
+		}
+			
+		 catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
 	
 	
+	//not finished
 	private void downloadManuelExam(FileDownloadInfo fileDownloadInfo, ConnectionToClient client) {
 		String sql = "SELECT file_data FROM cems.manueltests WHERE testId = ?";
 	    PreparedStatement statement;
@@ -152,7 +178,8 @@ public class EchoServer extends AbstractServer {
 			}
 			updateUserLoggedIn(loginInfo, conn);
 			addUserToLoggedTable(conn);
-			client.sendToClient(user);
+			Response response = new Response("LOGIN", user);
+			client.sendToClient(response);
 
 		} catch (Exception ex) {
 			/* handle the error */
@@ -168,11 +195,13 @@ public class EchoServer extends AbstractServer {
 				if(testid != -1) {
 					Test test = getTest(conn,testid);
 						if (test!=null) {
-							Question[] qLst= getTestQuestions(conn,testid,test.getQuesSize());
+							ArrayList<Question> qLst= getTestQuestions(conn,testid);
 								if(qLst != null ) {
 									test.setQLst(qLst);
+									test.setquesSize(qLst.size());
 									try {
-										client.sendToClient(test);
+										Response response = new Response("GetExam", test);
+										client.sendToClient(response);
 									} catch (IOException e) {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
@@ -181,7 +210,7 @@ public class EchoServer extends AbstractServer {
 								else {
 									System.out.println("Questions not Found!!! ");
 									try {
-										client.sendToClient((Test)null);
+										client.sendToClient((Response)null);
 									} catch (IOException e) {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
@@ -191,7 +220,7 @@ public class EchoServer extends AbstractServer {
 						else {
 							System.out.println("Test code not Found!!! ");
 							try {
-								client.sendToClient((Test)null);
+								client.sendToClient((Response)null);
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -201,7 +230,7 @@ public class EchoServer extends AbstractServer {
 				else {
 					System.out.println("Test not Found!!! ");
 					try {
-						client.sendToClient((Test)null);
+						client.sendToClient((Response)null);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -215,24 +244,24 @@ public class EchoServer extends AbstractServer {
 		}
 	
 		//returns Question list if testid Existed in DataBase else null
-		private  Question[] getTestQuestions(Connection conn,int testid,int Size) {
-			Question[] qLst=new Question[Size];
+		private ArrayList<Question> getTestQuestions(Connection conn,int testid) {
+			ArrayList<Question> qLst= new ArrayList<Question>();
 			boolean f= false;
 			Statement stmt;
 			try {
 				String id= '"' + String.valueOf(testid) +'"';
-				String str = "SELECT  q.*,tq.score FROM test t, questions q , test_question tq Where t.idTest=tq.idTest AND q.idquestion=tq.idquestion";
-				str= str+ " AND t.idTest = " + id + ";";
+				String str = "SELECT * FROM cems.exam_questions eq, cems.questions q where eq.exam_id=" + testid + " And eq.question_id = q.question_id ;";
+				//str= str+ " AND t.idTest = " + id + ";";
 				stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(str);
 				int i=0;
 		 		while (rs.next()) {
 		 			String [] ansArr= new String[4];
-		 			ansArr[0]=rs.getString(3);
-		 			ansArr[1]=rs.getString(4);
-		 			ansArr[2]=rs.getString(5);
-		 			ansArr[3]=rs.getString(6);
-		 			qLst[i]= new Question(rs.getString(2),ansArr,rs.getInt(9),rs.getInt(1));
+		 			ansArr[0]=rs.getString("answer1");
+		 			ansArr[1]=rs.getString("answer2");
+		 			ansArr[2]=rs.getString("answer3");
+		 			ansArr[3]=rs.getString("answer4");
+		 			qLst.add(new Question(rs.getString("question_text"),ansArr,rs.getInt("score"),rs.getInt("question_id")));
 		 			i++;
 		 			f=true;
 				}
@@ -247,9 +276,9 @@ public class EchoServer extends AbstractServer {
 		
 			
 		}
+		
 		public void submitTest(StudentInTest studentInTest,ConnectionToClient client) {
-			Statement stmt,stmt2;
-			String str2 ="UPDATE `cems`.`students_applying_for_test_list` SET `submitted` = '1' WHERE (`stdId` = '"+studentInTest.getStudentId() +" ') and (`testId` = '"+ studentInTest.getTestId() +"');";
+			Statement stmt;
 			String str;
 			String studentId= '"' + String.valueOf(studentInTest.getStudentId()) +'"';
 			String testId= '"' + String.valueOf(studentInTest.getTestId()) +'"';
@@ -260,14 +289,11 @@ public class EchoServer extends AbstractServer {
 				for(int i=0 ; i<studentInTest.getQesSize();i++ ) {
 					String answer= '"' + String.valueOf(studentInTest.getAnswer(i)) +'"';
 					String quesId= '"' + String.valueOf(studentInTest.getQuesIdArr()[i]) +'"';
-				    str = "INSERT INTO `cems`.`studentintest` (`studentId`, `testId`,`answer`, `courseName`, `quesId`) " ;
-				    str+="VALUES (" + studentId + ',' +testId + ',' + answer + ',' + courseName+ ',' + quesId + ");" ;
+				    str = "INSERT INTO `cems`.`students_answers` (`studentId`, `examId`, `courseName`,`quesId`, `answerNum`) " ;
+				    str+="VALUES (" + studentId + ',' +testId + ',' + courseName+ ',' + quesId + ',' + answer +  ");" ;
 				    stmt.executeUpdate(str);
 				    str="";
 					}
-				stmt2 = conn.createStatement();
-				stmt2.executeUpdate(str2);
-				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -283,7 +309,7 @@ public class EchoServer extends AbstractServer {
 			int currentD=testSourcetime.getSourceTime();
 			AddedTime added = new AddedTime();
 			added.setAdded(0);
-			str ="SELECT test.duration FROM cems.test test WHERE idTest=" +testSourcetime.getTestId() + ";";
+			str ="SELECT exams.test_time FROM exams  WHERE exam_id=" +testSourcetime.getTestId()  + ";";
 			Statement stmt;
 			try {
 				Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root","Aa123456");
@@ -296,14 +322,16 @@ public class EchoServer extends AbstractServer {
 				if(currentD != testSourcetime.getSourceTime()) {
 					added.setAdded(currentD - testSourcetime.getSourceTime());
 					try {
-						client.sendToClient(added);
+						Response response = new Response("AddedTime", added);
+						client.sendToClient(response);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				} else
 					try {
-						client.sendToClient(added);
+						Response response = new Response("AddedTime", added);
+						client.sendToClient(response);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -313,7 +341,8 @@ public class EchoServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			try {
-				client.sendToClient(added);
+				Response response = new Response("AddedTime", added);
+				client.sendToClient(response);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -321,12 +350,11 @@ public class EchoServer extends AbstractServer {
 		}
 		//gets test Data from DataBase and puts it in Test Object and returns it;
 		private Test getTest(Connection conn,int testid) {
-	       
 			ArrayList<Integer> studentsIdForTest = new ArrayList<>();
 			Test test=null;
 			Statement stmt;
 			try {
-			String id1= '"' + String.valueOf(testid) +'"';
+			String id1=  String.valueOf(testid) ;
 			String str = "SELECT * FROM exams Where exam_id =" +  id1 +";";
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(str);
@@ -335,13 +363,14 @@ public class EchoServer extends AbstractServer {
 			}
 	 		rs.close();
 	 		ResultSet rs2;
-	 		str = "SELECT list.stdId FROM cems.students_applying_for_test_list list WHERE testId = " + testid + " AND submitted = 0;";
+	 		str = "SELECT u.* FROM users u LEFT JOIN student_inexam s ON u.id = s.student_id WHERE u.role = 0 AND s.student_id IS NULL;";
 	 		Statement stmt2 = conn.createStatement();
 	 		rs2 = stmt2.executeQuery(str);
 	 		while (rs2.next()) {
-	 			studentsIdForTest.add(rs2.getInt(1));
+	 			studentsIdForTest.add(rs2.getInt("id"));
 			}
 	 		rs2.close();
+	 		if(test!=null)
 	 		test.setStudentsIdForTest(studentsIdForTest);
 	 		return test;
 			}
@@ -359,7 +388,7 @@ public class EchoServer extends AbstractServer {
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(str);
 	 		if (rs.next()) 
-	 			testid= rs.getInt("code");
+	 			testid= rs.getInt("exam_id");
 	 		rs.close();
 	 		return testid;
 			}
