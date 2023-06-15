@@ -69,13 +69,15 @@ public class StudentHistoryController {
      
     	 try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
 				"Aa123456")) {
-    		 String query="SELECT course ,grade FROM testcompletebystudent WHERE status='completed' AND StudentID=?";
+    		 String query="SELECT course ,grade, stats FROM testcompletebystudent WHERE StudentID=?";
     		 PreparedStatement statement = conn.prepareStatement(query);
     	        statement.setInt(1, this.student.getId());
     	        ResultSet resultSet = statement.executeQuery();
     	        while (resultSet.next()) {
     	            String column2Value = resultSet.getString("course");
-    	            int column3Value = resultSet.getInt("grade");
+    	            String column3Value = String.valueOf(resultSet.getInt("grade"));
+    	            String stat=resultSet.getString("stats");
+    	            if (stat.equals("Pending")) column3Value="-/-";
     	            
     	            data.add(new StudentData(column2Value,this.student.getId(),column3Value));
     	        }

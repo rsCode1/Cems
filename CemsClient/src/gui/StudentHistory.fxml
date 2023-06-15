@@ -22,7 +22,7 @@
             <TableColumn fx:id="tbcGrade" prefWidth="113.0" text="Grade" />
         </columns>
       </TableView>
-      <Label fx:id="lblGPA" layoutX="278.0" layoutY="64.0" text="GPA:">
+      <Label fx:id="lblGPA" layoutX="304.0" layoutY="65.0" text="GPA:">
          <font>
             <Font size="20.0" />
          </font>
