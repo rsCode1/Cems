@@ -228,10 +228,10 @@ public class writeQuestionController {
         radio4.setToggleGroup(correctAnswer);
 
         professionsComboBox.setOnMouseClicked(event -> {
-            System.out.println(professionsComboBox.getValue());
             // add some subjects to the comboBox
             Request request = new Request("getSubjects", null);
             try {
+                client.openConnection();
                 client.sendToServer(request);
             } catch (Exception e) {
                 // TODO Auto-generated catch block
@@ -242,9 +242,10 @@ public class writeQuestionController {
         coursesComboBox.setOnMouseClicked(event -> {
             // add some courses to the comboBox depending on the subject currently selected
             String subject = professionsComboBox.getValue();
-            if (!subject.equals("Select Course")) {
+            if (subject!=null) {
                 Request request = new Request("getCourses", subject);
                 try {
+                    client.openConnection();
                     client.sendToServer(request);
                 } catch (Exception e) {
                     e.printStackTrace();

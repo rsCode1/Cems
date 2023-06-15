@@ -121,6 +121,7 @@ public class LecturerPageController implements Initializable{
 
         Request request = new Request("getOngoingExams",lecturer);
         try {
+			client.openConnection();
             client.sendToServer(request);
         } catch (IOException e) {
             e.printStackTrace();
