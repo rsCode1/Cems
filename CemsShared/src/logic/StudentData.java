@@ -6,10 +6,10 @@ public class StudentData implements Serializable {
 
 	private String CourseName;
     private int StudentID;
-    private String grade;
+    private int grade;
     private String status;
 	
-	public StudentData(String cname,int studentid, String grade) {
+	public StudentData(String cname,int studentid, int grade) {
 		super();
 		this.CourseName=cname;
 		this.StudentID=studentid;
@@ -36,11 +36,11 @@ public class StudentData implements Serializable {
 		StudentID = studentID;
 	}
 
-	public String getGrade() {
+	public int getGrade() {
 		return grade;
 	}
 
-	public void setGrade(String grade) {
+	public void setGrade(int grade) {
 		this.grade = grade;
 	}
 
