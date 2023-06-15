@@ -136,7 +136,7 @@ public class StudentManualTestController {
 
 	    @FXML
 	    void click_download(ActionEvent event) {
-	        DirectoryChooser directoryChooser = new DirectoryChooser();
+	       /*  DirectoryChooser directoryChooser = new DirectoryChooser();
 	        directoryChooser.setTitle("Select Download Directory");
 	        File selectedDirectory = directoryChooser.showDialog(null);
 
@@ -183,7 +183,7 @@ public class StudentManualTestController {
 	        		catch (IOException e) {
 	        			e.printStackTrace();}
 	        	}
-	        }
+	        }*/
 	        
 	    }
 	    

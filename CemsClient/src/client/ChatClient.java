@@ -68,6 +68,7 @@ public class ChatClient extends AbstractClient
             AddedTime added= (AddedTime) response.getResponseParam();
             inExamController.setAdded(added);
             break;
+          //"lockexam()"
           }
          }
         }

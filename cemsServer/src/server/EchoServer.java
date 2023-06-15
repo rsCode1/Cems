@@ -278,7 +278,7 @@ public class EchoServer extends AbstractServer {
 		}
 		
 		public void submitTest(StudentInTest studentInTest,ConnectionToClient client) {
-			Statement stmt,stmt2;
+			Statement stmt,stmt2,stmt3,stmt4,stmt5;
 			String str;
 			String studentId= '"' + String.valueOf(studentInTest.getStudentId()) +'"';
 			String testId= '"' + String.valueOf(studentInTest.getTestId()) +'"';
@@ -294,20 +294,32 @@ public class EchoServer extends AbstractServer {
 				    stmt.executeUpdate(str);
 				    str="";
 					}
-				String str2="INSERT INTO `cems`.`grades` (`examId`, `studentId`, `courseID`, `grade`, `lecturerID`, `courseName`)";
+				String str2="INSERT INTO `cems`.`grades` (`examId`, `studentId`, `courseID`, `grade`, `lecturerID`, `courseName`, `status`)";
 				str2+=" VALUES ('"+studentInTest.getTestId()  + "', '" + studentInTest.getStudentId() + "', '"+ studentInTest.getCourseId() +"', '" + studentInTest.getScore();
-				str2+="', '" + studentInTest.getLecturerId() + "', '" +studentInTest.getCourseName() +"');";
+				str2+="', '" + studentInTest.getLecturerId() + "', '" +studentInTest.getCourseName() +"','" + "pending" +"');";
 				stmt2 = conn.createStatement();
 				stmt2.executeUpdate(str2);
-			} catch (SQLException e) {
+				String str3= "UPDATE `cems`.`student_inexam` SET `submitted` = '1' WHERE (`student_id` =" + studentId +") AND (`exam_id` = " + testId +");";
+				stmt3 = conn.createStatement();
+				stmt3.executeUpdate(str3);	
+				String str4= "SELECT (SELECT COUNT(*) FROM cems.student_inexam WHERE exam_id ="+testId +") AS total_rows,";
+                str4+="(SELECT COUNT(*) FROM cems.student_inexam WHERE exam_id ="+ testId+ "AND submitted = 1) AS submitted_rows;";
+				stmt4 = conn.createStatement();
+				ResultSet rs;
+				rs=stmt4.executeQuery(str4);	
+				if(rs.next()) {
+					if(rs.getInt("total_rows") == rs.getInt("submitted_rows")){
+						String str5="DELETE FROM cems.open_exams where exam_id ="+testId+";";
+						stmt5=conn.createStatement();
+						stmt5.executeUpdate(str5);
+					}
+				}
+			}	
+			catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-			
-			
-			
-			
 		}
 		
 		private void checkIfDurationChanged(TestSourceTime testSourcetime , ConnectionToClient client) {

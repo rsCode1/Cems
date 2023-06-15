@@ -260,6 +260,25 @@ public class InExamController {
             currentStage.close();
         });
     }
+	public void LockExam(int testid){
+		if(testid==test.getTestId()) {
+			 FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ApproveSubmit.fxml"));
+        try {
+            Parent root = loader.load();
+            ApproveSubmitController controller = loader.getController();
+            controller.setStudentAndClient(student, client, studentInTest, this.getController(), test);
+            controller.setDigOrMan(0);
+            controller.examIsLocked();
+            Platform.runLater(() -> {
+                Stage window = new Stage();
+                window.setScene(new Scene(root));
+                window.show();
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+		}
+	}
     
     public InExamController getController() {
 		return this;
