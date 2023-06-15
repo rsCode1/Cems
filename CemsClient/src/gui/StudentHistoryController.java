@@ -19,19 +19,19 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import logic.Request;
 import logic.StudentData;
-import logic.StudentGradesList;
+
 import logic.Users;
 
 
 
 public class StudentHistoryController {
 
-    private  StudentGradesList studentdata;
+    private ArrayList<StudentData> studentGradesInfo = new ArrayList<>();
 	private Users student;
 	private ChatClient client;
     
-	public void setStudentDataList(StudentGradesList  data) {
-		this.studentdata=data;
+	public void setStudentDataList(ArrayList<StudentData>  data) {
+		this.studentGradesInfo=data ;
 	   }
 	
     @FXML
@@ -72,25 +72,32 @@ public class StudentHistoryController {
 
 
     public void viewPage() {
-    	
-    	  ObservableList<StudentData> odata= FXCollections.observableArrayList();
-    	  DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yy");  
-          LocalDateTime now = LocalDateTime.now();  
-          lblDate.setText("Date : " + dtf.format(now));
-		  /*TableView<StudentData> tableView = new TableView<>();
-          TableColumn<StudentData, String> courseNameColumn = new TableColumn<>("Course");
-          courseNameColumn.setCellValueFactory(new PropertyValueFactory<>("course"));
-          TableColumn<StudentData, String> gradeColumn = new TableColumn<>("Grade");
-		  gradeColumn.setCellValueFactory(new PropertyValueFactory<>("grade"));
-		  tableView.getColumns().addAll(courseNameColumn, gradeColumn);*/
-          if(studentdata==null)
-				System.out.println("data is null");
-			else
-			for(int i=0 ; i<studentdata.getGradeList().size();i++) {
-				odata.add(studentdata.getGradeList().get(0));}
-    	  TestTableView.setItems(odata);
-    	  CalculateGPA();
-    	     
+    	try {
+    		client.openConnection();
+		     //System.out.println("client is not connected");
+				 ObservableList<StudentData> odata= FXCollections.observableArrayList();
+		    	  DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yy");  
+		          LocalDateTime now = LocalDateTime.now();  
+		          lblDate.setText("Date : " + dtf.format(now));
+		          tbcCourse.setCellValueFactory(new PropertyValueFactory<>("CourseName"));
+		          tbcGrade.setCellValueFactory(new PropertyValueFactory<>("grade"));
+		          if(studentGradesInfo!=null){
+						System.out.println("data is not null!!!");
+						System.out.println(studentGradesInfo.get(0).getCourseName() + " " + studentGradesInfo.get(0).getGrade());
+				  }
+					
+					for(int i=0 ; i<studentGradesInfo.size();i++) {
+						System.out.println(studentGradesInfo.get(i).getCourseName() + " " + studentGradesInfo.get(i).getGrade());
+						odata.add(studentGradesInfo.get(i));}
+		    	 TestTableView.setItems(odata);
+		    	CalculateGPA();
+		    	     
+			}
+		 catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	 
     }
     
     

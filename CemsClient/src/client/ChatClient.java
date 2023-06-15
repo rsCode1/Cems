@@ -61,9 +61,9 @@ public class ChatClient extends AbstractClient
 	 if (msg instanceof Response) {
        Response response = (Response) msg;
     	 switch (response.getResponseType()) {
-				  case "LOGIN":
-				  	login((Users) response.getResponseParam());
-					  break; 
+		 case "LOGIN":
+		  login((Users) response.getResponseParam());
+		   break; 
           case "GetExam":
            getExam((Test) response.getResponseParam());
            break;
@@ -72,14 +72,17 @@ public class ChatClient extends AbstractClient
             inExamController.setAdded(added);
             break;
           case "GetStudentGrades":
-        	ArrayList<StudentData>  data = (ArrayList<StudentData> ) response.getResponseParam();
-            studentHistoryController.setStudentDataList(data);
-            System.out.println("arrived at g.s.g and " + data.get(0).getCourseName());
+            ArrayList<StudentData> data = (ArrayList<StudentData>) response.getResponseParam();
+            sendStudentGrades(data);
             break;
           //"lockexam()"
           }
          }
         }
+
+  private void sendStudentGrades(ArrayList<StudentData> data) {
+    studentHistoryController.setStudentDataList(data);
+  }
    
        
        

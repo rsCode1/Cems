@@ -24,7 +24,7 @@ import com.mysql.cj.jdbc.Blob;
 
 import logic.Response;
 import logic.StudentData;
-import logic.StudentGradesList;
+
 import gui.ServerStartScreenController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -112,25 +112,20 @@ public class EchoServer extends AbstractServer {
 		 ArrayList<StudentData> studentGradesInfo = new ArrayList<>();
 		 try  {
 			 Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root","Aa123456");
-    		 String query="SELECT courseName ,grade, status FROM grades WHERE StudentID=?";
-    		 PreparedStatement statement = conn.prepareStatement(query);
-    	        statement.setInt(1, studentId);
-    	        ResultSet resultSet = statement.executeQuery();
+    		 String query="SELECT courseName ,grade, status FROM grades WHERE StudentID=" +studentId + " ;";
+    		 Statement stmt = conn.prepareStatement(query);
+    	     ResultSet resultSet = stmt.executeQuery(query);
     	        while (resultSet.next()) {
     	            String column2Value = resultSet.getString("courseName");
     	            String column3Value = String.valueOf(resultSet.getInt("grade"));
     	            String stat=resultSet.getString("status");
-    	            if (stat.equals("pending")) column3Value="-/-";
-    	            studentGradesInfo.add(new StudentData(column2Value,studentId,column3Value));
+    	            if (stat.equals("pending")) column3Value="---";
+    	            studentGradesInfo.add(new StudentData(column2Value,column3Value));
     	        }
-    	        StudentGradesList gradesList = new  StudentGradesList(studentGradesInfo);
-				Response response = new Response("GetStudentGrades", gradesList);
+				Response response = new Response("GetStudentGrades", studentGradesInfo);
 				resultSet.close();
 			    try {
-			    	if (studentGradesInfo == null ) {
-			    		System.out.println("array list is null");
-			    	}
-					client.sendToClient(response);
+			    	client.sendToClient(response);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

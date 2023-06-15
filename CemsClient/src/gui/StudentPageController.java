@@ -19,11 +19,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import logic.LogInInfo;
 import logic.Request;
+
 import logic.Users;
 
 import java.io.IOException;
 public class StudentPageController {
-    
 	private ChatClient client;
 	private Users student;
 	
@@ -63,6 +63,7 @@ public class StudentPageController {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yy");  
         LocalDateTime now = LocalDateTime.now();  
         dateLabel.setText("Date : " + dtf.format(now));  
+		
     }
     
     @FXML
@@ -135,7 +136,14 @@ public class StudentPageController {
     		Stage stage = new Stage();
     		StudentHistoryController controller = loader.getController();
     		controller.setStudentAndClient(student, client,controller);
-    		client.sendToServer(new Request("GetStudentGrades", student.getId()));
+    		if (client.isConnected()) {
+			client.sendToServer(new Request("GetStudentGrades", student.getId()));}
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     		controller.viewPage();
     		//takeExamController.setDigOrMan(1);
     		//takeExamController.setLabel("Welcome to Take Manuel Exam Form");

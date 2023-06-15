@@ -5,14 +5,14 @@ import java.io.Serializable;
 public class StudentData implements Serializable {
 
 	private String CourseName;
-    private int StudentID;
+    //private int StudentID;
     private String grade;
     private String status;
 	
-	public StudentData(String cname,int studentid, String grade) {
+	public StudentData(String cname, String grade) {
 		super();
 		this.CourseName=cname;
-		this.StudentID=studentid;
+		//this.StudentID=studentid;
 		this.grade=grade;
 	}
 
@@ -28,13 +28,13 @@ public class StudentData implements Serializable {
 	}
 
 
-	public int getStudentID() {
-		return StudentID;
-	}
+	//public int getStudentID() {
+	//	return StudentID;
+	//}
 
-	public void setStudentID(int studentID) {
-		StudentID = studentID;
-	}
+	//public void setStudentID(int studentID) {
+		//StudentID = studentID;
+	//}
 
 	public String getGrade() {
 		return grade;
