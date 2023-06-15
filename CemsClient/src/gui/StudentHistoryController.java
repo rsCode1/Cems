@@ -74,16 +74,16 @@ public class StudentHistoryController {
     	        statement.setInt(1, this.student.getId());
     	        ResultSet resultSet = statement.executeQuery();
     	        while (resultSet.next()) {
-    	            String column1Value = resultSet.getString("testName");
     	            String column2Value = resultSet.getString("course");
     	            String column3Value = resultSet.getString("grade");
-    	            data.add(new StudentData(column2Value, column1Value,this.student.getId(),column3Value));
+    	            data.add(new StudentData(column2Value,this.student.getId(),column3Value));
     	        }
     	        TestTableView.setItems(data);
     	 } catch (SQLException e) {
     	        e.printStackTrace();
     	    }
     	 
+    	 CalculateGPA();
     	     
     }
     
@@ -99,9 +99,9 @@ public class StudentHistoryController {
     	 
     	 for (StudentData sd : data)
     	 {
-    		 tempGrade=sd.getGrade();
-    		 if (tempGrade!=-1)
+    		 if (sd.getGrade()!="-/-")
     		 {
+    		     tempGrade=Integer.parseInt(sd.getGrade());
     			 total+=tempGrade;
     			 count++;
     		 }

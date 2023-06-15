@@ -5,17 +5,15 @@ import java.io.Serializable;
 public class StudentData implements Serializable {
 
 	private String CourseName;
-	private String TestName;
     private int StudentID;
     private String grade;
     private String status;
 	
-	public StudentData(String cname,String tname,int studentid, String column3Value) {
+	public StudentData(String cname,int studentid, String grade) {
 		super();
 		this.CourseName=cname;
-		this.TestName=tname;
 		this.StudentID=studentid;
-		this.grade=column3Value;
+		this.grade=grade;
 	}
 
 
@@ -29,14 +27,6 @@ public class StudentData implements Serializable {
 		CourseName = courseName;
 	}
 
-
-	public String getTestName() {
-		return TestName;
-	}
-
-	public void setTestName(String testName) {
-		TestName = testName;
-	}
 
 	public int getStudentID() {
 		return StudentID;
