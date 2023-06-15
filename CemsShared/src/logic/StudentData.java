@@ -7,15 +7,15 @@ public class StudentData implements Serializable {
 	private String CourseName;
 	private String TestName;
     private int StudentID;
-    private int grade;
+    private String grade;
     private String status;
 	
-	public StudentData(String cname,String tname,int studentid, int grade) {
+	public StudentData(String cname,String tname,int studentid, String column3Value) {
 		super();
 		this.CourseName=cname;
 		this.TestName=tname;
 		this.StudentID=studentid;
-		this.grade=grade;
+		this.grade=column3Value;
 	}
 
 
@@ -46,11 +46,11 @@ public class StudentData implements Serializable {
 		StudentID = studentID;
 	}
 
-	public int getGrade() {
+	public String getGrade() {
 		return grade;
 	}
 
-	public void setGrade(int grade) {
+	public void setGrade(String grade) {
 		this.grade = grade;
 	}
 

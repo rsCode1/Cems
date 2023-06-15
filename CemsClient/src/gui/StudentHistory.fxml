@@ -18,9 +18,8 @@
       <Button fx:id="btnBacktoHome" layoutX="14.0" layoutY="65.0" mnemonicParsing="false" onAction="#ReturnBack" text="Back" />
       <TableView fx:id="TestTableView" layoutX="53.0" layoutY="103.0" prefHeight="344.0" prefWidth="342.0">
         <columns>
-          <TableColumn fx:id="tbcCourse" prefWidth="100.0" text="Course" />
-          <TableColumn fx:id="tbcTest" prefWidth="148.0" text="Test" />
-            <TableColumn fx:id="tbcGrade" prefWidth="93.0" text="Grade" />
+          <TableColumn fx:id="tbcCourse" prefWidth="228.0" text="Course" />
+            <TableColumn fx:id="tbcGrade" prefWidth="113.0" text="Grade" />
         </columns>
       </TableView>
       <Label fx:id="lblGPA" layoutX="278.0" layoutY="64.0" text="GPA:">

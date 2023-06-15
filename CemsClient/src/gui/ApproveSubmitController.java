@@ -1,5 +1,6 @@
 package gui;
 
+
 import java.io.IOException;
 import java.sql.*;
 
@@ -90,30 +91,7 @@ public class ApproveSubmitController {
         inExamController.stopTimer();
         inExamController.CloseWindow();
 		
-String studentID = String.valueOf(student.getId());
-String testID = String.valueOf(test.getTestId());
-String course = test.getCourseName();
-String courseID = String.valueOf(test.getCourseId());
-String status = "GRADE IN PROGRESS";
 
-// SQL statement
-String sql = "INSERT INTO testcompletebystudent (studentID, testID, course, courseID, grade, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
-		"Aa123456");
-     PreparedStatement pstmt = conn.prepareStatement(sql);
-
-    // Set parameter values
-    pstmt.setString(1, studentID);;
-    pstmt.setString(2, testID);
-    pstmt.setString(3, course);
-    pstmt.setString(4, courseID);
-    pstmt.setString(5, "-/-");
-    pstmt.setString(6, status);
-
-    // Execute the statement
-    pstmt.executeUpdate();
-        
 		}
 
 	    catch (IOException e) {
@@ -131,8 +109,40 @@ Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serve
     		studentManualTest.stopTimer();
     		studentManualTest.CloseWindow();
     	}
+   
+    	String studentID = String.valueOf(student.getId());
+    	String testID = String.valueOf(test.getTestId());
+    	String course = test.getCourseName();
+    	String courseID = String.valueOf(test.getCourseId());
+    	String status = "GRADE IN PROGRESS";
+    	String sql = "INSERT INTO testcompletebystudent (studentID, testID, course, courseID, grade, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    try {
+    	
+    	Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+    			"Aa123456");
+    	     PreparedStatement pstmt = conn.prepareStatement(sql);
 
+    	    // Set parameter values
+    	    pstmt.setString(1, studentID);;
+    	    pstmt.setString(2, testID);
+    	    pstmt.setString(3, course);
+    	    pstmt.setString(4, courseID);
+    	    pstmt.setString(5, "-/-");
+    	    pstmt.setString(6, status);
+
+    	    // Execute the statement
+    	    pstmt.executeUpdate();
+    	}
+    catch (SQLException e) {
+        e.printStackTrace();
     }
+
+    	
+    }
+    	
+    	
+    	        
+
     public ApproveSubmitController getController() {
 		return this;
 	}

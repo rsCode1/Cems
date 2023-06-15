@@ -44,8 +44,6 @@ public class StudentHistoryController {
     @FXML
     private TableColumn<StudentData, String> tbcGrade;
 
-    @FXML
-    private TableColumn<StudentData, Integer> tbcTest;
     
     
     @FXML
@@ -78,7 +76,7 @@ public class StudentHistoryController {
     	        while (resultSet.next()) {
     	            String column1Value = resultSet.getString("testName");
     	            String column2Value = resultSet.getString("course");
-    	            int column3Value = resultSet.getInt("grade");
+    	            String column3Value = resultSet.getString("grade");
     	            data.add(new StudentData(column2Value, column1Value,this.student.getId(),column3Value));
     	        }
     	        TestTableView.setItems(data);
