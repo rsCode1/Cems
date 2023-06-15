@@ -11,7 +11,7 @@
       <Button fx:id="btnLogOut" layoutX="480.0" layoutY="390.0" mnemonicParsing="false" onAction="#LogOut" text="Log Out" />
 
       <Text fx:id="dateLabel" layoutX="186.0" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date :25/5/23" wrappingWidth="149.33333333333326" />
-      <Button fx:id="btnResults" layoutX="141.0" layoutY="324.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="290.0" text="show result" />
+      <Button fx:id="btnResults" layoutX="141.0" layoutY="324.0" mnemonicParsing="false" onAction="#ShowResults" prefHeight="56.0" prefWidth="290.0" text="show result" />
       <Label fx:id="WelcomeLabel" layoutX="22.0" layoutY="48.0" prefHeight="39.0" prefWidth="425.0" text="Welcome " textFill="#1667c4">
          <font>
             <Font name="System Bold" size="21.0" />

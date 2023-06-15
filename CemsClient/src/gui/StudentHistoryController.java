@@ -1,8 +1,10 @@
 package gui;
 
+import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import client.ChatClient;
 import javafx.collections.FXCollections;
@@ -13,18 +15,24 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import logic.Request;
 import logic.StudentData;
+import logic.StudentGradesList;
 import logic.Users;
 
 
 
 public class StudentHistoryController {
 
-	
+    private  StudentGradesList studentdata;
 	private Users student;
 	private ChatClient client;
-
+    
+	public void setStudentDataList(StudentGradesList  data) {
+		this.studentdata=data;
+	   }
 	
     @FXML
     private TableView<StudentData> TestTableView;
@@ -59,34 +67,29 @@ public class StudentHistoryController {
     	this.client.setStudentHistoryController(SH);
     }
     
-    ObservableList<StudentData> data= FXCollections.observableArrayList();
+  
+   
 
-    public void initialize() {
 
+    public void viewPage() {
+    	
+    	  ObservableList<StudentData> odata= FXCollections.observableArrayList();
     	  DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yy");  
           LocalDateTime now = LocalDateTime.now();  
           lblDate.setText("Date : " + dtf.format(now));
-     
-    	 try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
-				"Aa123456")) {
-    		 String query="SELECT course ,grade, stats FROM testcompletebystudent WHERE StudentID=?";
-    		 PreparedStatement statement = conn.prepareStatement(query);
-    	        statement.setInt(1, this.student.getId());
-    	        ResultSet resultSet = statement.executeQuery();
-    	        while (resultSet.next()) {
-    	            String column2Value = resultSet.getString("course");
-    	            String column3Value = String.valueOf(resultSet.getInt("grade"));
-    	            String stat=resultSet.getString("stats");
-    	            if (stat.equals("Pending")) column3Value="-/-";
-    	            
-    	            data.add(new StudentData(column2Value,this.student.getId(),column3Value));
-    	        }
-    	        TestTableView.setItems(data);
-    	 } catch (SQLException e) {
-    	        e.printStackTrace();
-    	    }
-    	 
-    	 CalculateGPA();
+		  /*TableView<StudentData> tableView = new TableView<>();
+          TableColumn<StudentData, String> courseNameColumn = new TableColumn<>("Course");
+          courseNameColumn.setCellValueFactory(new PropertyValueFactory<>("course"));
+          TableColumn<StudentData, String> gradeColumn = new TableColumn<>("Grade");
+		  gradeColumn.setCellValueFactory(new PropertyValueFactory<>("grade"));
+		  tableView.getColumns().addAll(courseNameColumn, gradeColumn);*/
+          if(studentdata==null)
+				System.out.println("data is null");
+			else
+			for(int i=0 ; i<studentdata.getGradeList().size();i++) {
+				odata.add(studentdata.getGradeList().get(0));}
+    	  TestTableView.setItems(odata);
+    	  CalculateGPA();
     	     
     }
     

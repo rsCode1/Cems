@@ -5,6 +5,7 @@
 package client;
 
 import logic.Response;
+import logic.StudentData;
 import client.*;
 import gui.ConnectToServerScreenController;
 import gui.InExamController;
@@ -13,6 +14,7 @@ import gui.StudentHistoryController;
 import gui.StudentManualTestController;
 import gui.TakeExamController;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -23,6 +25,7 @@ import logic.Test;
 import logic.Users;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import ocsf.client.*;
 
@@ -33,7 +36,7 @@ public class ChatClient extends AbstractClient
   private LoginScreenController loginScreecontroller;
   private TakeExamController takeExamController;
   private InExamController inExamController;
-  private StudentHistoryController StudentHistoryController;
+  private StudentHistoryController studentHistoryController;
   private String ip = "";
   private int portServer;
   // Instance variables **********************************************
@@ -67,6 +70,11 @@ public class ChatClient extends AbstractClient
           case "AddedTime":
             AddedTime added= (AddedTime) response.getResponseParam();
             inExamController.setAdded(added);
+            break;
+          case "GetStudentGrades":
+        	ArrayList<StudentData>  data = (ArrayList<StudentData> ) response.getResponseParam();
+            studentHistoryController.setStudentDataList(data);
+            System.out.println("arrived at g.s.g and " + data.get(0).getCourseName());
             break;
           //"lockexam()"
           }
@@ -102,7 +110,8 @@ public class ChatClient extends AbstractClient
 		System.out.println(user.getRole());
 
 	}
-
+  
+  
 
   public void setStudentManualTestController(StudentManualTestController controller) {
 	  this.stdManController=controller;
@@ -117,7 +126,7 @@ public class ChatClient extends AbstractClient
 	    this.inExamController = controller;
 	  }
   public void setStudentHistoryController(StudentHistoryController controller) {
-	    this.StudentHistoryController = controller;
+	    this.studentHistoryController = controller;
 	  }
 
   /**

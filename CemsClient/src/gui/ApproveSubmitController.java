@@ -1,8 +1,6 @@
 package gui;
 
-
 import java.io.IOException;
-import java.sql.*;
 
 import client.ChatClient;
 import javafx.event.ActionEvent;
@@ -79,7 +77,6 @@ public class ApproveSubmitController {
 			score+=test.getqLst().get(i).getScore();	
 			}
 		studentInTest.setScore(score);
-		
 		client.sendToServer(new Request("SubmitExam", studentInTest));
 		System.out.println("Submitted");
 		//Stage currentStage = (Stage) noBtn.getScene().getWindow();
@@ -91,7 +88,6 @@ public class ApproveSubmitController {
         inExamController.stopTimer();
         inExamController.CloseWindow();
 		
-
 		}
 
 	    catch (IOException e) {
@@ -109,11 +105,8 @@ public class ApproveSubmitController {
     		studentManualTest.stopTimer();
     		studentManualTest.CloseWindow();
     	}
-   
-    	
+
     }
-    	
-    	        
     public ApproveSubmitController getController() {
 		return this;
 	}
@@ -129,8 +122,27 @@ public class ApproveSubmitController {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}		
+			}
+			
+		}
+
+	}
+	public void examIsLocked(){
+		yesBtn.setDisable(true);
+        noBtn.setDisable(true);
+        lbl.setText("Sorry Exam is locked by luctuer!");
+        mesTxt.setText("Your answers are submitted automatically, Good Luck!");
+		if(DigOrMan==0) {
+			try {
+				client.sendToServer(new Request("SubmitExam", studentInTest));
+				inExamController.CloseWindow();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 	}
     
+
 }

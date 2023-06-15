@@ -128,8 +128,24 @@ public class StudentPageController {
 
 
     @FXML
-    public void ShowResults() {
-        // Implement the logic of the "Results" button.
+    public void ShowResults(ActionEvent event) {
+        try {
+    		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/StudentHistory.fxml"));
+    		Parent root = loader.load();
+    		Stage stage = new Stage();
+    		StudentHistoryController controller = loader.getController();
+    		controller.setStudentAndClient(student, client,controller);
+    		client.sendToServer(new Request("GetStudentGrades", student.getId()));
+    		controller.viewPage();
+    		//takeExamController.setDigOrMan(1);
+    		//takeExamController.setLabel("Welcome to Take Manuel Exam Form");
+    		stage.setScene(new Scene(root));
+    		stage.show();
+    		} 
+    	catch (IOException e) {
+        e.printStackTrace();
+    	}
+    	
     }
 
     @FXML
