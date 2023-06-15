@@ -93,7 +93,7 @@ public class ApproveSubmitController {
 	    catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
-	}
+	      }
     	}
     	
     	else {
@@ -109,6 +109,23 @@ public class ApproveSubmitController {
     }
     public ApproveSubmitController getController() {
 		return this;
+	}
+	public void forceSubmit(){
+		yesBtn.setDisable(true);
+        noBtn.setDisable(true);
+		lbl.setText("Time out!");
+		mesTxt.setText("your answers are submitted automatically, Good Luck!");
+		if(DigOrMan==0) {
+			try {
+				client.sendToServer(new Request("SubmitExam", studentInTest));
+				inExamController.CloseWindow();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+
 	}
     
 

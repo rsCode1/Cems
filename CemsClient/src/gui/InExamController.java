@@ -255,9 +255,10 @@ public class InExamController {
     }
     
     public void CloseWindow() {
-    	Stage currentStage = (Stage) nextBtn.getScene().getWindow();
-        currentStage.close();
-    	
+        Platform.runLater(() -> {
+            Stage currentStage = (Stage) nextBtn.getScene().getWindow();
+            currentStage.close();
+        });
     }
     
     public InExamController getController() {
@@ -326,7 +327,7 @@ public class InExamController {
                 // Timer has finished/*
                 if (!stopThread) {
                 	subBtn.setDisable(true);
-                	CloseWindow();
+                	forceSubmit();
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -334,13 +335,33 @@ public class InExamController {
         });
         timeThread.start();
     }
-
+    
     public void stopTimer() {
         stopThread = true;
         remainingTime=0;
         updateTimerLabel(remainingTime);
     
     }
-  
+
+   
+    private void forceSubmit() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ApproveSubmit.fxml"));
+
+        try {
+            Parent root = loader.load();
+            ApproveSubmitController controller = loader.getController();
+            controller.setStudentAndClient(student, client, studentInTest, this.getController(), test);
+            controller.setDigOrMan(0);
+            controller.forceSubmit();
+
+            Platform.runLater(() -> {
+                Stage window = new Stage();
+                window.setScene(new Scene(root));
+                window.show();
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
