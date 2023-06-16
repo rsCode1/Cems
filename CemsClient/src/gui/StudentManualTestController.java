@@ -123,11 +123,11 @@ public class StudentManualTestController {
 			}*/
 	    }
 	    public void CloseWindow() {
-	    	Button closeButton = new Button("Close Window");
-	    	Stage currentStage = (Stage) closeButton.getScene().getWindow();
-	        currentStage.close();
-	    	
-	    }
+        Platform.runLater(() -> {
+            Stage currentStage = (Stage) upload.getScene().getWindow();
+            currentStage.close();
+        });
+    }
 	    public void setWelcomeLabel() {
 	    	
 	    	crsName.setText(test.getCourseName() + " Test");
@@ -255,7 +255,7 @@ public class StudentManualTestController {
                 // Timer has finished
                 if (!stopThread) {
                 	subBtn.setDisable(true);
-                	CloseWindow();
+                	forceSubmit();
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -269,6 +269,44 @@ public class StudentManualTestController {
         remainingTime=0;
         updateTimerLabel(remainingTime);
     }
+	private void forceSubmit() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ApproveSubmit.fxml"));
+
+        try {
+            Parent root = loader.load();
+            ApproveSubmitController controller = loader.getController();
+            controller.setStudentAndClient2(student, client, this.getController());
+            controller.setDigOrMan(1);
+            controller.forceSubmit();
+
+            Platform.runLater(() -> {
+                Stage window = new Stage();
+                window.setScene(new Scene(root));
+                window.show();
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+		public void LockExam(int testid){
+		if(testid==test.getTestId()) {
+			 FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ApproveSubmit.fxml"));
+        try {
+            Parent root = loader.load();
+            ApproveSubmitController controller = loader.getController();
+            controller.setStudentAndClient2(student, client, this.getController());
+            controller.setDigOrMan(1);
+            controller.examIsLocked();
+            Platform.runLater(() -> {
+                Stage window = new Stage();
+                window.setScene(new Scene(root));
+                window.show();
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+		}
+	}
     
 	 public StudentManualTestController getController() {
 			return this;

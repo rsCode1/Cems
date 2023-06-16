@@ -125,6 +125,16 @@ public class ApproveSubmitController {
 			}
 			
 		}
+		else{
+			/*try {
+				client.sendToServer(new Request("SubmitExamManualExam", FileUploadInfo));
+				studentManualTest.CloseWindow();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}*/
+
+		}
 
 	}
 	public void examIsLocked(){
@@ -141,6 +151,16 @@ public class ApproveSubmitController {
 				e.printStackTrace();
 			}
 			
+		}
+		else{
+			/*try {
+				client.sendToServer(new Request("SubmitExamManualExam", FileUploadInfo));
+				studentManualTest.CloseWindow();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}*/
+
 		}
 	}
     
