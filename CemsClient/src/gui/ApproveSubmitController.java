@@ -13,10 +13,11 @@ import logic.MyFile;
 import logic.Request;
 import logic.StudentInTest;
 import logic.Test;
+import logic.UploadFile;
 import logic.Users;
 
 public class ApproveSubmitController {
-	private MyFile answersFile;
+	private UploadFile answersFile;
 	private Test test;
 	private StudentInTest studentInTest;
 	private ChatClient client;
@@ -24,7 +25,7 @@ public class ApproveSubmitController {
 	private InExamController inExamController; 
 	private StudentManualTestController studentManualTest; 
 	private int DigOrMan;
-	public void setAnswersFile(MyFile answersFile) {
+	public void setAnswersFile(UploadFile answersFile) {
 		this.answersFile = answersFile;
 	}
 	public int getDigOrMan() {

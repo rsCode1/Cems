@@ -43,6 +43,7 @@ import logic.Test;
 import logic.TestApplyInfo;
 import logic.TestCode;
 import logic.TestSourceTime;
+import logic.UploadFile;
 import logic.Users;
 
 import ocsf.server.AbstractServer;
@@ -105,7 +106,7 @@ public class EchoServer extends AbstractServer {
 				    getStudentGrades((int) request.getRequestParam() ,client);
 					break;
 				case"SubmitManualExamExam":
-				    submitManualExamExam((MyFile) request.getRequestParam(),client);
+				    submitManualExamExam((UploadFile) request.getRequestParam(),client);
 					break;
 				// Add more case statements for other request types
 			}
@@ -162,14 +163,31 @@ public class EchoServer extends AbstractServer {
 		
 	}
 
-	private void submitManualExamExam(MyFile answersFile,ConnectionToClient client){
+	private void submitManualExamExam(UploadFile answersFile,ConnectionToClient client){
 		 try{
-              String LocalfilePath="Submitted_Manual_Exams_Files\\"+ answersFile.getFileName();
+              String LocalfilePath="Submitted_Manual_Exams_Files\\"+ answersFile.getMyfile().getFileName();
 		      File newFile = new File (LocalfilePath);     
 		      FileOutputStream fis = new FileOutputStream(newFile);
 		      BufferedOutputStream bis = new BufferedOutputStream(fis);			  
-		      bis.write((answersFile).getMybytearray(),0,(answersFile).getSize());	
+		      bis.write(answersFile.getMyfile().getMybytearray(),0,answersFile.getMyfile().getSize());	
 		      bis.close();
+		      Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root","Aa123456");
+		      Statement stmt3,stmt4,stmt5;
+		      String str3= "UPDATE `cems`.`student_inexam` SET `submitted` = '1' WHERE (`student_id` =" + answersFile.getStudentId() +") AND (`exam_id` = " + answersFile.getTestId() +");";
+			  stmt3 = conn.createStatement();
+			  stmt3.executeUpdate(str3);
+			  String str4= "SELECT (SELECT COUNT(*) FROM cems.student_inexam WHERE exam_id ="+ answersFile.getTestId() +") AS total_rows,";
+              str4+="(SELECT COUNT(*) FROM cems.student_inexam WHERE exam_id ="+ answersFile.getTestId()+ "AND submitted = 1) AS submitted_rows;";
+				stmt4 = conn.createStatement();
+				ResultSet rs;
+				rs=stmt4.executeQuery(str4);	
+				if(rs.next()) {
+					if(rs.getInt("total_rows") == rs.getInt("submitted_rows")){
+						String str5="DELETE FROM cems.open_exams where exam_id ="+answersFile.getTestId()+";";
+						stmt5=conn.createStatement();
+						stmt5.executeUpdate(str5);
+					}
+				}
 		    }
 		catch (Exception e) {
 			System.out.println("Error send (Files)msg) to Server");

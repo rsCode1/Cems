@@ -19,6 +19,7 @@ import logic.MyFile;
 import logic.Request;
 import logic.Test;
 import logic.TestSourceTime;
+import logic.UploadFile;
 import logic.Users;
 
 import java.util.Timer;
@@ -46,7 +47,7 @@ import java.sql.Blob;
 // try push
 public class StudentManualTestController {
 	private MyFile downloadFile;
-	private MyFile uploadFile;
+	private UploadFile uploadFile;
 	public void setDownloadFile(MyFile downloadFile) {
 		this.downloadFile = downloadFile;
 	}
@@ -106,13 +107,13 @@ public class StudentManualTestController {
 			try {
 				root = loader.load();
 			    File newFile = new File (ToUploadPath);     
-			    uploadFile= new MyFile(newFile.getName());
+			    uploadFile= new UploadFile(new MyFile(newFile.getName()),student.getId(),test.getTestId());
 		        byte [] mybytearray  = new byte [(int)newFile.length()];
 			    FileInputStream fis = new FileInputStream(newFile);
 			    BufferedInputStream bis = new BufferedInputStream(fis);			  
-			    uploadFile.initArray(mybytearray.length);
-			    uploadFile.setSize(mybytearray.length);
-			    bis.read(uploadFile.getMybytearray(),0,mybytearray.length);
+			    uploadFile.getMyfile().initArray(mybytearray.length);
+			    uploadFile.getMyfile().setSize(mybytearray.length);
+			    bis.read(uploadFile.getMyfile().getMybytearray(),0,mybytearray.length);
 				Stage window = new Stage();
 				ApproveSubmitController controller=loader.getController();
 				controller.setStudentAndClient2(student ,client,this.getController());
