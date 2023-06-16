@@ -9,12 +9,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import logic.MyFile;
 import logic.Request;
 import logic.StudentInTest;
 import logic.Test;
 import logic.Users;
 
 public class ApproveSubmitController {
+	private MyFile answersFile;
 	private Test test;
 	private StudentInTest studentInTest;
 	private ChatClient client;
@@ -22,6 +24,9 @@ public class ApproveSubmitController {
 	private InExamController inExamController; 
 	private StudentManualTestController studentManualTest; 
 	private int DigOrMan;
+	public void setAnswersFile(MyFile answersFile) {
+		this.answersFile = answersFile;
+	}
 	public int getDigOrMan() {
 		return DigOrMan;
 	}
@@ -79,8 +84,6 @@ public class ApproveSubmitController {
 		studentInTest.setScore(score);
 		client.sendToServer(new Request("SubmitExam", studentInTest));
 		System.out.println("Submitted");
-		//Stage currentStage = (Stage) noBtn.getScene().getWindow();
-        //currentStage.close();
 		yesBtn.setDisable(true);
 		noBtn.setDisable(true);
 		lbl.setText("The Test is Submitted Succesfully!");
@@ -97,6 +100,12 @@ public class ApproveSubmitController {
     	}
     	
     	else {
+			try {
+				client.sendToServer(new Request("SubmitManualExamExam", answersFile));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     		//send new request to server "Submit Manual exam"
     		yesBtn.setDisable(true);
     		noBtn.setDisable(true);
@@ -126,13 +135,12 @@ public class ApproveSubmitController {
 			
 		}
 		else{
-			/*try {
-				client.sendToServer(new Request("SubmitExamManualExam", FileUploadInfo));
-				studentManualTest.CloseWindow();
+			try {
+				client.sendToServer(new Request("SubmitManualExamExam", answersFile));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}*/
+			}
 
 		}
 

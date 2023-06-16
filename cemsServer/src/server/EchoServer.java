@@ -104,7 +104,9 @@ public class EchoServer extends AbstractServer {
 				case"GetStudentGrades":
 				    getStudentGrades((int) request.getRequestParam() ,client);
 					break;
-
+				case"SubmitManualExamExam":
+				    submitManualExamExam((MyFile) request.getRequestParam(),client);
+					break;
 				// Add more case statements for other request types
 			}
 		}
@@ -152,19 +154,34 @@ public class EchoServer extends AbstractServer {
 		}
 			
 		 catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
 		
 		
 	}
+
+	private void submitManualExamExam(MyFile answersFile,ConnectionToClient client){
+		 try{
+              String LocalfilePath="Submitted_Manual_Exams_Files\\"+"Recived.docx";
+		      File newFile = new File (LocalfilePath);     
+		      FileOutputStream fis = new FileOutputStream(newFile);
+		      BufferedOutputStream bis = new BufferedOutputStream(fis);			  
+		      bis.write((answersFile).getMybytearray(),0,(answersFile).getSize());	
+		      bis.close();
+		    }
+		catch (Exception e) {
+			System.out.println("Error send (Files)msg) to Server");
+		}
+
+	}
 	
 	
 	//finished
 	private void downloadManuelExam(int testid, ConnectionToClient client) {
 	MyFile msg2= new MyFile(testid +".docx");
-  	String LocalfilePath="Manual_Exams_Files\\"+ testid +".docx";
+  	String LocalfilePath="Manual_Exams_Files\\" + testid +".docx";
   		
   	  try{
 

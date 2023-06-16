@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -45,6 +46,7 @@ import java.sql.Blob;
 // try push
 public class StudentManualTestController {
 	private MyFile downloadFile;
+	private MyFile uploadFile;
 	public void setDownloadFile(MyFile downloadFile) {
 		this.downloadFile = downloadFile;
 	}
@@ -67,12 +69,7 @@ public class StudentManualTestController {
     }
 
 
-	/*public DownloadManualExaminController getDownloadFile() {
-		return downloadFile;
-	}*/
-	/*public void setDownloadFile(DownloadManualExaminController downloadFile) {
-		this.downloadFile = downloadFile;
-	}*/
+	
 	public void setAdded(AddedTime added) {
 		this.added = added;
 	}
@@ -80,6 +77,11 @@ public class StudentManualTestController {
 		this.test=test;
 
 	}
+	@FXML
+    private Text selectedUpFileLbl;
+	@FXML
+    private Text uploadMes;
+
 	@FXML
     private Label downloadMes;
 	@FXML
@@ -102,14 +104,20 @@ public class StudentManualTestController {
 	    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ApproveSubmit.fxml"));
 			Parent root;
 			try {
-			     
 				root = loader.load();
-				//Stage window = (Stage) subBtn.getScene().getWindow();
+			    File newFile = new File (ToUploadPath);     
+			    uploadFile= new MyFile(newFile.getName());
+		        byte [] mybytearray  = new byte [(int)newFile.length()];
+			    FileInputStream fis = new FileInputStream(newFile);
+			    BufferedInputStream bis = new BufferedInputStream(fis);			  
+			    uploadFile.initArray(mybytearray.length);
+			    uploadFile.setSize(mybytearray.length);
+			    bis.read(uploadFile.getMybytearray(),0,mybytearray.length);
 				Stage window = new Stage();
 				ApproveSubmitController controller=loader.getController();
-				//controller.setTest(test);
 				controller.setStudentAndClient2(student ,client,this.getController());
 				controller.setDigOrMan(1);
+				controller.setAnswersFile(uploadFile);
 				window.setScene(new Scene(root));
 				window.show();
 			    }
@@ -118,15 +126,6 @@ public class StudentManualTestController {
 				e.printStackTrace();
 			    }
 
-	    	/*try {
-				client.sendToServer(new Request("SubmitExam", studentInTest));
-				int index = test.getStudentsIdForTest().indexOf(student.getId());
-				test.getStudentsIdForTest().remove(index);
-				System.out.println("Submitted");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
 	    }
 	    public void CloseWindow() {
         Platform.runLater(() -> {
@@ -138,6 +137,11 @@ public class StudentManualTestController {
 	    	
 	    	crsName.setText(test.getCourseName() + " Test");
 	    	subBtn.setDisable(true);
+			selectedFileLabel.setText("Selected Directory: not selected yet");
+			downloadMes.setText("Download status: not yet");
+			uploadMes.setText("Upload status: not yet");
+			selectedUpFileLbl.setText("Selected File: not selected yet");
+
 	    }
 
 	    @FXML
@@ -151,11 +155,11 @@ public class StudentManualTestController {
 	            selectedFileLabel.setText("Selected Directory: " + selectedDirectoryPath);
 	            String LocalfilePath=selectedDirectory.getPath();
 	            if(LocalfilePath.equals("C:\\") | LocalfilePath.equals("D:\\") | LocalfilePath.equals("F:\\")) {
-	               downloadMes.setText("Please choose folder path!");
+	               downloadMes.setText("Download status:Error Please choose folder path!");
 	            }
 	            else {
 	            LocalfilePath+= "\\" +"TestId_" + test.getTestId()+"-StId_" + student.getId() + ".docx";
-	            download.setDisable(true);
+	           
 	        		//}
 	        		try {
 	        			client.openConnection();
@@ -174,19 +178,20 @@ public class StudentManualTestController {
 			      		bis.write((downloadFile).getMybytearray(),0,(downloadFile).getSize());	
 			      		bis.close();
 			      		System.out.println("File downloaded successfully!");
-			      		downloadMes.setText("downloaded successfully to " + LocalfilePath);
+			      		downloadMes.setText("Download status: downloaded successfully!");
 			      		if(StartedTime == false) {
 	        	        		startTimer(test.getDuration() * 60,test.getDuration());
 	        	        		StartedTime=true;}
 			    		}
 					 catch (Exception e) {
-							System.out.println("gerring file from Server");
+							System.out.println("Error getting file from Server");
+							downloadMes.setText("Download status: Unexpected Error please contact the lectuer");
 						}
 				    }
 				    else {
-				    	System.out.println("error getting file from Server");
+				    	System.out.println("Error getting file from Server");
+						downloadMes.setText("Download status: Unexpected Error please contact the lectuer");
 				    }
-				    
 						
 		  			}
 								  
@@ -214,8 +219,10 @@ public class StudentManualTestController {
 		selectedFile = fileChooser.showOpenDialog(null);
 		if (selectedFile != null) {
 			ToUploadPath = selectedFile.getPath();
-			selectedFileLabel.setText("Selected File: " + selectedFile.getName());
+			selectedFileLabel.setText("Selected File: " + ToUploadPath);
+			uploadMes.setText(selectedFile.getName()+ " uploaded successfully!");
 			subBtn.setDisable(false);
+			System.out.println(ToUploadPath);
 		}
 	}
 
