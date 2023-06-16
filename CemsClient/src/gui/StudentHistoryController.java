@@ -87,7 +87,6 @@ public class StudentHistoryController {
 				  }
 					
 					for(int i=0 ; i<studentGradesInfo.size();i++) {
-						System.out.println(studentGradesInfo.get(i).getCourseName() + " " + studentGradesInfo.get(i).getGrade());
 						odata.add(studentGradesInfo.get(i));}
 		    	 TestTableView.setItems(odata);
 		    	CalculateGPA();

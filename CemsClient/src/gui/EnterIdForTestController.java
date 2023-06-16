@@ -16,7 +16,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import logic.Question;
+import logic.InTestQuestion;
 import logic.Request;
 import logic.Test;
 import logic.TestApplyInfo;

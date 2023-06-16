@@ -18,7 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import logic.LogInInfo;
-import logic.Question;
+import logic.InTestQuestion;
 import logic.Request;
 import logic.StudentInTest;
 import logic.Test;
@@ -40,7 +40,7 @@ public class TakeExamController {
 	private Users student;
 	private TestCode testCode;
 	private Test test;
-	private Question[] qLst;
+	private InTestQuestion[] qLst;
 	public void setStudentAndClient(Users Student,ChatClient client,TakeExamController controller) {
     	this.student=Student;
     	this.client=client;

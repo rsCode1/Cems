@@ -16,7 +16,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import logic.AddedTime;
-import logic.Question;
+import logic.InTestQuestion;
 import logic.Request;
 import logic.StudentInTest;
 import logic.Test;

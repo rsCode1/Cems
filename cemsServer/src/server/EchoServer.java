@@ -33,7 +33,7 @@ import logic.DownloadManualExaminController;
 import logic.FileDownloadInfo;
 import logic.LogInInfo;
 import logic.LoggedUsers;
-import logic.Question;
+import logic.InTestQuestion;
 import logic.Request;
 import logic.StudentInTest;
 import logic.Test;
@@ -233,7 +233,7 @@ public class EchoServer extends AbstractServer {
 				if(testid != -1) {
 					Test test = getTest(conn,testid);
 						if (test!=null) {
-							ArrayList<Question> qLst= getTestQuestions(conn,testid);
+							ArrayList<InTestQuestion> qLst= getTestQuestions(conn,testid);
 								if(qLst != null ) {
 									test.setQLst(qLst);
 									test.setquesSize(qLst.size());
@@ -282,8 +282,8 @@ public class EchoServer extends AbstractServer {
 		}
 	
 		//returns Question list if testid Existed in DataBase else null
-		private ArrayList<Question> getTestQuestions(Connection conn,int testid) {
-			ArrayList<Question> qLst= new ArrayList<Question>();
+		private ArrayList<InTestQuestion> getTestQuestions(Connection conn,int testid) {
+			ArrayList<InTestQuestion> qLst= new ArrayList<InTestQuestion>();
 			boolean f= false;
 			Statement stmt;
 			try {
@@ -299,7 +299,7 @@ public class EchoServer extends AbstractServer {
 		 			ansArr[1]=rs.getString("answer2");
 		 			ansArr[2]=rs.getString("answer3");
 		 			ansArr[3]=rs.getString("answer4");
-		 			qLst.add(new Question(rs.getString("question_text"),ansArr,rs.getInt("score"),rs.getInt("question_id"),rs.getInt("correct_answer")));
+		 			qLst.add(new InTestQuestion(rs.getString("question_text"),ansArr,rs.getInt("score"),rs.getInt("question_id"),rs.getInt("correct_answer")));
 		 			i++;
 		 			f=true;
 				}

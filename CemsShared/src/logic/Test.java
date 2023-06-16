@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Test implements Serializable{
-	private ArrayList<Question> qLst ;
+	private ArrayList<InTestQuestion> qLst ;
 	private String courseName;
 	private int testId;
 	private int lecturerId;
@@ -19,7 +19,7 @@ public class Test implements Serializable{
 	public int getTestId() {
 		return testId;
 	}
-	public ArrayList<Question> getqLst() {
+	public ArrayList<InTestQuestion> getqLst() {
 		return qLst;
 	}
 	public String getCourseName() {
@@ -50,7 +50,7 @@ public class Test implements Serializable{
 		this.lecturerId=lecturerId;
 		this.courseId=courseId;
 	}
-	public void setQLst(ArrayList<Question> qLst) {
+	public void setQLst(ArrayList<InTestQuestion> qLst) {
 		this.qLst=qLst;
 		
 	}
