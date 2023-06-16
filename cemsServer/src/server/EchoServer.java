@@ -164,7 +164,7 @@ public class EchoServer extends AbstractServer {
 
 	private void submitManualExamExam(MyFile answersFile,ConnectionToClient client){
 		 try{
-              String LocalfilePath="Submitted_Manual_Exams_Files\\"+"Recived.docx";
+              String LocalfilePath="Submitted_Manual_Exams_Files\\"+ answersFile.getFileName();
 		      File newFile = new File (LocalfilePath);     
 		      FileOutputStream fis = new FileOutputStream(newFile);
 		      BufferedOutputStream bis = new BufferedOutputStream(fis);			  
