@@ -1,8 +1,10 @@
 package server;
 // This file contains material supporting section 3.7 of the textbook:
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +35,7 @@ import logic.DownloadManualExaminController;
 import logic.FileDownloadInfo;
 import logic.LogInInfo;
 import logic.LoggedUsers;
+import logic.MyFile;
 import logic.InTestQuestion;
 import logic.Request;
 import logic.StudentInTest;
@@ -93,7 +96,7 @@ public class EchoServer extends AbstractServer {
 					checkIfDurationChanged((TestSourceTime) request.getRequestParam(),client);
 					break;
 				case "DownloadManualExam":
-				   downloadManuelExam((FileDownloadInfo) request.getRequestParam(),client);
+				   downloadManuelExam((int) request.getRequestParam(),client);
 				    break;
 				case"AddStudentToInExamList":
 					addStudentToInExamList((TestApplyInfo) request.getRequestParam() ,client);
@@ -158,50 +161,31 @@ public class EchoServer extends AbstractServer {
 	}
 	
 	
-	//not finished
-	private void downloadManuelExam(FileDownloadInfo fileDownloadInfo, ConnectionToClient client) {
-		String sql = "SELECT file_data FROM cems.manueltests WHERE testId = ?";
-	    PreparedStatement statement;
-	    
-        try {
-        	Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root","Aa123456");
-        	statement = conn.prepareStatement(sql);
-        	statement.setInt(1, fileDownloadInfo.getCourseId());
-	    ResultSet result = statement.executeQuery();
-	    if (result.next()) {
-	        Blob fileData = (Blob) result.getBlob("file_data");
-	        InputStream inputStream = fileData.getBinaryStream();
-	        Socket sock = new Socket("127.0.0.1", 4444);
-	        byte[] mybytearray = new byte[1024];
-	        File file = new File("C:\\123.docx");
-	        String FileName= file.getName();
-	        FileOutputStream fos = new FileOutputStream(fileDownloadInfo.getFileDownloadPath());
-	        BufferedOutputStream bos = new BufferedOutputStream(fos);
-	        int bytesRead = inputStream.read(mybytearray, 0, mybytearray.length);
-	        bos.write(mybytearray, 0, bytesRead);
-	        bos.close();
-	        sock.close();
-	        //DownloadManualExaminController DMIC = new DownloadManualExaminController(inputStream);
-	       // client.sendToClient(DMIC);
-	        
-	     /*  File outputFile = new File(fileDownloadInfo.getFileDownloadPath());
-	      //  OutputStream outputStream = new FileOutputStream(outputFile);
-	        byte[] buffer = new byte[4096];
-	        int bytesRead = -1;
-	        while ((bytesRead = inputStream.read(buffer)) != -1) {
-	            outputStream.write(buffer, 0, bytesRead);
-	        }
+	//finished
+	private void downloadManuelExam(int testid, ConnectionToClient client) {
+	MyFile msg2= new MyFile(testid +".docx");
+  	String LocalfilePath="Manual_Exams_Files\\"+ testid +".docx";
+  		
+  	  try{
 
-	        System.out.println("File downloaded successfully!");
-	        outputStream.close();*/
-	    } else {
-	        System.out.println("File not found!");
-	    }
-        
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}	
-		
+  		      File newFile = new File (LocalfilePath);
+  		      		      
+  		      byte [] mybytearray2  = new byte [(int)newFile.length()];
+  		      FileInputStream fis = new FileInputStream(newFile);
+  		      BufferedInputStream bis = new BufferedInputStream(fis);			  
+  		      
+  		      msg2.initArray(mybytearray2.length);
+  		      msg2.setSize(mybytearray2.length);
+  		      
+  		      bis.read(msg2.getMybytearray(),0,mybytearray2.length);
+  		      Response response = new Response("DownloadManualExam",msg2);
+			  client.sendToClient(response);
+  		    }
+  		catch (Exception e) {
+  			System.out.println("Error sending exam file to Server");
+  		}
+	    
+       
 	}
 
 	private void checkUserLogin(LogInInfo loginInfo, ConnectionToClient client) {

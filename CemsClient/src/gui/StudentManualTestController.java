@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import logic.AddedTime;
 import logic.DownloadManualExaminController;
 import logic.FileDownloadInfo;
+import logic.MyFile;
 import logic.Request;
 import logic.Test;
 import logic.TestSourceTime;
@@ -30,6 +31,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -42,7 +44,11 @@ import java.sql.Blob;
 
 // try push
 public class StudentManualTestController {
-	private DownloadManualExaminController downloadFile;
+	private MyFile downloadFile;
+	public void setDownloadFile(MyFile downloadFile) {
+		this.downloadFile = downloadFile;
+	}
+	//private DownloadManualExaminController downloadFile;
 	private String ToUploadPath;
 	private  int remainingTime;
 	private boolean StartedTime=false;
@@ -61,12 +67,12 @@ public class StudentManualTestController {
     }
 
 
-	public DownloadManualExaminController getDownloadFile() {
+	/*public DownloadManualExaminController getDownloadFile() {
 		return downloadFile;
-	}
-	public void setDownloadFile(DownloadManualExaminController downloadFile) {
+	}*/
+	/*public void setDownloadFile(DownloadManualExaminController downloadFile) {
 		this.downloadFile = downloadFile;
-	}
+	}*/
 	public void setAdded(AddedTime added) {
 		this.added = added;
 	}
@@ -136,54 +142,61 @@ public class StudentManualTestController {
 
 	    @FXML
 	    void click_download(ActionEvent event) {
-	       /*  DirectoryChooser directoryChooser = new DirectoryChooser();
+	        DirectoryChooser directoryChooser = new DirectoryChooser();
 	        directoryChooser.setTitle("Select Download Directory");
 	        File selectedDirectory = directoryChooser.showDialog(null);
 
 	        if (selectedDirectory != null) {
 	            String selectedDirectoryPath = selectedDirectory.getAbsolutePath();
 	            selectedFileLabel.setText("Selected Directory: " + selectedDirectoryPath);
-	            String path=selectedDirectory.getPath();
-	            if(path.equals("C:\\") | path.equals("D:\\") |  path.equals("F:\\")) {
+	            String LocalfilePath=selectedDirectory.getPath();
+	            if(LocalfilePath.equals("C:\\") | LocalfilePath.equals("D:\\") | LocalfilePath.equals("F:\\")) {
 	               downloadMes.setText("Please choose folder path!");
 	            }
 	            else {
-	            path+= "\\" +"TestId_" + test.getTestId()+"-StId_" + student.getId() + ".docx";
-	            FileDownloadInfo fileDownloadinfo = new FileDownloadInfo (path,test.getTestId());
-
-	             download.setDisable(true);
+	            LocalfilePath+= "\\" +"TestId_" + test.getTestId()+"-StId_" + student.getId() + ".docx";
+	            download.setDisable(true);
 	        		//}
 	        		try {
 	        			client.openConnection();
 	        			if (client.isConnected()) {
-	        				client.sendToServer(new Request("DownloadManualExam", fileDownloadinfo));
-	        				ServerSocket servsock = new ServerSocket(4444);
-	        				 File myFile = new File(fileDownloadinfo.getFileDownloadPath());
-	        				      Socket sock = servsock.accept();
-	        				      byte[] mybytearray = new byte[4096];
-	        				      int bytesRead = -1;
-	        				      BufferedInputStream bis = new BufferedInputStream(new FileInputStream(myFile));
-	        				      while(bytesRead=bis.read(mybytearray, 0, mybytearray.length) !=-1) {
-	        				      
-	        				      OutputStream os = sock.getOutputStream();
-	        				      os.write(mybytearray, 0, mybytearray.length);}
-	        				      os.flush();
-	        				      sock.close();
-	        				      servsock.close();
-	        			        }
-
-	        			    System.out.println("File downloaded successfully!");
-	        			  //  outputStream.close();
-	        	            downloadMes.setText("downloaded successfully to " + path);
-	        				if(StartedTime == false) {
+	        				client.sendToServer(new Request("DownloadManualExam", test.getTestId()));
+	        				 try {
+									Thread.sleep(70);
+							      }
+							      catch (InterruptedException e) {
+								   e.printStackTrace();}
+				    if(downloadFile!=null)	{	  
+					 try{
+			      		File newFile = new File (LocalfilePath);     
+			      		FileOutputStream fis = new FileOutputStream(newFile);
+			      		BufferedOutputStream bis = new BufferedOutputStream(fis);			  
+			      		bis.write((downloadFile).getMybytearray(),0,(downloadFile).getSize());	
+			      		bis.close();
+			      		System.out.println("File downloaded successfully!");
+			      		downloadMes.setText("downloaded successfully to " + LocalfilePath);
+			      		if(StartedTime == false) {
 	        	        		startTimer(test.getDuration() * 60,test.getDuration());
 	        	        		StartedTime=true;}
-	        			}
-	           // }
-	        		catch (IOException e) {
+			    		}
+					 catch (Exception e) {
+							System.out.println("gerring file from Server");
+						}
+				    }
+				    else {
+				    	System.out.println("error getting file from Server");
+				    }
+				    
+						
+		  			}
+								  
+	        	}//endof try
+	        	catch (IOException e) {
 	        			e.printStackTrace();}
-	        	}
-	        }*/
+	        	
+	        	}//endofif	
+	        }
+	       
 	        
 	    }
 	    

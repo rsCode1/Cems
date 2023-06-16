@@ -21,6 +21,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import logic.AddedTime;
 import logic.DownloadManualExaminController;
+import logic.MyFile;
 import logic.Test;
 import logic.Users;
 
@@ -75,6 +76,10 @@ public class ChatClient extends AbstractClient
             ArrayList<StudentData> data = (ArrayList<StudentData>) response.getResponseParam();
             sendStudentGrades(data);
             break;
+          case "DownloadManualExam":
+        	MyFile file= (MyFile) response.getResponseParam();
+        	stdManController.setDownloadFile(file);
+        	break;
           //"lockexam()"
           }
          }
