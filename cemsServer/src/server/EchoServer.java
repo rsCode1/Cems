@@ -176,18 +176,20 @@ public class EchoServer extends AbstractServer {
 		      String str3= "UPDATE `cems`.`student_inexam` SET `submitted` = '1' WHERE (`student_id` =" + answersFile.getStudentId() +") AND (`exam_id` = " + answersFile.getTestId() +");";
 			  stmt3 = conn.createStatement();
 			  stmt3.executeUpdate(str3);
-			  String str4= "SELECT (SELECT COUNT(*) FROM cems.student_inexam WHERE exam_id ="+ answersFile.getTestId() +") AS total_rows,";
-              str4+="(SELECT COUNT(*) FROM cems.student_inexam WHERE exam_id ="+ answersFile.getTestId()+ "AND submitted = 1) AS submitted_rows;";
-				stmt4 = conn.createStatement();
-				ResultSet rs;
-				rs=stmt4.executeQuery(str4);	
-				if(rs.next()) {
-					if(rs.getInt("total_rows") == rs.getInt("submitted_rows")){
-						String str5="DELETE FROM cems.open_exams where exam_id ="+answersFile.getTestId()+";";
+			  String testId= '"' + String.valueOf(answersFile.getTestId()) +'"';
+			  String str4= "SELECT (SELECT COUNT(*) FROM cems.student_inexam WHERE exam_id ="+testId +") AS total_rows,";
+			  str4+="(SELECT COUNT(*) FROM cems.student_inexam WHERE exam_id ="+ testId+ "AND submitted = 1) AS submitted_rows;";
+			  stmt4 = conn.createStatement();
+		      ResultSet rs;
+			  rs=stmt4.executeQuery(str4);	
+			  if(rs.next()) {
+				  if(rs.getInt("total_rows") == rs.getInt("submitted_rows")){
+						String str5="DELETE FROM cems.open_exams where exam_id ="+answersFile.getTestId()+" ;";
 						stmt5=conn.createStatement();
 						stmt5.executeUpdate(str5);
-					}
+				  }
 				}
+				rs.close();
 		    }
 		catch (Exception e) {
 			System.out.println("Error send (Files)msg) to Server");
@@ -371,6 +373,7 @@ public class EchoServer extends AbstractServer {
 						stmt5.executeUpdate(str5);
 					}
 				}
+				rs.close();
 			}	
 			catch (SQLException e) {
 				// TODO Auto-generated catch block
