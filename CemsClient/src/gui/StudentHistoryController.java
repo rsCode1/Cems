@@ -81,15 +81,11 @@ public class StudentHistoryController {
 		          lblDate.setText("Date : " + dtf.format(now));
 		          tbcCourse.setCellValueFactory(new PropertyValueFactory<>("CourseName"));
 		          tbcGrade.setCellValueFactory(new PropertyValueFactory<>("grade"));
-		          if(studentGradesInfo!=null){
-						System.out.println("data is not null!!!");
-						System.out.println(studentGradesInfo.get(0).getCourseName() + " " + studentGradesInfo.get(0).getGrade());
+				  for(int i=0 ; i<studentGradesInfo.size();i++) {
+						odata.add(studentGradesInfo.get(i));
 				  }
-					
-					for(int i=0 ; i<studentGradesInfo.size();i++) {
-						odata.add(studentGradesInfo.get(i));}
-		    	 TestTableView.setItems(odata);
-		    	CalculateGPA();
+		    	  TestTableView.setItems(odata);
+		    	  CalculateGPA();
 		    	     
 			}
 		 catch (IOException e) {
@@ -112,8 +108,13 @@ public class StudentHistoryController {
     	 for (StudentData sd : data)
     	 {
     		 if (sd.getGrade()!="-/-")
-    		 {
-    		     tempGrade=Integer.parseInt(sd.getGrade());
+    		 { 
+    			 if( !sd.getGrade().matches("[0-9]+")) {
+    				 tempGrade=0;
+    			 }
+    			 else {
+    				 tempGrade=Integer.parseInt(sd.getGrade());
+    			 }
     			 total+=tempGrade;
     			 count++;
     		 }
