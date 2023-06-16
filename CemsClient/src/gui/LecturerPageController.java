@@ -27,31 +27,22 @@ import logic.LogInInfo;
 import logic.Request;
 import logic.Users;
 
-public class LecturerPageController implements Initializable{
+public class LecturerPageController implements Initializable {
 	private Users lecturer;
 	private ChatClient client;
-    private ArrayList<Exam> ongoingExams;
-    
-    @FXML
-    private TableColumn<Exam, String> courseName;
+	private ArrayList<Exam> ongoingExams;
 
-    @FXML
-    private TableColumn<Exam, Integer> examId;
-    
-    @FXML
-    private TableColumn<Exam, Integer> lecturerId;
-    
-    @FXML
-    private TableColumn<Exam, String> LecturerName;
-    
-    @FXML
-    private TableColumn<Exam, Integer> examCode;
-    
-    @FXML
-    private TableColumn<Exam, Integer> timeRem;
-    
-    @FXML
-    private TableView<Exam> ongoingExamsTable;
+	@FXML
+	private TableColumn<Exam, Integer> examId;
+
+	@FXML
+	private TableColumn<Exam, Integer> examCode;
+
+	@FXML
+	private TableColumn<Exam, Integer> timeRem;
+
+	@FXML
+	private TableView<Exam> ongoingExamsTable;
 
 	@FXML
 	private Button CreateExamBtn;
@@ -70,8 +61,6 @@ public class LecturerPageController implements Initializable{
 
 	@FXML
 	private Button logOutBtn;
-
-
 
 	@FXML
 	private Text toolCreateExams;
@@ -96,55 +85,55 @@ public class LecturerPageController implements Initializable{
 
 	@FXML
 	public void initialize(URL location, ResourceBundle resources) {
-//	    toolTimeRequest.setOnMouseClicked(e -> {  make tool time request-> clickable
-//	    	showTimeRequestForm();
-//	    });
-		
-        examId.setCellValueFactory(new PropertyValueFactory<Exam, Integer>("examId"));
-        courseName.setCellValueFactory(new PropertyValueFactory<Exam, String>("courseName"));
-        LecturerName.setCellValueFactory(new PropertyValueFactory<Exam, String>("lecturerName"));
-        examCode.setCellValueFactory(new PropertyValueFactory<Exam, Integer>("examCode"));
-        timeRem.setCellValueFactory(new PropertyValueFactory<Exam, Integer>("timeRemaining"));
+		// toolTimeRequest.setOnMouseClicked(e -> { make tool time request-> clickable
+		// showTimeRequestForm();
+		// });
 
-        
+		examId.setCellValueFactory(new PropertyValueFactory<Exam, Integer>("examId"));
+		examCode.setCellValueFactory(new PropertyValueFactory<Exam, Integer>("code"));
+		timeRem.setCellValueFactory(new PropertyValueFactory<Exam, Integer>("testTime"));
 		Platform.runLater(() -> {
 			lecturerName.setText(lecturer.getFirstName() + " " + lecturer.getLastName());
 		});
 
 	}
+
 	public void setLecturerAndClient(Users lecturer, ChatClient client) {
 		this.lecturer = lecturer;
 		this.client = client;
 	}
-	@FXML
-    public void getOngoingExamsTable() {
 
-        Request request = new Request("getOngoingExams",lecturer);
-        try {
+	@FXML
+	public void getOngoingExamsTable() {
+
+		Request request = new Request("getOngoingExams", lecturer);
+		try {
 			client.openConnection();
-            client.sendToServer(request);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-	@FXML
-    public void setOngoingExamsTable(ArrayList<Exam> exam) {
-    	System.out.println("worked should update");
-    	ongoingExamsTable.getItems().clear();
-    	ongoingExamsTable.getItems().addAll(exam);
-    }
+			client.sendToServer(request);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-    public void setExams(ArrayList<Exam> exams) {
-        this.ongoingExams = exams;
-    }
-    public ArrayList<Exam> getExams() {
-        return ongoingExams;
-    }
+	@FXML
+	public void setOngoingExamsTable(ArrayList<Exam> exam) {
+		System.out.println("worked should update");
+		ongoingExamsTable.getItems().clear();
+		ongoingExamsTable.getItems().addAll(exam);
+	}
+
+	public void setExams(ArrayList<Exam> exams) {
+		this.ongoingExams = exams;
+	}
+
+	public ArrayList<Exam> getExams() {
+		return ongoingExams;
+	}
 
 	@FXML
 	public void startExam(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/start_exam.fxml")); // specify the path to the
-																							// new fxml file
+		// new fxml file
 		Parent parent = null;
 		try {
 			parent = loader.load();
@@ -165,8 +154,6 @@ public class LecturerPageController implements Initializable{
 		window.setScene(nextScene);
 		window.show();
 	}
-
-
 
 	@FXML
 	public void logOut(ActionEvent event) {
@@ -189,7 +176,7 @@ public class LecturerPageController implements Initializable{
 		}
 
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LoginScreen.fxml")); // specify the path to the
-																								// new fxml file
+		// new fxml file
 		Parent parent = null;
 		try {
 			parent = loader.load();
@@ -212,7 +199,7 @@ public class LecturerPageController implements Initializable{
 	@FXML
 	public void showCreateQuestionForm(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/write_question.fxml")); // specify the path to
-																								// the new fxml file
+		// the new fxml file
 		Parent parent = null;
 		try {
 			parent = loader.load();
@@ -236,7 +223,7 @@ public class LecturerPageController implements Initializable{
 	@FXML
 	public void showCreateExamForm(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/create_exam.fxml")); // specify the path to
-																								// the new fxml file
+		// the new fxml file
 		Parent parent = null;
 
 		try {
@@ -281,8 +268,5 @@ public class LecturerPageController implements Initializable{
 		window.setScene(nextScene);
 		window.show();
 	}
-
-	
-
 
 }

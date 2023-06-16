@@ -57,36 +57,91 @@ public class EchoServer extends AbstractServer {
 			Request request = (Request) msg;
 
 			switch (request.getRequestType()) {
-			case "LOGIN":
-				checkUserLogin((LogInInfo) request.getRequestParam(), client);
-				break;
-			case "LOGOUT":
-				logOut((LogInInfo) request.getRequestParam(), client);
-				break;
-			case "writeQuestion":
-				writeQuestion((Question) request.getRequestParam(), client);
-				break;
-			case "getSubjects":
-				getSubjects(client);
-				break;
-			case "getCourses":
-				getCourses(client, (String) request.getRequestParam());
-				break;
-			case "getQuestions":
-				getQuestions(client, (String) request.getRequestParam());
-				break;
-			case "saveExam":
-				saveExam((Exam) request.getRequestParam(), client);
-				break;
-			case "getExamsByLecturer":
-				getExamsByLecturer(client, (Users) request.getRequestParam());
-				break;
-			case "getOngoingExams":
-				getOngoingExams(client, (Users) request.getRequestParam());
-
-
-				// Add more case statements for other request types
+				case "LOGIN":
+					checkUserLogin((LogInInfo) request.getRequestParam(), client);
+					break;
+				case "LOGOUT":
+					logOut((LogInInfo) request.getRequestParam(), client);
+					break;
+				case "writeQuestion":
+					writeQuestion((Question) request.getRequestParam(), client);
+					break;
+				case "getSubjects":
+					getSubjects(client);
+					break;
+				case "getCourses":
+					getCourses(client, (String) request.getRequestParam());
+					break;
+				case "getQuestions":
+					getQuestions(client, (String) request.getRequestParam());
+					break;
+				case "saveExam":
+					saveExam((Exam) request.getRequestParam(), client);
+					break;
+				case "getExamsByLecturer":
+					getExamsByLecturer(client, (Users) request.getRequestParam());
+					break;
+				case "getOngoingExams":
+					getOngoingExams(client, (Users) request.getRequestParam());
+				case "startExam":
+					startExam(client, (Exam) request.getRequestParam());
+					// Add more case statements for other request types
 			}
+		}
+	}
+
+	private void startExam(ConnectionToClient client, Exam exam) {
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			System.out.println("SQL connection succeed");
+			String checkCodeCommand = "SELECT code FROM open_exams WHERE exam_id = ?";
+			PreparedStatement stmt = conn.prepareStatement(checkCodeCommand);
+			stmt.setInt(1, exam.getExamId());
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()){
+					Response response = new Response("startExamFailed", null);
+					client.sendToClient(response);
+					return;
+
+			}
+			String command = "INSERT INTO open_exams VALUES(?,?,?)";
+			stmt = conn.prepareStatement(command);
+			stmt.setInt(1, exam.getExamId());
+			stmt.setInt(2, exam.getCode());
+			stmt.setInt(3, exam.getTestTime());
+			stmt.executeUpdate();
+			Response response = new Response("startExamSuccess", null);
+			client.sendToClient(response);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
+		private void getOngoingExams(ConnectionToClient client, Users lecturer) {
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			System.out.println("SQL connection succeed Ongoing Exams!");
+			// create Table, if exist skip
+			String command1 = "SELECT open_exams.exam_id, open_exams.code, open_exams.test_time "
+					+ "FROM open_exams "
+					+ "JOIN exams ON open_exams.exam_id = exams.exam_id "
+					+ "WHERE exams.lecturer_id = ?";
+			PreparedStatement stmt = conn.prepareStatement(command1);
+			stmt.setInt(1, lecturer.getId());
+
+			ResultSet rs = stmt.executeQuery();
+			ArrayList<Exam> exams = new ArrayList<>();
+			while (rs.next()) {
+				Exam exam = new Exam(rs.getInt("exam_id"), rs.getInt("code"), rs.getInt("test_time"));
+				exams.add(exam);
+			}
+			Response response = new Response("getOngoingExams", exams);
+			client.sendToClient(response);
+		} catch (SQLException | IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -112,37 +167,7 @@ public class EchoServer extends AbstractServer {
 		}
 	}
 
-	private void getOngoingExams(ConnectionToClient client, Users lecturer) {
-		try {
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
-					"Aa123456");
-			System.out.println("SQL connection succeed Ongoing Exams!");
-			// create Table, if exist skip
-			Statement stmt = conn.createStatement();
-			String command = "CREATE TABLE IF NOT EXISTS ongoing_exams (ExamID INT PRIMARY KEY,Course VARCHAR(45),Lecturer VARCHAR(45),LecturerID int,Code INT,Time_Remaining INT)";
-			stmt.executeUpdate(command);
 
-			String command1 = "SELECT ExamID,Course,Lecturer,Code,Time_Remaining FROM ongoing_exams WHERE LecturerID = '" 
-					+ lecturer.getId() + "'";
-			ResultSet rs = stmt.executeQuery(command1);
-			ArrayList<Exam> exams = new ArrayList<>();
-			while (rs.next()) {
-				Exam exam = new Exam(rs.getInt("ExamID"), rs.getString("Course"), rs.getString("Lecturer"),
-						rs.getInt("Code"), rs.getInt("Time_Remaining"));
-				System.out.println("Exam ID: " + exam.getExamId());
-				System.out.println("Course: " + exam.getCourseName());
-				System.out.println("Lecturer: " + exam.getLecturerName());
-				System.out.println("Code: " + exam.getExamCode());
-				System.out.println("Time Remaining: " + exam.getTimeRemaining());
-				exams.add(exam);
-
-			}
-			Response response = new Response("getOngoingExams", exams);
-			client.sendToClient(response);
-		} catch (SQLException | IOException e) {
-			e.printStackTrace();
-		}
-	}
 
 	// save the exam to the database using the exam class
 	private void saveExam(Exam exam, ConnectionToClient client) {

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import client.ChatClient;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import logic.Exam;
@@ -46,15 +48,36 @@ public class StartExamController implements Initializable {
 
     @FXML
     private TableColumn<Exam, Integer> testTime;
-    
+
     @FXML
     private Button backBtn;
 
     @FXML
-    void startExamBtn(ActionEvent event) {
+    private TextField fourDigitCode;
 
+    @FXML
+    void startExamBtn(ActionEvent event) {
+        Exam exam = examsTable.getSelectionModel().getSelectedItem();
+        if (exam == null) {
+            label.setText("Please select an exam");
+            return;
+        }
+        if (!fourDigitCode.getText().matches("[0-9]+")) {
+            label.setText("Please enter a 4 digit code only numbers");
+            return;
+        }
+        if (fourDigitCode.getText().trim().length() != 4) {
+            label.setText("Please enter a 4 digit code");
+            return;
+        }
+        try {
+            client.openConnection();
+            Exam openExam = new Exam(exam.getExamId(), Integer.parseInt(fourDigitCode.getText()), exam.getTestTime());
+            client.sendToServer(new Request("startExam", openExam));
+        } catch (Exception e) {
+            label.setText("Couldnt send to server");
+        }
     }
-    
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -66,13 +89,15 @@ public class StartExamController implements Initializable {
         testTime.setCellValueFactory(new PropertyValueFactory<Exam, Integer>("testTime"));
 
     }
+
     public void setExamsTable(ArrayList<Exam> exam) {
         examsTable.getItems().clear();
         examsTable.getItems().addAll(exam);
     }
+
     public void getExamsTable() {
 
-        Request request = new Request("getExamsByLecturer",lecturer);
+        Request request = new Request("getExamsByLecturer", lecturer);
         try {
             client.openConnection();
             client.sendToServer(request);
@@ -80,23 +105,28 @@ public class StartExamController implements Initializable {
             e.printStackTrace();
         }
     }
+
     public void setClientAndLecturer(ChatClient client, Users lecturer) {
         this.client = client;
         this.lecturer = lecturer;
     }
+
     public void setExams(ArrayList<Exam> exams) {
         this.exams = exams;
     }
+
     public ArrayList<Exam> getExams() {
         return exams;
     }
+
     public void setLabel(String label) {
         this.label.setText(label);
     }
+
     @FXML
     void backToMainScreen(ActionEvent event) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LecturerPage.fxml")); // specify the path to the
-                                                                                           // main screen FXML file
+                                                                                              // main screen FXML file
         Parent parent = null;
         try {
             parent = loader.load();
@@ -107,20 +137,34 @@ public class StartExamController implements Initializable {
 
         // Get the main screen's controller and pass the ChatClient and lecturer
         // instances to it
-		LecturerPageController controller = loader.getController();
-		controller.setLecturerAndClient(lecturer, client);
-		controller.getOngoingExamsTable();
-		client.setController(controller);
+        LecturerPageController controller = loader.getController();
+        controller.setLecturerAndClient(lecturer, client);
+        controller.getOngoingExamsTable();
+        client.setController(controller);
 
         // Get the Stage information
         Stage window = (Stage) backBtn.getScene().getWindow();
         window.setScene(mainScene);
         window.show();
     }
-	@FXML
-    public void donothing(ArrayList<Exam> exam) {
-    	System.out.println("worked should update start");
 
+    @FXML
+    public void donothing(ArrayList<Exam> exam) {
+        System.out.println("worked should update start");
+
+    }
+
+    public void startExamSuccess() {
+        Platform.runLater(() -> {
+            label.setText("Exam started successfully");
+        });
+
+    }
+
+    public void startExamFailed() {
+        Platform.runLater(() -> {
+            label.setText("Exam already started with this code");
+        });
     }
 
 }

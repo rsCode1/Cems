@@ -88,11 +88,12 @@ public class LoginScreenController {
 					root = loader.load();
 					Stage window = (Stage) getLoginBtn().getScene().getWindow();
 					if (user.getRole() == 1) {
-                        //call lecturer conrtoller and use method
+						// call lecturer conrtoller and use method
 						LecturerPageController controller = loader.getController();
 						controller.setLecturerAndClient(user, client);
-						controller.getOngoingExamsTable();
 						client.setController(controller);
+						controller.getOngoingExamsTable();
+
 					}
 					window.setScene(new Scene(root));
 					// Center the stage on the screen

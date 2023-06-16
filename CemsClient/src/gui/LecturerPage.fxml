@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="createQuestionForm" prefHeight="731.0" prefWidth="1067.0" styleClass="b" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LecturerPageController">
+<Pane fx:id="createQuestionForm" prefHeight="731.0" prefWidth="1067.0" styleClass="b" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LecturerPageController">
    <children>
       <ImageView fitHeight="758.0" fitWidth="1067.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -52,16 +52,14 @@
                </color>
             </InnerShadow>
          </effect></Button>
-      <TableView fx:id="ongoingExamsTable" layoutX="184.0" layoutY="426.0" prefHeight="122.0" prefWidth="701.0">
+      <TableView fx:id="ongoingExamsTable" layoutX="250.0" layoutY="405.0" prefHeight="143.0" prefWidth="635.0">
          <columns>
-            <TableColumn fx:id="examId" prefWidth="105.0" text="Exam id" />
-            <TableColumn fx:id="courseName" prefWidth="230.0" text="Course" />
-            <TableColumn fx:id="LecturerName" prefWidth="118.0" text="Lecturer" />
-            <TableColumn fx:id="examCode" prefWidth="137.0" text="Code" />
-            <TableColumn fx:id="timeRem" prefWidth="110.0" text="Time remaining" />
+            <TableColumn fx:id="examId" prefWidth="236.00003051757812" text="Exam id" />
+            <TableColumn fx:id="examCode" prefWidth="176.00003051757812" text="Code" />
+            <TableColumn fx:id="timeRem" prefWidth="222.40008544921875" text="Time" />
          </columns>
       </TableView>
-      <Label layoutX="199.0" layoutY="391.0" prefHeight="35.0" prefWidth="114.0" text="ongoing exams:" textFill="#1e1f26">
+      <Label layoutX="251.0" layoutY="378.0" prefHeight="35.0" prefWidth="114.0" text="ongoing exams:" textFill="#1e1f26">
          <font>
             <Font name="Calibri" size="16.0" />
          </font>
@@ -132,7 +130,7 @@
             <Font name="Calibri Bold" size="41.0" />
          </font>
       </Label>
-      <Button fx:id="CloseExamBtn" layoutX="184.0" layoutY="563.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="136.0" style="-fx-background-color: #f56060;" text="Close an Exam">
+      <Button fx:id="CloseExamBtn" layoutX="251.0" layoutY="554.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="136.0" style="-fx-background-color: #f56060;" text="Close an Exam">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>

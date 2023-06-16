@@ -102,16 +102,15 @@ public class ChatClient extends AbstractClient
 					break;
 				case "getOngoingExams":
 					ArrayList<Exam> ongoingExamsArr = (ArrayList<Exam>) response.getResponseParam();
-					System.out.println("got res and sent");
-					 Exam firstExam = ongoingExamsArr.get(0);
-					System.out.println("Exam ID: " + firstExam.getExamId());
-					System.out.println("Course: " + firstExam.getCourseName());
-					System.out.println("Lecturer: " + firstExam.getLecturerName());
-					System.out.println("Code: " + firstExam.getExamCode());
-					System.out.println("Time Remaining: " + firstExam.getTimeRemaining());
 					lecturerPageController.setOngoingExamsTable(ongoingExamsArr);
-					System.out.println("got into func");
 					break;
+				case "startExamSuccess":
+					startExamController.startExamSuccess();
+					break;
+				case "startExamFailed":
+					startExamController.startExamFailed();
+					break;
+
 			}
 
 		}
@@ -146,16 +145,18 @@ public class ChatClient extends AbstractClient
 	public void setController(ReviewExamController controller) {
 		this.reviewExamController = controller;
 	}
+
 	public void setController(TimeRequestController controller) {
 		this.TimeRequestController = controller;
 	}
+
 	public void setController(StartExamController controller) {
 		this.startExamController = controller;
 	}
+
 	public void setController(LecturerPageController controller) {
-	    this.lecturerPageController = controller;
+		this.lecturerPageController = controller;
 	}
-	
 
 	/**
 	 * This method terminates the client.
