@@ -130,7 +130,7 @@
             <Font name="Calibri Bold" size="41.0" />
          </font>
       </Label>
-      <Button fx:id="CloseExamBtn" layoutX="251.0" layoutY="554.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="136.0" style="-fx-background-color: #f56060;" text="Close an Exam">
+      <Button fx:id="CloseExamBtn" layoutX="251.0" layoutY="554.0" mnemonicParsing="false" onAction="#closeExam" prefHeight="49.0" prefWidth="136.0" style="-fx-background-color: #f56060;" text="Close an Exam">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>

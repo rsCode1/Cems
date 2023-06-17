@@ -131,6 +131,27 @@ public class LecturerPageController implements Initializable {
 
 	}
 
+    @FXML
+    void closeExam(ActionEvent event) {
+		Exam exam = ongoingExamsTable.getSelectionModel().getSelectedItem();
+		if(exam == null) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText("No exam selected");
+			alert.setContentText("Please select an exam to close");
+			alert.showAndWait();
+			return;
+		}
+		Request request = new Request("closeExam", exam);
+		try {
+			client.openConnection();
+			client.sendToServer(request);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+
 	public void setLecturerAndClient(Users lecturer, ChatClient client) {
 		this.lecturer = lecturer;
 		this.client = client;

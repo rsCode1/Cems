@@ -16,6 +16,7 @@ import logic.Users;
 import ocsf.server.ConnectionToClient;
 
 public class ServerCommandsLecturer {
+
     public void changeGrade(ConnectionToClient client, Exam exam) {
         try {
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",

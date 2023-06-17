@@ -152,6 +152,14 @@ public class ChatClient extends AbstractClient
 					MyFile file = (MyFile) response.getResponseParam();
 					stdManController.setDownloadFile(file);
 					break;
+				case "closeExam":
+					if (inExamController != null) {
+						inExamController.LockExam((int) response.getResponseParam());
+					}
+					if (stdManController != null) {
+						stdManController.LockExam((int) response.getResponseParam());
+					}
+					break;
 			}
 
 		}
@@ -222,13 +230,9 @@ public class ChatClient extends AbstractClient
 		}
 	}
 
-
-
 	public void setStudentManualTestController(StudentManualTestController controller) {
 		this.stdManController = controller;
 	}
-
-
 
 	public void setTakeExamController(TakeExamController controller) {
 		this.takeExamController = controller;

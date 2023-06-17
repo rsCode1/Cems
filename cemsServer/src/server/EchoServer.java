@@ -145,13 +145,24 @@ public class EchoServer extends AbstractServer {
 				case"SubmitManualExam":
 					serverCommandsStudent.submitManualExam((UploadFile) request.getRequestParam(),client);
 					break;
+				case "closeExam":
+					closeExam(client, (Exam) request.getRequestParam());
+					break;
 				// Add more case statements for other request types
 			}
 		}
 	}
 
 
-
+    public void closeExam (ConnectionToClient client,Exam exam){
+        Response response = new Response("closeExam", exam.getExamId());
+		try {
+			this.sendToAllClients(response);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+        
+    }
 	
 	private void checkUserLogin(LogInInfo loginInfo, ConnectionToClient client) {
 		try {
