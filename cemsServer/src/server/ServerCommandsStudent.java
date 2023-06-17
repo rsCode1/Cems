@@ -366,7 +366,7 @@ public class ServerCommandsStudent {
 			}
 			rs.close();
 			ResultSet rs2;
-			str = "SELECT u.* FROM users u LEFT JOIN student_inexam s ON u.id = s.student_id WHERE u.role = 0 AND s.student_id IS NULL;";
+			str = "SELECT u.* FROM users u LEFT JOIN student_inexam s ON u.id = s.student_id AND s.exam_id =" + testid + " WHERE u.role = 0 AND s.student_id IS NULL;";
 			Statement stmt2 = conn.createStatement();
 			rs2 = stmt2.executeQuery(str);
 			while (rs2.next()) {
