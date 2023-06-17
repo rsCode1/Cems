@@ -23,7 +23,12 @@ import logic.Request;
 import logic.Users;
 
 import java.io.IOException;
+
 public class StudentPageController {
+	/**the student page controller is for students home page in our cems app ,
+	 * once a student is logged in, it welcome the student to the cems app
+	 * displaye
+	 */
 	private ChatClient client;
 	private Users student;
 	
