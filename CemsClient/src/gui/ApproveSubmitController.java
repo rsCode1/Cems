@@ -25,16 +25,29 @@ public class ApproveSubmitController {
 	private InExamController inExamController; 
 	private StudentManualTestController studentManualTest; 
 	private int DigOrMan;
+
+	/**
+	 * sets the file that was uploaded
+	 */
 	public void setAnswersFile(UploadFile answersFile) {
 		this.answersFile = answersFile;
 	}
+	/**
+	 * returns if the test is digital or manual
+	 */
 	public int getDigOrMan() {
 		return DigOrMan;
 	}
+	/**
+	 * sets the test property to digital or manual
+	 */
 	public void setDigOrMan(int digOrMan) {
 		DigOrMan = digOrMan;
 	}
 
+/**
+ * sets which user is logged,what client,the test that is being proccessed, and the controller we"re using
+ */
 	public void setStudentAndClient(Users Student,ChatClient client,StudentInTest studentInTest,InExamController inExamController,Test test) {
     	this.student=Student;
     	this.client=client;
@@ -62,11 +75,17 @@ public class ApproveSubmitController {
     private Button yesBtn;
 
     @FXML
+	/**
+	 * cancels the submission
+	 */
     void noBtnclicked(ActionEvent event) {
     	 Stage currentStage = (Stage) noBtn.getScene().getWindow();
          currentStage.close();
     }
     @FXML
+	/**
+	 * closes the submission windows
+	 */
     void clsBtnClicked(ActionEvent event) {
     	Stage currentStage = (Stage) clsBtn.getScene().getWindow();
         currentStage.close();
@@ -74,6 +93,10 @@ public class ApproveSubmitController {
     }
 
     @FXML
+	/**
+	 *approves the exam, sending to sever all the answers and closing
+	 the exam
+	 */
     void yesBtnClicked(ActionEvent event) {
     	if(DigOrMan==0) {
     	try {
@@ -116,10 +139,17 @@ public class ApproveSubmitController {
     		studentManualTest.CloseWindow();
     	}
 
-    }
+    } 
+/**
+ * returns the controller used for this form
+ */
     public ApproveSubmitController getController() {
 		return this;
 	}
+
+	/**
+	 * submits the exam when the timer runs up or the lecturer closes  the exam.
+	 */
 	public void forceSubmit(){
 		yesBtn.setDisable(true);
         noBtn.setDisable(true);
@@ -146,6 +176,11 @@ public class ApproveSubmitController {
 		}
 
 	}
+	/**
+	 * disables the option to submit the exam after it was locked
+	 */
+
+	 
 	public void examIsLocked(){
 		yesBtn.setDisable(true);
         noBtn.setDisable(true);

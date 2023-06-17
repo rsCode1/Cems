@@ -25,7 +25,9 @@ import logic.Test;
 import logic.TestApplyInfo;
 import logic.TestCode;
 import logic.Users;
-
+/** the take exam controller mange the process of student takeing exam in our cems app
+ *  ,it valid the exam code input by the sstudent 
+ * ,ensure the confirm of the chrckbox and comunict with the server to run the test and then it show to test  in exam screen where the student enters is ID the start the test .  */
 public class TakeExamController {
 	private int DigOrMan;
 	public int getDigOrMan() {
@@ -66,7 +68,7 @@ public class TakeExamController {
     @FXML
     private TextField codeTxt;
 
-  
+
 
     @FXML
     private Button startBtn;
@@ -85,7 +87,11 @@ public class TakeExamController {
     	  Stage currentStage = (Stage) backBtn.getScene().getWindow();
           currentStage.close();
     }
-
+	/**
+	 * when the student clicks the start button the metued checks if the exam code is valid or not
+	 * . is send request to the server to fetch the exam ,if the client is not connected to the server desplay the error message.
+	 * @param event
+	 */
     @FXML
     void startBtnClicked(ActionEvent event) {
     	String code = codeTxt.getText() ;
@@ -184,9 +190,15 @@ public class TakeExamController {
 		});
     }
     
-    //Checks if id and code not empty and contains number only , 
+
+	/**
+	 * Checks if id and code not empty and contains number only , 
     //checks also if CheckBox is checked
-    //returns True if yes
+    //returns True if yes /
+	 * @param code
+	 * @return
+	 */
+
     public boolean CheckApplyingInfo(String code ){
     	boolean ret=false;
     	String mes1 = "Please Click on Check Box!";

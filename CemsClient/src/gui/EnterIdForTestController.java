@@ -25,6 +25,7 @@ import logic.Users;
 
 public class EnterIdForTestController {
 	private int DigOrMan;
+	
 	public int getDigOrMan() {
 		return DigOrMan;
 	}
