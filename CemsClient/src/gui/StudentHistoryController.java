@@ -30,6 +30,10 @@ public class StudentHistoryController {
 	private Users student;
 	private ChatClient client;
     
+	/**
+	 * sets the grade data array that would be used later
+	 * @param data
+	 */
 	public void setStudentDataList(ArrayList<StudentData>  data) {
 		this.studentGradesInfo=data ;
 	   }
@@ -55,12 +59,21 @@ public class StudentHistoryController {
     
     
     @FXML
+	/**
+	 * closes the current screen and returns to the home page
+	 * @param event
+	 */
     void ReturnBack(ActionEvent event) {
     	Stage currentStage = (Stage) btnBacktoHome.getScene().getWindow();
         currentStage.close();
     }
 
-    
+    /**
+	 * sets the student,client and controller that would be used in this form
+	 * @param Student
+	 * @param client
+	 * @param SH
+	 */
     public void setStudentAndClient(Users Student,ChatClient client,StudentHistoryController SH) {
     	this.student=Student;
     	this.client=client;
@@ -71,6 +84,10 @@ public class StudentHistoryController {
    
 
 
+	/**
+	 * method the sets up the table view in the page, gets from the server all the grade data
+	 * of a student and organized it in the table
+	 */
     public void viewPage() {
     	try {
     		client.openConnection();
@@ -96,8 +113,9 @@ public class StudentHistoryController {
     }
     
     
-    
-    
+/**
+ * based on the data in the table, calculates the average grade of the logged user
+ */
     public void CalculateGPA()
     {
     	 ObservableList<StudentData> data=TestTableView.getItems();
@@ -107,7 +125,7 @@ public class StudentHistoryController {
     	 
     	 for (StudentData sd : data)
     	 {
-    		 if (sd.getGrade()!="-/-")
+    		 if (sd.getGrade()!="---")
     		 { 
     			 if( !sd.getGrade().matches("[0-9]+")) {
     				 tempGrade=0;
