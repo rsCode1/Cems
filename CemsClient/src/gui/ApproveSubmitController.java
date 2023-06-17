@@ -191,9 +191,10 @@ public class ApproveSubmitController {
 		yesBtn.setDisable(true);
         noBtn.setDisable(true);
         lbl.setText("Sorry Exam is locked by luctuer!");
-        mesTxt.setText("Your answers are submitted automatically, Good Luck!");
+        
 		if(DigOrMan==0) {
 			try {
+				mesTxt.setText("Your answers are submitted automatically, Good Luck!");
 				forceSubmit();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -203,6 +204,7 @@ public class ApproveSubmitController {
 		}
 		else{
 			try {
+				mesTxt.setText("Good luck next time!");
 				forceSubmit();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
