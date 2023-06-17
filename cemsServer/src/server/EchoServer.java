@@ -57,7 +57,7 @@ import ocsf.server.ConnectionToClient;
 public class EchoServer extends AbstractServer {
 	private ServerStartScreenController serverScreenController;
 	private ServerCommandsLecturer lecturerCommands = new ServerCommandsLecturer();
-    private ServerCommandsStudent serverCommandsStudent = new ServerCommandsStudent();
+	private ServerCommandsStudent serverCommandsStudent = new ServerCommandsStudent();
 	final public static int DEFAULT_PORT = 5555;
 
 	public EchoServer(int port) {
@@ -124,26 +124,26 @@ public class EchoServer extends AbstractServer {
 				case "changeGrade":
 					lecturerCommands.changeGrade(client, (Exam) request.getRequestParam());
 					break;
-				case "GetExam" :
-					serverCommandsStudent.getExam( (TestCode) request.getRequestParam(),client);
+				case "GetExam":
+					serverCommandsStudent.getExam((TestCode) request.getRequestParam(), client);
 					break;
-				case "SubmitExam" :
-					serverCommandsStudent.submitTest( (StudentInTest) request.getRequestParam(),client);
+				case "SubmitExam":
+					serverCommandsStudent.submitTest((StudentInTest) request.getRequestParam(), client);
 					break;
 				case "CheckIfDurationChanged":
-					serverCommandsStudent.checkIfDurationChanged((TestSourceTime) request.getRequestParam(),client);
+					serverCommandsStudent.checkIfDurationChanged((TestSourceTime) request.getRequestParam(), client);
 					break;
 				case "DownloadManualExam":
-					serverCommandsStudent.downloadManuelExam((int) request.getRequestParam(),client);
-				    break;
-				case"AddStudentToInExamList":
-					serverCommandsStudent.addStudentToInExamList((TestApplyInfo) request.getRequestParam() ,client);
+					serverCommandsStudent.downloadManuelExam((int) request.getRequestParam(), client);
 					break;
-				case"GetStudentGrades":
-					serverCommandsStudent.getStudentGrades((int) request.getRequestParam() ,client);
+				case "AddStudentToInExamList":
+					serverCommandsStudent.addStudentToInExamList((TestApplyInfo) request.getRequestParam(), client);
 					break;
-				case"SubmitManualExam":
-					serverCommandsStudent.submitManualExam((UploadFile) request.getRequestParam(),client);
+				case "GetStudentGrades":
+					serverCommandsStudent.getStudentGrades((int) request.getRequestParam(), client);
+					break;
+				case "SubmitManualExam":
+					serverCommandsStudent.submitManualExam((UploadFile) request.getRequestParam(), client);
 					break;
 				case "closeExam":
 					closeExam(client, (Exam) request.getRequestParam());
@@ -153,17 +153,22 @@ public class EchoServer extends AbstractServer {
 		}
 	}
 
-
-    public void closeExam (ConnectionToClient client,Exam exam){
-        Response response = new Response("closeExam", exam.getExamId());
+	public void closeExam(ConnectionToClient client, Exam exam) {
+		Response response = new Response("closeExam", exam.getExamId());
 		try {
 			this.sendToAllClients(response);
-		}catch (Exception e){
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			String command1 = "DELETE FROM cems.open_exams WHERE exam_id = ?;";
+			PreparedStatement stmt = conn.prepareStatement(command1);
+			stmt.setInt(1, exam.getExamId());
+			stmt.executeUpdate();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        
-    }
-	
+
+	}
+
 	private void checkUserLogin(LogInInfo loginInfo, ConnectionToClient client) {
 		try {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
@@ -185,7 +190,6 @@ public class EchoServer extends AbstractServer {
 			ex.printStackTrace();
 		}
 	}
-	
 
 	// function to add all the users that are logged in to the logged to the table
 	// in server
