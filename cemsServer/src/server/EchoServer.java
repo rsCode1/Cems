@@ -105,8 +105,8 @@ public class EchoServer extends AbstractServer {
 				case"GetStudentGrades":
 				    getStudentGrades((int) request.getRequestParam() ,client);
 					break;
-				case"SubmitManualExamExam":
-				    submitManualExamExam((UploadFile) request.getRequestParam(),client);
+				case"SubmitManualExam":
+				    submitManualExam((UploadFile) request.getRequestParam(),client);
 					break;
 				// Add more case statements for other request types
 			}
@@ -125,7 +125,11 @@ public class EchoServer extends AbstractServer {
     	            String column2Value = resultSet.getString("courseName");
     	            String column3Value = String.valueOf(resultSet.getInt("grade"));
     	            String stat=resultSet.getString("status");
+<<<<<<< HEAD
     	            if (stat.equals("pending")) column3Value="---";
+=======
+    	            if (!stat.equals("approved")) column3Value="-/-";
+>>>>>>> 727ec7c (fixed few things)
     	            studentGradesInfo.add(new StudentData(column2Value,column3Value));
     	        }
 				Response response = new Response("GetStudentGrades", studentGradesInfo);
@@ -163,16 +167,28 @@ public class EchoServer extends AbstractServer {
 		
 	}
 
-	private void submitManualExamExam(UploadFile answersFile,ConnectionToClient client){
+	private void submitManualExam(UploadFile answersFile,ConnectionToClient client){
 		 try{
+			 
+			 boolean Submitted =true;
+			 String status="Entered manualy but not Submitted.";
+			 if(answersFile.getMyfile() == null) Submitted= false ;
+			 if(Submitted) {
               String LocalfilePath="Submitted_Manual_Exams_Files\\"+ answersFile.getMyfile().getFileName();
 		      File newFile = new File (LocalfilePath);     
 		      FileOutputStream fis = new FileOutputStream(newFile);
 		      BufferedOutputStream bis = new BufferedOutputStream(fis);			  
 		      bis.write(answersFile.getMyfile().getMybytearray(),0,answersFile.getMyfile().getSize());	
 		      bis.close();
+		      status="Submitted Manualy, Manual check needed.";
+		      }
 		      Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root","Aa123456");
-		      Statement stmt3,stmt4,stmt5;
+		      Statement stmt2,stmt3,stmt4,stmt5;
+		      String str2="INSERT INTO `cems`.`grades` (`examId`, `studentId`, `courseID`,`lecturerID`, `courseName`, `status`)";
+			  str2+=" VALUES ('"+answersFile.getStudentInTest().getTestId()  + "', '" + answersFile.getStudentInTest().getStudentId() + "', '"+ answersFile.getStudentInTest().getCourseId() +"',";
+			  str2+=" '" + answersFile.getStudentInTest().getLecturerId() + "', '" +answersFile.getStudentInTest().getCourseName() +"','" + status +"');";
+			  stmt2 = conn.createStatement();
+			  stmt2.executeUpdate(str2);
 		      String str3= "UPDATE `cems`.`student_inexam` SET `submitted` = '1' WHERE (`student_id` =" + answersFile.getStudentId() +") AND (`exam_id` = " + answersFile.getTestId() +");";
 			  stmt3 = conn.createStatement();
 			  stmt3.executeUpdate(str3);
@@ -190,9 +206,12 @@ public class EchoServer extends AbstractServer {
 				  }
 				}
 				rs.close();
+				
+				
 		    }
 		catch (Exception e) {
-			System.out.println("Error send (Files)msg) to Server");
+			System.out.println("Error sending files to Server");
+			e.printStackTrace();
 		}
 
 	}

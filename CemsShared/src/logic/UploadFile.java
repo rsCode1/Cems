@@ -3,6 +3,7 @@ package logic;
 import java.io.Serializable;
 
 public class UploadFile implements Serializable  {
+	private StudentInTest studentInTest;
 	private MyFile myfile;
 	private int studentId; 
 	private int testId;
@@ -21,7 +22,13 @@ public class UploadFile implements Serializable  {
 	public int getTestId() {
 		return testId;
 	}
+	public void setStudentInTest(StudentInTest studentInTest) {
+		this.studentInTest = studentInTest;
+	}
 	
+	public StudentInTest getStudentInTest() {
+        return studentInTest;
+    }
 		
 
 }

@@ -125,7 +125,8 @@ public class ApproveSubmitController {
     	
     	else {
 			try {
-				client.sendToServer(new Request("SubmitManualExamExam", answersFile));
+				client.sendToServer(new Request("SubmitManualExam", answersFile));
+				studentManualTest.CloseWindow();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -154,9 +155,10 @@ public class ApproveSubmitController {
 		yesBtn.setDisable(true);
         noBtn.setDisable(true);
 		lbl.setText("Time out!");
-		mesTxt.setText("your answers are submitted automatically, Good Luck!");
+		
 		if(DigOrMan==0) {
 			try {
+				mesTxt.setText("your answers are submitted automatically, Good Luck!");
 				client.sendToServer(new Request("SubmitExam", studentInTest));
 				inExamController.CloseWindow();
 			} catch (IOException e) {
@@ -167,7 +169,11 @@ public class ApproveSubmitController {
 		}
 		else{
 			try {
-				client.sendToServer(new Request("SubmitManualExamExam", answersFile));
+				client.openConnection();
+    			if (client.isConnected()) {
+				mesTxt.setText("Good luck next time!");
+				client.sendToServer(new Request("SubmitManualExam", answersFile));
+				studentManualTest.CloseWindow();}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

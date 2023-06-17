@@ -150,8 +150,6 @@ public class StudentPageController {
 				e.printStackTrace();
 			}
     		controller.viewPage();
-    		//takeExamController.setDigOrMan(1);
-    		//takeExamController.setLabel("Welcome to Take Manuel Exam Form");
     		stage.setScene(new Scene(root));
     		stage.show();
     		} 

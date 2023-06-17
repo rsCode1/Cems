@@ -17,6 +17,7 @@ import logic.DownloadManualExaminController;
 import logic.FileDownloadInfo;
 import logic.MyFile;
 import logic.Request;
+import logic.StudentInTest;
 import logic.Test;
 import logic.TestSourceTime;
 import logic.UploadFile;
@@ -46,12 +47,14 @@ import java.sql.Blob;
 
 // try push
 public class StudentManualTestController {
+	private StudentInTest studentInTest;
+	
 	private MyFile downloadFile;
 	private UploadFile uploadFile;
 	public void setDownloadFile(MyFile downloadFile) {
 		this.downloadFile = downloadFile;
 	}
-	//private DownloadManualExaminController downloadFile;
+	private String downloadPath;
 	private String ToUploadPath;
 	private  int remainingTime;
 	private boolean StartedTime=false;
@@ -60,6 +63,14 @@ public class StudentManualTestController {
 	private Users student;
 	private boolean locked=false;
 	private AddedTime added=new AddedTime();
+	 public void setStudentInTest() {
+		 this.studentInTest= new StudentInTest (student.getId(),test.getCourseName(),test.getQuesSize(),test.getTestId(),test.getLecturerId(),test.getCourseId());
+		 int[] quesId= new int[test.getQuesSize()];
+		 for(int i =0 ; i<test.getQuesSize();i++) {
+			 quesId[i]=test.getqLst().get(i).getQuesId();
+		 }
+		 this.studentInTest.setQuesId(quesId);
+	 }
     public AddedTime getAdded() {
 		return added;
 	}
@@ -108,6 +119,7 @@ public class StudentManualTestController {
 				root = loader.load();
 			    File newFile = new File (ToUploadPath);     
 			    uploadFile= new UploadFile(new MyFile(newFile.getName()),student.getId(),test.getTestId());
+				uploadFile.setStudentInTest(studentInTest);
 		        byte [] mybytearray  = new byte [(int)newFile.length()];
 			    FileInputStream fis = new FileInputStream(newFile);
 			    BufferedInputStream bis = new BufferedInputStream(fis);			  
@@ -160,6 +172,7 @@ public class StudentManualTestController {
 	            }
 	            else {
 	            LocalfilePath+= "\\" +"TestId_" + test.getTestId()+"-StId_" + student.getId() + ".docx";
+	            downloadPath=LocalfilePath;
 	           
 	        		//}
 	        		try {
@@ -223,7 +236,6 @@ public class StudentManualTestController {
 			selectedFileLabel.setText("Selected File: " + ToUploadPath);
 			uploadMes.setText(selectedFile.getName()+ " uploaded successfully!");
 			subBtn.setDisable(false);
-			System.out.println(ToUploadPath);
 		}
 	}
 
@@ -247,7 +259,7 @@ public class StudentManualTestController {
         stopThread = false; // Reset stopThread flag
         timeThread = new Thread(() -> {
             try {
-                remainingTime = timeInSeconds;
+                remainingTime = timeInSeconds +60;
                 while (remainingTime >= 0 && !stopThread) {
                 	if( remainingTime <=5 && addedTime==false ) {
                 		//checkIfDurationChanged
@@ -295,11 +307,13 @@ public class StudentManualTestController {
 
         try {
             Parent root = loader.load();
+            UploadFile forceUpload= new UploadFile(null,student.getId(),test.getTestId());
+			forceUpload.setStudentInTest(studentInTest);
             ApproveSubmitController controller = loader.getController();
             controller.setStudentAndClient2(student, client, this.getController());
             controller.setDigOrMan(1);
+			controller.setAnswersFile(forceUpload);
             controller.forceSubmit();
-
             Platform.runLater(() -> {
                 Stage window = new Stage();
                 window.setScene(new Scene(root));

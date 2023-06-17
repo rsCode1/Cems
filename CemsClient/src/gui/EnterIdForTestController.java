@@ -178,6 +178,7 @@ public class EnterIdForTestController {
 	            StudentManualTestController controller=loader.getController();
 	            controller.setStudentAndClient(student, client,controller);
 	            controller.setTest(test);
+	            controller.setStudentInTest();
 	            controller.setWelcomeLabel();
 	            window.setScene(new Scene(root));
 				window.show();
