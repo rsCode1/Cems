@@ -194,22 +194,20 @@ public class ApproveSubmitController {
         mesTxt.setText("Your answers are submitted automatically, Good Luck!");
 		if(DigOrMan==0) {
 			try {
-				client.sendToServer(new Request("SubmitExam", studentInTest));
-				inExamController.CloseWindow();
-			} catch (IOException e) {
+				forceSubmit();
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
 		}
 		else{
-			/*try {
-				client.sendToServer(new Request("SubmitExamManualExam", FileUploadInfo));
-				studentManualTest.CloseWindow();
-			} catch (IOException e) {
+			try {
+				forceSubmit();
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}*/
+			}
 
 		}
 	}
