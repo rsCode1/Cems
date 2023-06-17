@@ -13,10 +13,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -278,6 +280,15 @@ public class LecturerPageController implements Initializable {
 
 	@FXML
 	public void showTimeRequestForm(ActionEvent event) {
+		Exam exam = ongoingExamsTable.getSelectionModel().getSelectedItem();
+		if (exam == null) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText("No exam selected");
+			alert.setContentText("Please select an exam from the table");
+			alert.showAndWait();
+			return;
+		}
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/time_request.fxml")); // specify the path to
 		// the new fxml file
 		Parent parent = null;
