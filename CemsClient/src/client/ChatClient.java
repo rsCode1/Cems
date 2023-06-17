@@ -4,17 +4,24 @@
 
 package client;
 
+import logic.Response;
+import logic.StudentData;
 import client.*;
 import gui.ConnectToServerScreenController;
 import gui.LecturerApprovalController;
 import gui.LecturerPageController;
+import gui.InExamController;
 import gui.LoginScreenController;
 import gui.ReviewExamController;
 import gui.StartExamController;
 import gui.writeQuestionController;
 import gui.createExamController;
 import gui.TimeRequestController;
+import gui.StudentHistoryController;
+import gui.StudentManualTestController;
+import gui.TakeExamController;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,9 +29,14 @@ import javafx.stage.Stage;
 import logic.Exam;
 import logic.LogInInfo;
 import logic.Response;
+import logic.AddedTime;
+import logic.DownloadManualExaminController;
+import logic.MyFile;
+import logic.Test;
 import logic.Users;
 import logic.Question;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +47,7 @@ import ocsf.client.*;
 public class ChatClient extends AbstractClient
 
 {
+	private StudentManualTestController stdManController;
 	private LoginScreenController loginScreecontroller;
 	private writeQuestionController writeQuestionController;
 	private createExamController createExamController;
@@ -43,10 +56,12 @@ public class ChatClient extends AbstractClient
 	private StartExamController startExamController;
 	private LecturerPageController lecturerPageController;
 	private LecturerApprovalController lecturerApprovalController;
+	private TakeExamController takeExamController;
+	private InExamController inExamController;
+	private StudentHistoryController studentHistoryController;
 	private String ip = "";
 	private int portServer;
 	// Instance variables **********************************************
-	
 
 	public ChatClient(String host, int port, Object clientUI) throws IOException {
 		super(host, port);
@@ -122,6 +137,21 @@ public class ChatClient extends AbstractClient
 				case "changeGradeSuccess":
 					lecturerApprovalController.changeGradeSuccess();
 					break;
+				case "GetExam":
+					getExam((Test) response.getResponseParam());
+					break;
+				case "AddedTime":
+					AddedTime added = (AddedTime) response.getResponseParam();
+					inExamController.setAdded(added);
+					break;
+				case "GetStudentGrades":
+					ArrayList<StudentData> data = (ArrayList<StudentData>) response.getResponseParam();
+					sendStudentGrades(data);
+					break;
+				case "DownloadManualExam":
+					MyFile file = (MyFile) response.getResponseParam();
+					stdManController.setDownloadFile(file);
+					break;
 			}
 
 		}
@@ -174,6 +204,45 @@ public class ChatClient extends AbstractClient
 	}
 
 	/**
+	 * This method handles all data that comes in from the server.
+	 *
+	 * @param msg The message from the server.
+	 */
+
+	private void sendStudentGrades(ArrayList<StudentData> data) {
+		studentHistoryController.setStudentDataList(data);
+	}
+
+	private void getExam(Test test) {
+		try {
+			takeExamController.ShowStudentEnterIdScreen(test);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+
+
+	public void setStudentManualTestController(StudentManualTestController controller) {
+		this.stdManController = controller;
+	}
+
+
+
+	public void setTakeExamController(TakeExamController controller) {
+		this.takeExamController = controller;
+	}
+
+	public void setInExamController(InExamController controller) {
+		this.inExamController = controller;
+	}
+
+	public void setStudentHistoryController(StudentHistoryController controller) {
+		this.studentHistoryController = controller;
+	}
+
+	/**
 	 * This method terminates the client.
 	 */
 	public void quit() {
@@ -193,4 +262,4 @@ public class ChatClient extends AbstractClient
 		return portServer;
 	}
 }
-// End of ChatClient class
+// End of ChatClient class

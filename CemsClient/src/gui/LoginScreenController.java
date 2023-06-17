@@ -26,6 +26,7 @@ import logic.Users;
 
 public class LoginScreenController {
 	private ChatClient client;
+
 	@FXML
 	private TextField userName;
 	@FXML
@@ -87,6 +88,7 @@ public class LoginScreenController {
 				try {
 					root = loader.load();
 					Stage window = (Stage) getLoginBtn().getScene().getWindow();
+					StudentPageController studentController = null;
 					if (user.getRole() == 1) {
 						// call lecturer conrtoller and use method
 						LecturerPageController controller = loader.getController();
@@ -94,6 +96,12 @@ public class LoginScreenController {
 						client.setController(controller);
 						controller.getOngoingExamsTable();
 
+					}
+					if (user.getRole() == 0) {
+						String welcomeMsg= "Welcome" +" "+ user.getFirstName() + " " + user.getLastName();
+						studentController = loader.getController();
+						studentController.setStudentAndClient(user, client);
+						studentController.setWelcomeLabel(welcomeMsg);
 					}
 					window.setScene(new Scene(root));
 					// Center the stage on the screen

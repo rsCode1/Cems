@@ -11,7 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
+//hi guys from tamer
 public class ConnectToServerScreenController  {
 	ChatClient client= null;
 	
@@ -22,6 +22,9 @@ public class ConnectToServerScreenController  {
     @FXML
     private Label wrongIpText;
     @FXML
+	/**
+	 * the method can connects between the client and server
+	 */
     public void Connect(ActionEvent event) throws Exception {
         String ip = ipTextField.getText();
         try {
@@ -38,7 +41,9 @@ public class ConnectToServerScreenController  {
         }
     }
 
-    
+    /**
+	 * sets up the chatclient for our connection
+	 */
 	public void ConnectToServerScreenControllers(String host, int port) 
 	  {
 	    try 
@@ -52,7 +57,9 @@ public class ConnectToServerScreenController  {
 	      System.exit(1);
 	    }
 	  }
-	
+	/**
+	 * shows the login form
+	 */
 	private void showLogin() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LoginScreen.fxml")); // specify the path to the new fxml file
 		Parent parent=null;

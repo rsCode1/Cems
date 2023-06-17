@@ -3,6 +3,14 @@ package server;
 
 import java.io.IOException;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+
 // "Object Oriented Software Engineering" and is issued under the open-source
 // license found at www.lloseng.com
 
@@ -16,21 +24,40 @@ import java.util.ArrayList;
 
 import javax.swing.plaf.nimbus.State;
 
+import com.mysql.cj.jdbc.Blob;
+
+import logic.Response;
+import logic.StudentData;
+
 import gui.ServerStartScreenController;
 import logic.Exam;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import logic.AddedTime;
+import logic.DownloadManualExaminController;
+import logic.FileDownloadInfo;
 import logic.LogInInfo;
 import logic.LoggedUsers;
 import logic.Question;
+import logic.MyFile;
+import logic.InTestQuestion;
 import logic.Request;
 import logic.Response;
+import logic.StudentInTest;
+import logic.Test;
+import logic.TestApplyInfo;
+import logic.TestCode;
+import logic.TestSourceTime;
+import logic.UploadFile;
 import logic.Users;
+
 import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 
 public class EchoServer extends AbstractServer {
 	private ServerStartScreenController serverScreenController;
 	private ServerCommandsLecturer lecturerCommands = new ServerCommandsLecturer();
-
+    private ServerCommandsStudent serverCommandsStudent = new ServerCommandsStudent();
 	final public static int DEFAULT_PORT = 5555;
 
 	public EchoServer(int port) {
@@ -97,12 +124,35 @@ public class EchoServer extends AbstractServer {
 				case "changeGrade":
 					lecturerCommands.changeGrade(client, (Exam) request.getRequestParam());
 					break;
+				case "GetExam" :
+					serverCommandsStudent.getExam( (TestCode) request.getRequestParam(),client);
+					break;
+				case "SubmitExam" :
+					serverCommandsStudent.submitTest( (StudentInTest) request.getRequestParam(),client);
+					break;
+				case "CheckIfDurationChanged":
+					serverCommandsStudent.checkIfDurationChanged((TestSourceTime) request.getRequestParam(),client);
+					break;
+				case "DownloadManualExam":
+					serverCommandsStudent.downloadManuelExam((int) request.getRequestParam(),client);
+				    break;
+				case"AddStudentToInExamList":
+					serverCommandsStudent.addStudentToInExamList((TestApplyInfo) request.getRequestParam() ,client);
+					break;
+				case"GetStudentGrades":
+					serverCommandsStudent.getStudentGrades((int) request.getRequestParam() ,client);
+					break;
+				case"SubmitManualExam":
+					serverCommandsStudent.submitManualExam((UploadFile) request.getRequestParam(),client);
+					break;
+				// Add more case statements for other request types
 			}
 		}
 	}
 
 
 
+	
 	private void checkUserLogin(LogInInfo loginInfo, ConnectionToClient client) {
 		try {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
@@ -124,6 +174,7 @@ public class EchoServer extends AbstractServer {
 			ex.printStackTrace();
 		}
 	}
+	
 
 	// function to add all the users that are logged in to the logged to the table
 	// in server
