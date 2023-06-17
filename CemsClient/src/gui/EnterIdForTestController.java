@@ -26,19 +26,37 @@ import logic.Users;
 public class EnterIdForTestController {
 	private int DigOrMan;
 	
+	/**
+	 * return if the test is manual or digital
+	 * @return
+	 */
 	public int getDigOrMan() {
 		return DigOrMan;
 	}
+	/**
+	 * sets the exam to be manual or digital
+	 * @param digOrMan
+	 */
 	public void setDigOrMan(int digOrMan) {
 		DigOrMan = digOrMan;
 	}
 	private ChatClient client;
 	private Users student;
 	private Test test;
+	/**
+	 * sets the student and client that currently using the form
+	 * @param Student
+	 * @param client
+	 */
 	public void setStudentAndClient(Users Student,ChatClient client) {
     	this.student=Student;
     	this.client=client;
     }
+
+	/**
+	 * sets the test that we are going to initialize
+	 * @param test
+	 */
 	public void setTest(Test test){
 		this.test=test;
 		
@@ -59,6 +77,12 @@ public class EnterIdForTestController {
     @FXML
     private Label testLbl;
     @FXML
+
+	/**
+	 * sends to server the ID of the student, checks if he's eligiable for the test.
+	 * if yes, procceed to test form.
+	 * @param event
+	 */
     void StartTestClicked(ActionEvent event) {
     	String id = idField.getText();
     	if(CheckApplyingInfo(id)) {
@@ -88,6 +112,11 @@ public class EnterIdForTestController {
     	
 
     }
+	/**
+	 * the method the checks if the given ID is valid and matches the id of the logged user
+	 * @param code
+	 * @return
+	 */
     public boolean CheckApplyingInfo(String code ){
     	boolean ret=false;
     	errTxt.setText(" ");
@@ -109,6 +138,12 @@ public class EnterIdForTestController {
         }
         return ret;
     }
+
+	/**
+	 * depends on whether the test is digital or manual, opens the Corresponding test form 
+	 * to the student
+	 * @param test
+	 */
     public void ShowStudentTestScreen(Test test) {
 			if (test == null) {
 				errTxt.setText("Id or Code is wrong!, please try again!"); } 
@@ -153,6 +188,9 @@ public class EnterIdForTestController {
 			}
 		
     }
+	/**
+	 * adding the lecturer notes in the test form
+	 */
     public void SetLectureNotes() {
     	lecnotesArea.setText(test.getStudentNotes());
     	testLbl.setText("Welcome to " + test.getCourseName() + " Test");
@@ -165,7 +203,10 @@ public class EnterIdForTestController {
     
     
     
-    
+    /**
+	 * returns the controller used in that form
+	 * @return
+	 */
     public EnterIdForTestController getController() {
 		return this;
 	}
