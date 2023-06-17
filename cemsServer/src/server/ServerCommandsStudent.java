@@ -308,7 +308,7 @@ public class ServerCommandsStudent {
 		int currentD = testSourcetime.getSourceTime();
 		AddedTime added = new AddedTime();
 		added.setAdded(0);
-		str = "SELECT exams.test_time FROM exams  WHERE exam_id=" + testSourcetime.getTestId() + ";";
+		str = "SELECT test_time FROM cems.open_exams WHERE exam_id=" + testSourcetime.getTestId() +" ;";
 		Statement stmt;
 		try {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
