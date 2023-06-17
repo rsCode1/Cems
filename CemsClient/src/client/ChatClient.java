@@ -6,6 +6,7 @@ package client;
 
 import client.*;
 import gui.ConnectToServerScreenController;
+import gui.LecturerApprovalController;
 import gui.LecturerPageController;
 import gui.LoginScreenController;
 import gui.ReviewExamController;
@@ -41,10 +42,11 @@ public class ChatClient extends AbstractClient
 	private TimeRequestController TimeRequestController;
 	private StartExamController startExamController;
 	private LecturerPageController lecturerPageController;
-
+	private LecturerApprovalController lecturerApprovalController;
 	private String ip = "";
 	private int portServer;
 	// Instance variables **********************************************
+	
 
 	public ChatClient(String host, int port, Object clientUI) throws IOException {
 		super(host, port);
@@ -110,7 +112,16 @@ public class ChatClient extends AbstractClient
 				case "startExamFailed":
 					startExamController.startExamFailed();
 					break;
-
+				case "getGrades":
+					ArrayList<Exam> gradesArr = (ArrayList<Exam>) response.getResponseParam();
+					lecturerApprovalController.setGradesTable(gradesArr);
+					break;
+				case "approveGradeSuccess":
+					lecturerApprovalController.approveGradeSuccess();
+					break;
+				case "changeGradeSuccess":
+					lecturerApprovalController.changeGradeSuccess();
+					break;
 			}
 
 		}
@@ -128,6 +139,10 @@ public class ChatClient extends AbstractClient
 		}
 		System.out.println(user.getRole());
 
+	}
+
+	public void setController(LecturerApprovalController controller) {
+		this.lecturerApprovalController = controller;
 	}
 
 	public void setController(LoginScreenController controller) {

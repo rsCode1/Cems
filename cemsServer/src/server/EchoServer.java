@@ -83,11 +83,84 @@ public class EchoServer extends AbstractServer {
 					break;
 				case "getOngoingExams":
 					getOngoingExams(client, (Users) request.getRequestParam());
+					break;
 				case "startExam":
 					startExam(client, (Exam) request.getRequestParam());
-					// Add more case statements for other request types
+					break;
+				case "getGrades":
+					getGrades(client, (Users) request.getRequestParam());
+					break;
+				case "approveGrade":
+					approveGrade(client, (Exam) request.getRequestParam());
+					break;
+				case "changeGrade":
+					changeGrade(client, (Exam) request.getRequestParam());
+					break;
 			}
 		}
+	}
+
+	private void changeGrade(ConnectionToClient client, Exam exam) {
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			System.out.println("SQL connection succeed");
+			String command = "UPDATE grades SET status='changed grade',notes = ?,grade = ? WHERE examId = ? and studentId = ? and lecturerID = ?";
+			PreparedStatement stmt = conn.prepareStatement(command);
+			stmt.setString(1, exam.getNotesForChange());
+			stmt.setInt(2, exam.getGrade());
+			stmt.setInt(3, exam.getExamId());
+			stmt.setInt(4, exam.getStudentId());
+			stmt.setInt(5, exam.getLecturer().getId());
+			stmt.executeUpdate();
+			Response response = new Response("changeGradeSuccess", null);
+			client.sendToClient(response);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void approveGrade(ConnectionToClient client, Exam exam) {
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			System.out.println("SQL connection succeed");
+			String command = "UPDATE grades SET status='approved' WHERE examId = ? and studentId = ? and lecturerID = ?";
+			PreparedStatement stmt = conn.prepareStatement(command);
+			stmt.setInt(1, exam.getExamId());
+			stmt.setInt(2, exam.getStudentId());
+			stmt.setInt(3, exam.getLecturer().getId());
+			stmt.executeUpdate();
+			Response response = new Response("approveGradeSuccess", null);
+			client.sendToClient(response);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void getGrades(ConnectionToClient client, Users lecturer) {
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			System.out.println("SQL connection succeed");
+			String command = "SELECT examId,studentId,grade,courseName FROM grades WHERE status='pending' and lecturerID = ?";
+			PreparedStatement stmt = conn.prepareStatement(command);
+			stmt.setInt(1, lecturer.getId());
+			ResultSet rs = stmt.executeQuery();
+			ArrayList<Exam> exams = new ArrayList<>();
+			while (rs.next()) {
+				Exam exam = new Exam(rs.getInt("examId"), rs.getInt("studentId"), rs.getString("courseName"),
+						rs.getInt("grade"), lecturer);
+				exams.add(exam);
+			}
+			Response response = new Response("getGrades", exams);
+			client.sendToClient(response);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	private void startExam(ConnectionToClient client, Exam exam) {
@@ -99,10 +172,10 @@ public class EchoServer extends AbstractServer {
 			PreparedStatement stmt = conn.prepareStatement(checkCodeCommand);
 			stmt.setInt(1, exam.getExamId());
 			ResultSet rs = stmt.executeQuery();
-			if (rs.next()){
-					Response response = new Response("startExamFailed", null);
-					client.sendToClient(response);
-					return;
+			if (rs.next()) {
+				Response response = new Response("startExamFailed", null);
+				client.sendToClient(response);
+				return;
 
 			}
 			String command = "INSERT INTO open_exams VALUES(?,?,?)";
@@ -118,8 +191,7 @@ public class EchoServer extends AbstractServer {
 		}
 	}
 
-
-		private void getOngoingExams(ConnectionToClient client, Users lecturer) {
+	private void getOngoingExams(ConnectionToClient client, Users lecturer) {
 		try {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
 					"Aa123456");
@@ -166,8 +238,6 @@ public class EchoServer extends AbstractServer {
 			e.printStackTrace();
 		}
 	}
-
-
 
 	// save the exam to the database using the exam class
 	private void saveExam(Exam exam, ConnectionToClient client) {

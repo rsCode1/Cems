@@ -17,6 +17,18 @@ public class Exam implements Serializable {
     private int code;
     private int time_remaning;
     private String lecturer_name;
+    private int studentId;
+    private int grade;
+    private String ChangeGradeReason;
+
+
+    public Exam (int examId, int studentId,String courseName, int grade,Users lecturer) {
+        this.examId = examId;
+        this.studentId = studentId;
+        this.courseName = courseName;
+        this.grade = grade;
+        this.lecturer = lecturer;
+    }
 
     public Exam(int examId, int code, int testTime) {
         this.examId = examId;
@@ -110,6 +122,21 @@ public class Exam implements Serializable {
 
     public int getCode() {
         return code;
+    }
+    public int getStudentId() {
+        return studentId;
+    }
+    public int getGrade() {
+        return grade;
+    }
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+    public void setChangeGradeReason(String ChangeGradeReason) {
+        this.ChangeGradeReason = ChangeGradeReason;
+    }
+    public String getNotesForChange() {
+        return ChangeGradeReason;
     }
 
 }

@@ -96,6 +96,37 @@ public class LecturerPageController implements Initializable {
 			lecturerName.setText(lecturer.getFirstName() + " " + lecturer.getLastName());
 		});
 
+		toolGrade.setOnMouseClicked(e -> {
+			Platform.runLater(() -> {
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/lecturerApproval.fxml")); // specify
+																											// the
+																											// path
+																											// to
+				// the new fxml file
+				Parent parent = null;
+				try {
+					parent = loader.load();
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+				Scene nextScene = new Scene(parent);
+
+				// Get the new scene's controller and pass the ChatClient instance to it
+				LecturerApprovalController controller = loader.getController();
+				controller.setClientAndLecturer(this.client, lecturer);
+				controller.getGrades();
+				client.setController(controller);
+
+				// Get the Stage information
+				Stage window = (Stage) toolGrade.getScene().getWindow();
+				window.setScene(nextScene);
+				window.show();
+			});
+			
+
+		});
+
 	}
 
 	public void setLecturerAndClient(Users lecturer, ChatClient client) {
