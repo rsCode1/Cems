@@ -125,11 +125,7 @@ public class EchoServer extends AbstractServer {
     	            String column2Value = resultSet.getString("courseName");
     	            String column3Value = String.valueOf(resultSet.getInt("grade"));
     	            String stat=resultSet.getString("status");
-<<<<<<< HEAD
-    	            if (stat.equals("pending")) column3Value="---";
-=======
     	            if (!stat.equals("approved")) column3Value="-/-";
->>>>>>> 727ec7c (fixed few things)
     	            studentGradesInfo.add(new StudentData(column2Value,column3Value));
     	        }
 				Response response = new Response("GetStudentGrades", studentGradesInfo);
