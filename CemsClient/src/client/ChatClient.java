@@ -90,14 +90,7 @@ public class ChatClient extends AbstractClient
   }
    
        
-       
   
- /*  else if(msg instanceof DownloadManualExaminController ) {
-	  DownloadManualExaminController finfo=   ( DownloadManualExaminController) msg;
-	  stdManController.setDownloadFile(finfo);
-  }*/
-  
-
   private void getExam(Test test){
     try {
 		  takeExamController.ShowStudentEnterIdScreen(test);
