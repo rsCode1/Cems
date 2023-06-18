@@ -63,6 +63,18 @@ public class LecturerStatisticsController implements Initializable {
 	private TextField gpa;
 	@FXML
 	private TextField median;
+	@FXML
+	private Text toolCreateExams;
+
+	@FXML
+	private Text toolGrade;
+
+	@FXML
+	private Text toolStatistics;
+
+
+	@FXML
+	private Text toolWriteQuestions;
 
 	@FXML
 	void viewStats(ActionEvent event) {
@@ -101,6 +113,30 @@ public class LecturerStatisticsController implements Initializable {
 		sComments.setCellValueFactory(new PropertyValueFactory<Exam, String>("studentComments"));
 		testTime.setCellValueFactory(new PropertyValueFactory<Exam, Integer>("testTime"));
 
+		toolWriteQuestions.setOnMouseClicked(e -> {
+			Platform.runLater(() -> {
+				questionTool();
+			});
+			
+		});
+		toolCreateExams.setOnMouseClicked(e -> {
+			Platform.runLater(() -> {
+				ExamsTool();
+			});
+			
+		});
+
+		toolGrade.setOnMouseClicked(e -> {
+			Platform.runLater(() -> {
+				GradeTool();
+			});
+		});
+		toolStatistics.setOnMouseClicked(e -> {
+			Platform.runLater(() -> {
+				StatisticsTool();
+			});
+			
+		});
 	}
 
 	public void setExamsTable(ArrayList<Exam> exam) {
@@ -208,5 +244,109 @@ public class LecturerStatisticsController implements Initializable {
 			MEDIAN = gradesArr.get(medianIndex).getGrade();
 		}
 	}
+	// update all toolsBar
+		private void questionTool() {
+
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/write_question.fxml")); // specify
+
+			Parent parent = null;
+			try {
+				parent = loader.load();
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			Scene nextScene = new Scene(parent);
+
+			// Get the new scene's controller and pass the ChatClient instance to it
+			writeQuestionController controller = loader.getController();
+			controller.setClientAndLecturer(this.client, lecturer);
+			client.setController(controller);
+
+			// Get the Stage information
+			Stage window = (Stage) toolGrade.getScene().getWindow();
+			window.setScene(nextScene);
+			window.show();
+
+		}
+		private void GradeTool() {
+
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/lecturerApproval.fxml")); // specify
+
+			Parent parent = null;
+			try {
+				parent = loader.load();
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			Scene nextScene = new Scene(parent);
+
+			// Get the new scene's controller and pass the ChatClient instance to it
+			LecturerApprovalController controller = loader.getController();
+			controller.setClientAndLecturer(this.client, lecturer);
+			controller.getGrades();
+			client.setController(controller);
+
+			// Get the Stage information
+			Stage window = (Stage) toolGrade.getScene().getWindow();
+			window.setScene(nextScene);
+			window.show();
+
+		}
+		private void ExamsTool() {
+
+
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/create_exam.fxml")); // specify
+
+				Parent parent = null;
+				try {
+					parent = loader.load();
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+				Scene nextScene = new Scene(parent);
+
+				// Get the new scene's controller and pass the ChatClient instance to it
+				createExamController controller = loader.getController();
+				controller.setClientAndLecturer(this.client, lecturer);
+				client.setController(controller);
+
+				// Get the Stage information
+				Stage window = (Stage) toolGrade.getScene().getWindow();
+				window.setScene(nextScene);
+				window.show();
+		}
+
+		private void StatisticsTool() {
+			Platform.runLater(() -> {
+
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/lecturerStatistics.fxml")); // specify
+
+				Parent parent = null;
+				try {
+					parent = loader.load();
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+				Scene nextScene = new Scene(parent);
+
+				// Get the new scene's controller and pass the ChatClient instance to it
+				LecturerStatisticsController controller = loader.getController();
+				controller.setClientAndLecturer(this.client, lecturer);
+				controller.getExamsTable();
+				controller.getGrades();
+				client.setController(controller);
+
+				// Get the Stage information
+				Stage window = (Stage) toolGrade.getScene().getWindow();
+				window.setScene(nextScene);
+				window.show();
+			});
+		}
+		
+		// end toolsBar
 
 }
