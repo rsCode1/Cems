@@ -164,8 +164,8 @@ public class ServerCommandsStudent {
 			        	cheated=1; //if cheated=1 then there is cheating in the exam
 			        }
 			        String insertQuery = "INSERT INTO `cems`.`closed_exams` " +
-		                     "(`exam_id`, `code`, `test_time`, `date_start`, `date_end`, `cheat`, `students_number`) " +
-		                     "VALUES ("+ testId +", '"+ code +"', '"+ duration + "', '"+ DateExamStarted +"', '"+DateExamEnded +"', '"+ cheated +"', '"+ studentsnumber + "');";
+		                     "(`exam_id`, `code`, `test_time`, `date_start`, `date_end`, `cheat`, `students_number`, `lecturer_id`) " +
+		                     "VALUES ("+ testId +", '"+ code +"', '"+ duration + "', '"+ DateExamStarted +"', '"+DateExamEnded +"', '"+ cheated +"', '"+ studentsnumber + "', '" + answersFile.getStudentInTest().getLecturerId() +"');";
 			        stmt8 = conn.createStatement();
 					stmt8.executeUpdate(insertQuery);
 				}
@@ -377,8 +377,8 @@ public class ServerCommandsStudent {
 			        	cheated=1; //if cheated=1 then there is cheating in the exam
 			        }
 			        String insertQuery = "INSERT INTO `cems`.`closed_exams` " +
-		                     "(`exam_id`, `code`, `test_time`, `date_start`, `date_end`, `cheat`, `students_number`) " +
-		                     "VALUES ("+ testId +", '"+ code +"', '"+ duration + "', '"+ DateExamStarted +"', '"+DateExamEnded +"', '"+ cheated +"', '"+ studentsnumber + "');";
+		                     "(`exam_id`, `code`, `test_time`, `date_start`, `date_end`, `cheat`, `students_number` , `lecturer_id`) " +
+		                     "VALUES ("+ testId +", '"+ code +"', '"+ duration + "', '"+ DateExamStarted +"', '"+DateExamEnded +"', '"+ cheated +"', '"+ studentsnumber + "' , '" + studentInTest.getLecturerId() + "');";
 			        stmt8 = conn.createStatement();
 					stmt8.executeUpdate(insertQuery);
 				}
