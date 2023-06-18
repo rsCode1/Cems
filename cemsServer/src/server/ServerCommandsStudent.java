@@ -84,7 +84,7 @@ public class ServerCommandsStudent {
 		try {
 
 			boolean Submitted = true;
-			String status = "Entered manualy but not Submitted.";
+			String status = "Not Submitted- manualy";
 			if (answersFile.getMyfile() == null)
 				Submitted = false;
 			if (Submitted) {
@@ -94,7 +94,7 @@ public class ServerCommandsStudent {
 				BufferedOutputStream bis = new BufferedOutputStream(fis);
 				bis.write(answersFile.getMyfile().getMybytearray(), 0, answersFile.getMyfile().getSize());
 				bis.close();
-				status = "Submitted Manualy, Manual check needed.";
+				status = "Submitted- Manualy";
 			}
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
 					"Aa123456");

@@ -138,6 +138,9 @@ public class ChatClient extends AbstractClient
 				case "changeGradeSuccess":
 					lecturerApprovalController.changeGradeSuccess();
 					break;
+				case "requestTimeSuccess":
+					TimeRequestController.requestTimeSuccess();
+					break;
 				case "GetExam":
 					getExam((Test) response.getResponseParam());
 					break;

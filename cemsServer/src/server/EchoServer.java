@@ -42,6 +42,7 @@ import logic.Question;
 import logic.MyFile;
 import logic.InTestQuestion;
 import logic.Request;
+import logic.RequestTime;
 import logic.Response;
 import logic.StudentInTest;
 import logic.Test;
@@ -124,6 +125,10 @@ public class EchoServer extends AbstractServer {
 				case "changeGrade":
 					lecturerCommands.changeGrade(client, (Exam) request.getRequestParam());
 					break;
+				case "RequestTime":
+					lecturerCommands.requestTime(client, (RequestTime) request.getRequestParam());
+					break;
+
 				case "GetExam":
 					serverCommandsStudent.getExam((TestCode) request.getRequestParam(), client);
 					break;
@@ -157,6 +162,7 @@ public class EchoServer extends AbstractServer {
 		Response response = new Response("closeExam", exam.getExamId());
 		try {
 			this.sendToAllClients(response);
+			Thread.sleep(3000);
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
 					"Aa123456");
 			String command1 = "DELETE FROM cems.open_exams WHERE exam_id = ?;";

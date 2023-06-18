@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import client.ChatClient;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -88,9 +89,10 @@ public class StudentHistoryController {
 	 * method the sets up the table view in the page, gets from the server all the grade data
 	 * of a student and organized it in the table
 	 */
-    public void viewPage() {
-    	try {
-    		client.openConnection();
+     public void viewPage() {
+    	
+    	
+    		Platform.runLater(() -> {
 		     //System.out.println("client is not connected");
 				 ObservableList<StudentData> odata= FXCollections.observableArrayList();
 		    	  DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yy");  
@@ -103,12 +105,10 @@ public class StudentHistoryController {
 				  }
 		    	  TestTableView.setItems(odata);
 		    	  CalculateGPA();
+    		 });
 		    	     
-			}
-		 catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			
+		
     	 
     }
     
