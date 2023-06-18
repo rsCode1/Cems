@@ -144,7 +144,7 @@ public class StudentPageController {
     		if (client.isConnected()) {
 			client.sendToServer(new Request("GetStudentGrades", student.getId()));}
 			try {
-				Thread.sleep(70);
+				Thread.sleep(150 );
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
