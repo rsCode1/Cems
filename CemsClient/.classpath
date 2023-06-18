@@ -6,7 +6,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lib/charm-glisten-6.2.3.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CemsShared"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/OCSF"/>
 	<classpathentry kind="output" path="bin"/>

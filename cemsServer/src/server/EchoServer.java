@@ -373,7 +373,7 @@ public class EchoServer extends AbstractServer {
 
 						Statement st = conn.createStatement();
 						int updateStmt = st.executeUpdate(
-								String.format("UPDATE exams SET time = time + %d WHERE exam_id = %s", extraTime,
+								String.format("UPDATE open_exams SET test_time = test_time + %d WHERE exam_id = %s", extraTime,
 										examID));
 						Statement statment = conn.createStatement();
 						int rowsAffected = statment
