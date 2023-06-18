@@ -11,6 +11,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import logic.AddedTime;
@@ -95,16 +97,15 @@ public class ServerCommandsStudent {
 				bis.write(answersFile.getMyfile().getMybytearray(), 0, answersFile.getMyfile().getSize());
 				bis.close();
 				status = "Submitted- Manualy";
-			}
+			}//answersFile.getStudentInTest()
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
 					"Aa123456");
-			Statement stmt2, stmt3, stmt4, stmt5;
-			String str2 = "INSERT INTO `cems`.`grades` (`examId`, `studentId`, `courseID`,`lecturerID`, `courseName`, `status`)";
-			str2 += " VALUES ('" + answersFile.getStudentInTest().getTestId() + "', '"
-					+ answersFile.getStudentInTest().getStudentId() + "', '"
-					+ answersFile.getStudentInTest().getCourseId() + "',";
-			str2 += " '" + answersFile.getStudentInTest().getLecturerId() + "', '"
-					+ answersFile.getStudentInTest().getCourseName() + "','" + status + "');";
+			Statement stmt2, stmt3, stmt4, stmt5,stmt6,stmt7,stmt8;
+			String str2 = "INSERT INTO `cems`.`grades` (`examId`, `studentId`, `courseID`, `grade`, `lecturerID`, `courseName`, `status`)";
+			str2 += " VALUES ('" + answersFile.getStudentInTest().getTestId() + "', '" + answersFile.getStudentInTest().getStudentId() + "', '"
+					+ answersFile.getStudentInTest().getCourseId() + "', '" + answersFile.getStudentInTest().getScore();
+			str2 += "', '" + answersFile.getStudentInTest().getLecturerId() + "', '" + answersFile.getStudentInTest().getCourseName() + "','" + "pending"
+					+ "');";
 			stmt2 = conn.createStatement();
 			stmt2.executeUpdate(str2);
 			String str3 = "UPDATE `cems`.`student_inexam` SET `submitted` = '1' WHERE (`student_id` ="
@@ -117,13 +118,56 @@ public class ServerCommandsStudent {
 			str4 += "(SELECT COUNT(*) FROM cems.student_inexam WHERE exam_id =" + testId
 					+ "AND submitted = 1) AS submitted_rows;";
 			stmt4 = conn.createStatement();
-			ResultSet rs;
+			ResultSet rs,rs2,rs3;
 			rs = stmt4.executeQuery(str4);
 			if (rs.next()) {
 				if (rs.getInt("total_rows") == rs.getInt("submitted_rows")) {
+					int studentsnumber= rs.getInt("total_rows"); //number of students who did the exam
+					String str6= "SELECT test_time,code FROM cems.open_exams where exam_id=" +testId   +" ;";
+					stmt6= conn.createStatement();
+					rs2=stmt6.executeQuery(str6);
+					rs2.next();
+					int duration=rs2.getInt("test_time");//test duration
+					int code=rs2.getInt("code");//test code
+					rs2.close();
 					String str5 = "DELETE FROM cems.open_exams where exam_id =" + answersFile.getTestId() + " ;";
 					stmt5 = conn.createStatement();
 					stmt5.executeUpdate(str5);
+					LocalDateTime now = LocalDateTime.now();
+			        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy HH:mm");
+			        String DateExamEnded = now.format(formatter);//date end
+			        LocalDateTime before = LocalDateTime.now().minusMinutes(duration);
+			        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("dd/M/yyyy HH:mm");
+			        String DateExamStarted = before.format(formatter2); //date start
+			       //this query returns the number of ques id's in test where 70% of students who did the exam 
+			       //answered the same wrong answer, so if there is at least one ques id 
+			       //there's a big chance of cheating 
+			        String query = "SELECT COUNT(*) AS numRowsReturned " +
+			        	    "FROM ( " +
+			        	    "    SELECT quesId, answerNum, COUNT(*) AS answerCount, (SELECT COUNT(DISTINCT studentId) FROM students_answers WHERE examId ="+ testId +") AS totalStudents " +
+			        	    "    FROM students_answers " +
+			        	    "    WHERE examId ="+ testId +"AND answerNum <> correctAnswer " +
+			        	    "    GROUP BY quesId, answerNum " +
+			        	    "    HAVING answerCount >= 0.7 * totalStudents " +
+			        	    ") AS subquery;";
+			        stmt7=conn.createStatement();
+			        rs3=stmt7.executeQuery(query);
+			        int quesCheated =0;
+			        if (rs3.next()) {
+			        	quesCheated=rs3.getInt("numRowsReturned");
+			        }
+			        rs3.close();
+			        int cheated=0;
+			        //if 20% of questions are "Cheated" then cheated is assured
+			        double percentage = (double) quesCheated / answersFile.getStudentInTest().getQesSize() * 100;
+			        if (percentage >= 35 & studentsnumber>1 & answersFile.getStudentInTest().getQesSize() >2) {
+			        	cheated=1; //if cheated=1 then there is cheating in the exam
+			        }
+			        String insertQuery = "INSERT INTO `cems`.`closed_exams` " +
+		                     "(`exam_id`, `code`, `test_time`, `date_start`, `date_end`, `cheat`, `students_number`) " +
+		                     "VALUES ("+ testId +", '"+ code +"', '"+ duration + "', '"+ DateExamStarted +"', '"+DateExamEnded +"', '"+ cheated +"', '"+ studentsnumber + "');";
+			        stmt8 = conn.createStatement();
+					stmt8.executeUpdate(insertQuery);
 				}
 			}
 			rs.close();
@@ -253,7 +297,7 @@ public class ServerCommandsStudent {
 	}
 
 	public void submitTest(StudentInTest studentInTest, ConnectionToClient client) {
-		Statement stmt, stmt2, stmt3, stmt4, stmt5;
+		Statement stmt, stmt2, stmt3, stmt4, stmt5,stmt6,stmt7,stmt8;
 		String str;
 		String studentId = '"' + String.valueOf(studentInTest.getStudentId()) + '"';
 		String testId = '"' + String.valueOf(studentInTest.getTestId()) + '"';
@@ -265,8 +309,9 @@ public class ServerCommandsStudent {
 			for (int i = 0; i < studentInTest.getQesSize(); i++) {
 				String answer = '"' + String.valueOf(studentInTest.getAnswer(i)) + '"';
 				String quesId = '"' + String.valueOf(studentInTest.getQuesIdArr()[i]) + '"';
-				str = "INSERT INTO `cems`.`students_answers` (`studentId`, `examId`, `courseName`,`quesId`, `answerNum`) ";
-				str += "VALUES (" + studentId + ',' + testId + ',' + courseName + ',' + quesId + ',' + answer + ");";
+				String correctAns = '"' + String.valueOf(studentInTest.getTest().getqLst().get(i).getcAns()) + '"';
+				str = "INSERT INTO `cems`.`students_answers` (`studentId`, `examId`, `courseName`,`quesId`, `answerNum`, `correctAnswer`) ";
+				str += "VALUES (" + studentId + ',' + testId + ',' + courseName + ',' + quesId + ',' + answer + ',' + correctAns + ");";
 				stmt.executeUpdate(str);
 				str = "";
 			}
@@ -286,16 +331,60 @@ public class ServerCommandsStudent {
 			str4 += "(SELECT COUNT(*) FROM cems.student_inexam WHERE exam_id =" + testId
 					+ "AND submitted = 1) AS submitted_rows;";
 			stmt4 = conn.createStatement();
-			ResultSet rs;
+			ResultSet rs,rs2,rs3;
 			rs = stmt4.executeQuery(str4);
 			if (rs.next()) {
 				if (rs.getInt("total_rows") == rs.getInt("submitted_rows")) {
+					int studentsnumber= rs.getInt("total_rows"); //number of students who did the exam
+					String str6= "SELECT test_time,code FROM cems.open_exams where exam_id=" +testId   +" ;";
+					stmt6= conn.createStatement();
+					rs2=stmt6.executeQuery(str6);
+					rs2.next();
+					int duration=rs2.getInt("test_time");//test duration
+					int code=rs2.getInt("code");//test code
+					rs2.close();
 					String str5 = "DELETE FROM cems.open_exams where exam_id =" + testId + ";";
 					stmt5 = conn.createStatement();
 					stmt5.executeUpdate(str5);
+					LocalDateTime now = LocalDateTime.now();
+			        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy HH:mm");
+			        String DateExamEnded = now.format(formatter);//date end
+			        LocalDateTime before = LocalDateTime.now().minusMinutes(duration);
+			        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("dd/M/yyyy HH:mm");
+			        String DateExamStarted = before.format(formatter2); //date start
+			       //this query returns the number of ques id's in test where 70% of students who did the exam 
+			       //answered the same wrong answer, so if there is at least one ques id 
+			       //there's a big chance of cheating 
+			        String query = "SELECT COUNT(*) AS numRowsReturned " +
+			        	    "FROM ( " +
+			        	    "    SELECT quesId, answerNum, COUNT(*) AS answerCount, (SELECT COUNT(DISTINCT studentId) FROM students_answers WHERE examId ="+ testId +") AS totalStudents " +
+			        	    "    FROM students_answers " +
+			        	    "    WHERE examId ="+ testId +"AND answerNum <> correctAnswer " +
+			        	    "    GROUP BY quesId, answerNum " +
+			        	    "    HAVING answerCount >= 0.7 * totalStudents " +
+			        	    ") AS subquery;";
+			        stmt7=conn.createStatement();
+			        rs3=stmt7.executeQuery(query);
+			        int quesCheated =0;
+			        if (rs3.next()) {
+			        	quesCheated=rs3.getInt("numRowsReturned");
+			        }
+			        rs3.close();
+			        int cheated=0;
+			        //if 20% of questions are "Cheated" then cheated is assured
+			        double percentage = (double) quesCheated / studentInTest.getQesSize() * 100;
+			        if (percentage >= 35 & studentsnumber>1 & studentInTest.getQesSize() >2) {
+			        	cheated=1; //if cheated=1 then there is cheating in the exam
+			        }
+			        String insertQuery = "INSERT INTO `cems`.`closed_exams` " +
+		                     "(`exam_id`, `code`, `test_time`, `date_start`, `date_end`, `cheat`, `students_number`) " +
+		                     "VALUES ("+ testId +", '"+ code +"', '"+ duration + "', '"+ DateExamStarted +"', '"+DateExamEnded +"', '"+ cheated +"', '"+ studentsnumber + "');";
+			        stmt8 = conn.createStatement();
+					stmt8.executeUpdate(insertQuery);
 				}
 			}
 			rs.close();
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

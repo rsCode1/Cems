@@ -70,6 +70,7 @@ public class StudentManualTestController {
 			 quesId[i]=test.getqLst().get(i).getQuesId();
 		 }
 		 this.studentInTest.setQuesId(quesId);
+		 this.studentInTest.setTest(test);
 	 }
     public AddedTime getAdded() {
 		return added;
