@@ -116,7 +116,10 @@ public class ChatClient extends AbstractClient
 					break;
 				case "getExamsByLecturer":
 					ArrayList<Exam> examsArr = (ArrayList<Exam>) response.getResponseParam();
-					startExamController.setExamsTable(examsArr);
+					if (startExamController!=null)
+						startExamController.setExamsTable(examsArr);
+					if (lecturerStatisticsController!=null)
+						lecturerStatisticsController.setExamsTable(examsArr);
 					break;
 				case "getOngoingExams":
 					ArrayList<Exam> ongoingExamsArr = (ArrayList<Exam>) response.getResponseParam();
@@ -130,7 +133,10 @@ public class ChatClient extends AbstractClient
 					break;
 				case "getGrades":
 					ArrayList<Exam> gradesArr = (ArrayList<Exam>) response.getResponseParam();
-					lecturerApprovalController.setGradesTable(gradesArr);
+					if (lecturerApprovalController!=null)
+						lecturerApprovalController.setGradesTable(gradesArr);
+					if (lecturerStatisticsController!=null)
+						lecturerStatisticsController.setGradesArr(gradesArr);
 					break;
 				case "approveGradeSuccess":
 					lecturerApprovalController.approveGradeSuccess();

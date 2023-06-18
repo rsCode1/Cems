@@ -144,6 +144,8 @@ public class LecturerPageController implements Initializable {
 	}
 
 	private void StatisticsTool() {
+		Platform.runLater(() -> {
+
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/lecturerStatistics.fxml")); // specify
 
 		Parent parent = null;
@@ -158,14 +160,15 @@ public class LecturerPageController implements Initializable {
 // Get the new scene's controller and pass the ChatClient instance to it
 		LecturerStatisticsController controller = loader.getController();
 		controller.setClientAndLecturer(this.client, lecturer);
-		//controller.getStatistics();
+		controller.getExamsTable();
+		controller.getGrades();
 		client.setController(controller);
 
 // Get the Stage information
 		Stage window = (Stage) toolGrade.getScene().getWindow();
 		window.setScene(nextScene);
 		window.show();
-
+		});
 	}
 
 	@FXML

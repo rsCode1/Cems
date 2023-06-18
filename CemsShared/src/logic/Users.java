@@ -11,6 +11,7 @@ public class Users implements Serializable {
 	private String  password;
 	private int isLogged ;
 	private int role ;
+	int flag=0;
 
 	public Users (int id, String firstName, String lastName, String userName, String password, int isLogged, int role) {
 		super();
@@ -73,6 +74,12 @@ public class Users implements Serializable {
 
 	public int getId() {
 		return id;
+	}
+	public void setFlag(int flag) {
+		this.flag = flag;
+	}
+	public int getFlag() {
+		return flag;
 	}
 
 
