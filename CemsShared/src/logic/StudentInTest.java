@@ -12,7 +12,13 @@ public class StudentInTest implements Serializable {
 	private int [] quesIdArr;
 	private int lecturerId;
 	private int courseId;
-	
+    private Test test;
+    public void setTest (Test test) {
+    	this.test=test;
+    }
+    public Test getTest() {
+    	return this.test;
+    }
 	public int[] getQuesIdArr() {
 		return quesIdArr;
 	}

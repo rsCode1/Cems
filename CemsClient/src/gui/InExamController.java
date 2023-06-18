@@ -61,6 +61,7 @@ public class InExamController {
 			 quesId[i]=test.getqLst().get(i).getQuesId();
 		 }
 		 this.studentInTest.setQuesId(quesId);
+		 this.studentInTest.setTest(test);
 	 }
 	
 	/*public void setTest(Test test){
