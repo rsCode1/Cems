@@ -325,6 +325,7 @@ public class LecturerPageController implements Initializable {
 		// Get the new scene's controller and pass the ChatClient instance to it
 		TimeRequestController controller = loader.getController();
 		controller.setClientAndLecturer(this.client, lecturer);
+		controller.setExam(exam);
 		client.setController(controller);
 		// Get the Stage information
 		Stage window = (Stage) TimeRequestBtn.getScene().getWindow();

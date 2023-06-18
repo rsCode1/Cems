@@ -11,11 +11,32 @@ import java.util.ArrayList;
 
 import logic.Exam;
 import logic.Question;
+import logic.RequestTime;
 import logic.Response;
 import logic.Users;
 import ocsf.server.ConnectionToClient;
 
 public class ServerCommandsLecturer {
+
+    public void requestTime(ConnectionToClient client, RequestTime requestTime) {
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+                    "Aa123456");
+            System.out.println("SQL connection succeed");
+            String command = "INSERT INTO requests (examID,RequestedBy,Reason,extraTime) VALUES (?,?,?,?)";
+            PreparedStatement stmt = conn.prepareStatement(command);
+            stmt.setString(1, requestTime.getExamID());
+            stmt.setString(2, requestTime.getRequestedBy());
+            stmt.setString(3, requestTime.getReason());
+            stmt.setInt(4, requestTime.getExtraTime());
+            stmt.executeUpdate();
+            Response response = new Response("requestTimeSuccess", null);
+            client.sendToClient(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void changeGrade(ConnectionToClient client, Exam exam) {
         try {
