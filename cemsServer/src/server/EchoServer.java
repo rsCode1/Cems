@@ -157,6 +157,7 @@ public class EchoServer extends AbstractServer {
 		Response response = new Response("closeExam", exam.getExamId());
 		try {
 			this.sendToAllClients(response);
+			Thread.sleep(3000);
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
 					"Aa123456");
 			String command1 = "DELETE FROM cems.open_exams WHERE exam_id = ?;";
