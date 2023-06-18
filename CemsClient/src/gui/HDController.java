@@ -47,7 +47,7 @@ import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import logic.Exam;
+import logic.ExamHD;
 import logic.Grades;
 import logic.LogInInfo;
 import logic.Request;
