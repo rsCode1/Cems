@@ -2,7 +2,7 @@ package logic;
 
 import java.io.Serializable;
 
-public class Exam implements Serializable {
+public class ExamHD implements Serializable {
 String examID;
 String writtenBy;
 String testSubject;
@@ -10,7 +10,7 @@ String courseName;
 String examNumber;
 int time;
 
-public Exam(String examID, String writtenBy, String testSubject, String courseName, String examNumber){
+public ExamHD(String examID, String writtenBy, String testSubject, String courseName, String examNumber){
     this.examID = testSubject+courseName+examNumber;//"020306"
     this.writtenBy = writtenBy;
     this.testSubject = testSubject;//"02"
