@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="587.0" prefWidth="860.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.pastExamsController">
+   <children>
+      <Text layoutX="353.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="past exams" wrappingWidth="118.921875" />
+      <TableView fx:id="pastExamsTable" layoutX="78.0" layoutY="109.0" prefHeight="369.0" prefWidth="734.0">
+        <columns>
+          <TableColumn fx:id="examId" prefWidth="75.0" text="exam id" />
+          <TableColumn fx:id="code" prefWidth="59.20001220703125" text="code" />
+            <TableColumn fx:id="testTime" prefWidth="76.800048828125" text="test time" />
+            <TableColumn fx:id="dateStart" prefWidth="183.199951171875" text="date start" />
+            <TableColumn fx:id="dateEnd" prefWidth="148.80007934570312" text="date end" />
+            <TableColumn fx:id="cheat" prefWidth="75.20001220703125" text="cheat" />
+            <TableColumn fx:id="studentsNumber" prefWidth="116.0" text="students number" />
+        </columns>
+      </TableView>
+      <Button fx:id="backBtn" layoutX="47.0" layoutY="503.0" mnemonicParsing="false" onAction="#backToMainScreen" text="back" />
+      <Text layoutX="152.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <Label layoutX="78.0" layoutY="82.0" text="view the past exams and see if someone cheated" />
+   </children>
+</Pane>

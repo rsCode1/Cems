@@ -18,6 +18,38 @@ import ocsf.server.ConnectionToClient;
 
 public class ServerCommandsLecturer {
 
+    public void getPastExams(ConnectionToClient client, Users lecturer) {
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+                    "Aa123456");
+            System.out.println("SQL connection succeed Ongoing Exams!");
+            // create Table, if exist skip
+            String command1 = "SELECT exam_id, code, test_time ,date_start,date_end,cheat,students_number "
+                    + "FROM closed_exams "
+                    + "WHERE closed_exams.lecturer_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(command1);
+            stmt.setInt(1, lecturer.getId());
+
+            ResultSet rs = stmt.executeQuery();
+            ArrayList<Exam> exams = new ArrayList<>();
+            while (rs.next()) {
+                int examId = rs.getInt("exam_id");
+                int code = rs.getInt("code");
+                int testTime = rs.getInt("test_time");
+                String dateStart = rs.getString("date_start");
+                String dateEnd = rs.getString("date_end");
+                int cheat = rs.getInt("cheat");
+                int studentsNumber = rs.getInt("students_number");
+                Exam exam = new Exam(examId, code, testTime, dateStart, dateEnd, cheat, studentsNumber);
+                exams.add(exam);
+            }
+            Response response = new Response("getPastExams", exams);
+            client.sendToClient(response);
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void requestTime(ConnectionToClient client, RequestTime requestTime) {
         try {
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",

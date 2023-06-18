@@ -17,6 +17,7 @@ import gui.ReviewExamController;
 import gui.StartExamController;
 import gui.writeQuestionController;
 import gui.createExamController;
+import gui.pastExamsController;
 import gui.TimeRequestController;
 import gui.StudentHistoryController;
 import gui.StudentManualTestController;
@@ -61,6 +62,7 @@ public class ChatClient extends AbstractClient
 	private InExamController inExamController;
 	private StudentHistoryController studentHistoryController;
 	private LecturerStatisticsController lecturerStatisticsController;
+	private pastExamsController pastExamsController;
 	private String ip = "";
 	private int portServer;
 	// Instance variables **********************************************
@@ -147,6 +149,10 @@ public class ChatClient extends AbstractClient
 				case "requestTimeSuccess":
 					TimeRequestController.requestTimeSuccess();
 					break;
+				case "getPastExams":
+					ArrayList<Exam> pastExamsArr = (ArrayList<Exam>) response.getResponseParam();
+					pastExamsController.setExamsTable(pastExamsArr);
+					break;
 				case "GetExam":
 					getExam((Test) response.getResponseParam());
 					break;
@@ -222,6 +228,9 @@ public class ChatClient extends AbstractClient
 	}
 	public void setController(LecturerStatisticsController controller) {
 		this.lecturerStatisticsController = controller;
+	}
+	public void setController (pastExamsController controller) {
+		this.pastExamsController = controller;
 	}
 
 	/**

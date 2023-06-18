@@ -128,6 +128,9 @@ public class EchoServer extends AbstractServer {
 				case "RequestTime":
 					lecturerCommands.requestTime(client, (RequestTime) request.getRequestParam());
 					break;
+				case "getPastExams":
+					lecturerCommands.getPastExams(client, (Users) request.getRequestParam());
+					break;
 
 				case "GetExam":
 					serverCommandsStudent.getExam((TestCode) request.getRequestParam(), client);

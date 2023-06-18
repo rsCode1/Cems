@@ -98,7 +98,6 @@ public class LecturerPageController implements Initializable {
 			lecturerName.setText(lecturer.getFirstName() + " " + lecturer.getLastName());
 		});
 
-		
 		toolGrade.setOnMouseClicked(e -> {
 			Platform.runLater(() -> {
 				GradeTool();
@@ -109,8 +108,6 @@ public class LecturerPageController implements Initializable {
 				StatisticsTool();
 			});
 		});
-		
-		
 
 	}
 
@@ -128,51 +125,77 @@ public class LecturerPageController implements Initializable {
 		}
 		Scene nextScene = new Scene(parent);
 
-// Get the new scene's controller and pass the ChatClient instance to it
+		// Get the new scene's controller and pass the ChatClient instance to it
 		LecturerApprovalController controller = loader.getController();
 		controller.setClientAndLecturer(this.client, lecturer);
 		controller.getGrades();
 		client.setController(controller);
 
-// Get the Stage information
+		// Get the Stage information
 		Stage window = (Stage) toolGrade.getScene().getWindow();
 		window.setScene(nextScene);
 		window.show();
-
-
 
 	}
 
 	private void StatisticsTool() {
 		Platform.runLater(() -> {
 
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/lecturerStatistics.fxml")); // specify
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/lecturerStatistics.fxml")); // specify
 
-		Parent parent = null;
-		try {
-			parent = loader.load();
+			Parent parent = null;
+			try {
+				parent = loader.load();
 
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		Scene nextScene = new Scene(parent);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			Scene nextScene = new Scene(parent);
 
-// Get the new scene's controller and pass the ChatClient instance to it
-		LecturerStatisticsController controller = loader.getController();
-		controller.setClientAndLecturer(this.client, lecturer);
-		controller.getExamsTable();
-		controller.getGrades();
-		client.setController(controller);
+			// Get the new scene's controller and pass the ChatClient instance to it
+			LecturerStatisticsController controller = loader.getController();
+			controller.setClientAndLecturer(this.client, lecturer);
+			controller.getExamsTable();
+			controller.getGrades();
+			client.setController(controller);
 
-// Get the Stage information
-		Stage window = (Stage) toolGrade.getScene().getWindow();
-		window.setScene(nextScene);
-		window.show();
+			// Get the Stage information
+			Stage window = (Stage) toolGrade.getScene().getWindow();
+			window.setScene(nextScene);
+			window.show();
 		});
 	}
 
 	@FXML
-	void closeExam(ActionEvent event) {
+	public void pastExams(ActionEvent event) {
+		Platform.runLater(() -> {
+
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/pastExams.fxml")); // specify
+
+			Parent parent = null;
+			try {
+				parent = loader.load();
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			Scene nextScene = new Scene(parent);
+
+			// Get the new scene's controller and pass the ChatClient instance to it
+			pastExamsController controller = loader.getController();
+			controller.setClientAndLecturer(this.client, lecturer);
+			controller.getPastExams();
+			client.setController(controller);
+
+			// Get the Stage information
+			Stage window = (Stage) toolGrade.getScene().getWindow();
+			window.setScene(nextScene);
+			window.show();
+		});
+	}
+
+	@FXML
+	public void closeExam(ActionEvent event) {
 		Exam exam = ongoingExamsTable.getSelectionModel().getSelectedItem();
 		if (exam == null) {
 			Alert alert = new Alert(AlertType.ERROR);
