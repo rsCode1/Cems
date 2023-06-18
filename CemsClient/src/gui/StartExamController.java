@@ -148,11 +148,7 @@ public class StartExamController implements Initializable {
         window.show();
     }
 
-    @FXML
-    public void donothing(ArrayList<Exam> exam) {
-        System.out.println("worked should update start");
 
-    }
 
     public void startExamSuccess() {
         Platform.runLater(() -> {

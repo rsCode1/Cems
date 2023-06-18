@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane fx:id="lecturerStatistics" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="731.0" prefWidth="1067.0" style="-fx-background-color: #d8bfd8;" styleClass="b" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LecturerStatisticsController">
+   <children>
+      <ImageView fitHeight="758.0" fitWidth="1067.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/background.jpeg" />
+         </image>
+      </ImageView>
+      <ComboBox fx:id="coursesComboBox" layoutX="110.0" layoutY="156.0" prefHeight="25.0" prefWidth="212.0" promptText="Select Course" />
+      <Button fx:id="backBtn" layoutX="23.0" layoutY="682.0" mnemonicParsing="false" onAction="#backToMainScreen" prefHeight="35.0" prefWidth="74.0" text="back" />
+      <Text fill="#018679" layoutX="382.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lecturer Statistics" wrappingWidth="467.0">
+         <font>
+            <Font name="System Bold" size="39.0" />
+         </font>
+      </Text>
+      <TextField layoutX="272.0" layoutY="19.0" text="Home &gt; Statistics" />
+      <Button fx:id="showQuestionView" layoutX="339.0" layoutY="154.0" mnemonicParsing="false" onAction="#showStatistics" prefHeight="16.0" prefWidth="62.0" text="show" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <Text layoutX="773.0" layoutY="174.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <Label fx:id="errLabel" layoutX="233.0" layoutY="534.0" prefHeight="27.0" prefWidth="375.0" textFill="#e11616">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Label layoutX="48.0" layoutY="3.0" prefHeight="58.0" prefWidth="123.0" text="Cems" textFill="#00ffbd">
+         <font>
+            <Font name="Calibri Bold" size="50.0" />
+         </font>
+         <effect>
+            <DropShadow height="38.59" radius="18.795" spread="0.53" width="38.59">
+               <input>
+                  <InnerShadow height="191.25" radius="111.0625" width="255.0">
+                     <color>
+                        <Color green="0.02631578966975212" blue="0.01798245683312416" />
+                     </color>
+                  </InnerShadow>
+               </input>
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
+      </Label>
+      <Text fx:id="toolWriteQuestions" fill="#03573c" layoutX="525.0" layoutY="39.0" stroke="#02a894" strokeType="OUTSIDE" text="Write Questions">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="toolGrade" fill="#03573c" layoutX="875.0" layoutY="39.0" stroke="#02a894" strokeType="OUTSIDE" text="Grade">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="toolStatistics" fill="#03573c" layoutX="970.0" layoutY="39.0" stroke="#02a894" strokeType="OUTSIDE" text="Statistics">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="toolCreateExams" fill="#03573c" layoutX="710.0" layoutY="39.0" stroke="#02a894" strokeType="OUTSIDE" text="Create Exams">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <BarChart fx:id="barChartLec" layoutX="68.0" layoutY="221.0" prefHeight="326.0" prefWidth="660.0">
+         <xAxis>
+            <CategoryAxis side="BOTTOM" />
+         </xAxis>
+         <yAxis>
+            <NumberAxis side="LEFT" />
+         </yAxis>
+      </BarChart>
+      <Text layoutX="110.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="please select coruse:" />
+      <TextField fx:id="testNumLabel" layoutX="767.0" layoutY="264.0" />
+      <TextField fx:id="GPALable" layoutX="767.0" layoutY="332.0" />
+      <TextField fx:id="medianLabel" layoutX="767.0" layoutY="402.0" />
+      <TextField fx:id="standardLabel" layoutX="767.0" layoutY="477.0" />
+      <Text layoutX="767.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total tests:" />
+      <Text layoutX="767.0" layoutY="473.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Standard Deviation:" />
+      <Text layoutX="767.0" layoutY="397.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Median:" />
+      <Text layoutX="767.0" layoutY="328.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GPA:" />
+   </children>
+</Pane>

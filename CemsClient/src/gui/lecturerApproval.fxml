@@ -6,23 +6,79 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="593.0" prefWidth="905.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LecturerApprovalController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="731.0" prefWidth="1067.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LecturerApprovalController">
    <children>
-      <TableView fx:id="examsTable" layoutX="51.0" layoutY="58.0" prefHeight="286.0" prefWidth="808.0">
+      <ImageView fitHeight="758.0" fitWidth="1067.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/background.jpeg" />
+         </image>
+      </ImageView>
+      <TableView fx:id="examsTable" layoutX="53.0" layoutY="193.0" prefHeight="286.0" prefWidth="979.0">
         <columns>
-          <TableColumn fx:id="examId" prefWidth="91.19998931884766" text="Exam id" />
-          <TableColumn fx:id="studentId" prefWidth="169.59996032714844" text="Student id" />
-            <TableColumn fx:id="courseName" prefWidth="388.0" text="course name" />
-            <TableColumn fx:id="grade" prefWidth="147.20001220703125" text="grade" />
+          <TableColumn fx:id="examId" prefWidth="122.0" text="Exam id" />
+          <TableColumn fx:id="studentId" prefWidth="136.0" text="Student id" />
+            <TableColumn fx:id="courseName" prefWidth="436.0" text="course name" />
+            <TableColumn fx:id="grade" prefWidth="284.0" text="grade" />
         </columns>
       </TableView>
-      <Button fx:id="approveBtn" layoutX="86.0" layoutY="434.0" mnemonicParsing="false" onAction="#approveGrade" prefHeight="69.0" prefWidth="177.0" text="approve" />
-      <Button fx:id="changeBtn" layoutX="390.0" layoutY="460.0" mnemonicParsing="false" onAction="#changeGrade" prefHeight="69.0" prefWidth="177.0" text="change grade" />
-      <TextField fx:id="newGrade" layoutX="404.0" layoutY="428.0" promptText="Enter new grade" />
-      <TextArea fx:id="changeGradeReason" layoutX="581.0" layoutY="407.0" prefHeight="122.0" prefWidth="286.0" promptText="Enter reasong for chenge grade" />
-      <Button fx:id="backBtn" layoutX="51.0" layoutY="542.0" mnemonicParsing="false" onAction="#goBack" text="back" />
-      <Label fx:id="errLabel" layoutX="283.0" layoutY="361.0" prefHeight="34.0" prefWidth="318.0" text="Label" />
+      <Button fx:id="approveBtn" layoutX="855.0" layoutY="536.0" mnemonicParsing="false" onAction="#approveGrade" prefHeight="69.0" prefWidth="177.0" text="Approve grade" />
+      <Button fx:id="changeBtn" layoutX="360.0" layoutY="550.0" mnemonicParsing="false" onAction="#changeGrade" prefHeight="69.0" prefWidth="149.0" text="change grade" />
+      <TextField fx:id="newGrade" layoutX="359.0" layoutY="502.0" prefHeight="34.0" prefWidth="149.0" promptText="Enter new grade" />
+      <TextArea fx:id="changeGradeReason" layoutX="53.0" layoutY="502.0" prefHeight="115.0" prefWidth="286.0" promptText="Enter reasong for grade change" />
+      <Button fx:id="backBtn" layoutX="30.0" layoutY="668.0" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="68.0" text="back" />
+      <Label fx:id="errLabel" layoutX="543.0" layoutY="609.0" prefHeight="34.0" prefWidth="318.0" />
+      <Label layoutX="431.0" layoutY="108.0" prefHeight="58.0" prefWidth="225.0" text="Grade Tests" textFill="#018679">
+         <font>
+            <Font name="Calibri Bold" size="41.0" />
+         </font>
+      </Label>
+      <Label layoutX="48.0" layoutY="3.0" prefHeight="58.0" prefWidth="123.0" text="Cems" textFill="#00ffbd">
+         <font>
+            <Font name="Calibri Bold" size="50.0" />
+         </font>
+         <effect>
+            <DropShadow height="38.59" radius="18.795" spread="0.53" width="38.59">
+               <input>
+                  <InnerShadow height="191.25" radius="111.0625" width="255.0">
+                     <color>
+                        <Color green="0.02631578966975212" blue="0.01798245683312416" />
+                     </color>
+                  </InnerShadow>
+               </input>
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
+      </Label>
+      <Text fx:id="toolWriteQuestions" fill="#03573c" layoutX="525.0" layoutY="39.0" stroke="#02a894" strokeType="OUTSIDE" text="Write Questions">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="toolGrade" fill="#03573c" layoutX="875.0" layoutY="39.0" stroke="#02a894" strokeType="OUTSIDE" text="Grade">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="toolStatistics" fill="#03573c" layoutX="970.0" layoutY="39.0" stroke="#02a894" strokeType="OUTSIDE" text="Statistics">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="toolCreateExams" fill="#03573c" layoutX="710.0" layoutY="39.0" stroke="#02a894" strokeType="OUTSIDE" text="Create Exams">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Text>
    </children>
 </Pane>

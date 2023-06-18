@@ -10,6 +10,7 @@ import client.*;
 import gui.ConnectToServerScreenController;
 import gui.LecturerApprovalController;
 import gui.LecturerPageController;
+import gui.LecturerStatisticsController;
 import gui.InExamController;
 import gui.LoginScreenController;
 import gui.ReviewExamController;
@@ -59,6 +60,7 @@ public class ChatClient extends AbstractClient
 	private TakeExamController takeExamController;
 	private InExamController inExamController;
 	private StudentHistoryController studentHistoryController;
+	private LecturerStatisticsController lecturerStatisticsController;
 	private String ip = "";
 	private int portServer;
 	// Instance variables **********************************************
@@ -115,7 +117,6 @@ public class ChatClient extends AbstractClient
 				case "getExamsByLecturer":
 					ArrayList<Exam> examsArr = (ArrayList<Exam>) response.getResponseParam();
 					startExamController.setExamsTable(examsArr);
-					startExamController.donothing(examsArr);
 					break;
 				case "getOngoingExams":
 					ArrayList<Exam> ongoingExamsArr = (ArrayList<Exam>) response.getResponseParam();
@@ -209,6 +210,9 @@ public class ChatClient extends AbstractClient
 
 	public void setController(LecturerPageController controller) {
 		this.lecturerPageController = controller;
+	}
+	public void setController(LecturerStatisticsController controller) {
+		this.lecturerStatisticsController = controller;
 	}
 
 	/**
