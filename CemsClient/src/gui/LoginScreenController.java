@@ -59,6 +59,7 @@ public class LoginScreenController {
 			e.printStackTrace();
 		}
 	}
+
 	public void ShowUserWelcomeScreen(Users user) throws IOException {
 		Platform.runLater(() -> {
 			String Studentpath = "/gui/StudentPage.fxml";
@@ -79,7 +80,7 @@ public class LoginScreenController {
 					loader = new FXMLLoader(getClass().getResource(Lacturertpath));
 				}
 				if (user.getRole() == 2) {
-					loader = new FXMLLoader(getClass().getResource(HDpath));	
+					loader = new FXMLLoader(getClass().getResource(HDpath));
 				}
 				Parent root;
 				try {
@@ -96,17 +97,18 @@ public class LoginScreenController {
 
 					}
 					if (user.getRole() == 0) {
-						String welcomeMsg= "Welcome" +" "+ user.getFirstName() + " " + user.getLastName();
+						String welcomeMsg = "Welcome" + " " + user.getFirstName() + " " + user.getLastName();
 						studentController = loader.getController();
 						studentController.setStudentAndClient(user, client);
 						studentController.setWelcomeLabel(welcomeMsg);
 					}
-					if(user.getRole()==2) {
-						 hdccontroller=loader.getController();
-						 client.setController(hdccontroller);
+					if (user.getRole() == 2) {
+						hdccontroller = loader.getController();
 						hdccontroller.SetHeadOfDepartment(user, client);
 						hdccontroller.refreshTable1();
-						}
+						client.setController(hdccontroller);
+
+					}
 					window.setScene(new Scene(root));
 					// Center the stage on the screen
 					double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
@@ -123,6 +125,7 @@ public class LoginScreenController {
 			}
 		});
 	}
+
 	public LoginScreenController getController() {
 		return this;
 	}

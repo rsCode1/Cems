@@ -18,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="anchorpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="617.0" prefWidth="942.0" styleClass="background" stylesheets="@../../../CemsShared/src/Styles/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.HDController">
+<AnchorPane fx:id="anchorpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="617.0" prefWidth="942.0" styleClass="background" stylesheets="@../../../CemsShared/src/Styles/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.HDController">
    <children>
       <Label layoutX="261.0" layoutY="15.0" prefHeight="48.0" prefWidth="386.0" text="Welcome Head Of Departmant" AnchorPane.leftAnchor="261.0" AnchorPane.rightAnchor="295.0" AnchorPane.topAnchor="15.0">
          <font>
@@ -88,7 +88,7 @@
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font></Text>
-                        <Label layoutX="641.0" layoutY="32.0" text="Lectuer name:" />
+                        <Label layoutX="641.0" layoutY="32.0" text="Lecturer name:" />
                         <TextField fx:id="LectuerName" layoutX="737.0" layoutY="28.0" />
                         <VBox layoutY="121.0" prefHeight="200.0" prefWidth="279.0" spacing="10.0">
                            <children>

@@ -106,20 +106,15 @@ public class HDController implements Initializable {
 	@FXML
 	private TextField Median_LECTextArea1;
 
-	
-
 	@FXML
 	private TextField GPA_STUtextArea1;
 	@FXML
 	private TextField median_STUtextArea1;
-	
 
 	@FXML
 	private TextField GPA_GradestextArea1;
 	@FXML
 	private TextField Median_GradestextArea1;
-
-	
 
 	@FXML
 	private Label testlbl;
@@ -289,7 +284,7 @@ public class HDController implements Initializable {
 	private int StudentCount = 0;
 	private int LectuerCount = 0;
 	private int CourseCount = 0;
-	
+
 	/**
 	 * Data initialization on screens
 	 */
@@ -311,19 +306,6 @@ public class HDController implements Initializable {
 		ExtraTimeColumn.setCellValueFactory(new PropertyValueFactory<>("extraTime"));
 
 		ReasonColumn.setCellValueFactory(new PropertyValueFactory<>("reason"));
-
-		try {
-			client = new ChatClient("localhost", 5555, this);
-			client.openConnection();
-			if (client.isConnected()) {
-				testlbl.setText("connection succeeded");
-
-			} else {
-				System.out.println("Not connected to server.");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
 	}
 
@@ -370,10 +352,11 @@ public class HDController implements Initializable {
 	/**
 	 * The function updates the additional time for the test
 	 * after the department head approves the request
+	 * 
 	 * @param requestList ArrayList<RequestTime>
 	 * @return void
 	 */
-	
+
 	@FXML
 	public void UpdateRequestTime(ArrayList<RequestTime> requestList) {
 		Platform.runLater(() -> {
@@ -387,6 +370,7 @@ public class HDController implements Initializable {
 	 * The function is activated when the head of the department approves the time
 	 * request,
 	 * pops up a confirmation message and deletes the information from the DB
+	 * 
 	 * @param ActionEvent event
 	 */
 	@FXML
@@ -446,8 +430,10 @@ public class HDController implements Initializable {
 
 		refreshTable1();
 	}
+
 	/**
-	 * while pressing refresh table ,connect to server and get the current time requests,and put them in the table
+	 * while pressing refresh table ,connect to server and get the current time
+	 * requests,and put them in the table
 	 */
 	public void refreshTable1() {
 
@@ -470,6 +456,7 @@ public class HDController implements Initializable {
 	/**
 	 * The function pops a message on the screen when the
 	 * department head approves the request
+	 * 
 	 * @param String name that will be displayed in the poopup
 	 */
 	public void showpPopupApprove(String username) {
@@ -497,8 +484,9 @@ public class HDController implements Initializable {
 
 		});
 	}
+
 	/**
-	 * The function pops up a message on the screen that the request has 
+	 * The function pops up a message on the screen that the request has
 	 * been rejected as the head of the department clicks on rejecting a request
 	 */
 	public void showpPopupReject() {
@@ -522,119 +510,126 @@ public class HDController implements Initializable {
 
 		});
 	}
+
 	/**
 	 * Display the information in a histogram according to division into tenths
 	 * checks for input rror(empty fields)
+	 * 
 	 * @param ActionEvent event
-	 * send to server the request for the grades of the required info' and then this will activate another function that will divide the grades into tenths
-	 * using import__NAME__statisticstenths method
-	 * the function wll call correct function according to the fxid of the button that calls it
+	 *                    send to server the request for the grades of the required
+	 *                    info' and then this will activate another function that
+	 *                    will divide the grades into tenths
+	 *                    using import__NAME__statisticstenths method
+	 *                    the function wll call correct function according to the
+	 *                    fxid of the button that calls it
 	 */
 	@FXML
 	public void showtenths(ActionEvent event) {
 		System.out.println("showtenths");
-
-		try {
-			client.openConnection();
-			if (event.getSource() == showLecturertentsButton) {
-				if (LectuerID.getText().isEmpty()) {//error handeling
-					LectuerID.setStyle("-fx-border-color: rgb(255,0,0);-fx-border-width: 2px;");
-					LectuerID.setPromptText("please enter lecturer ID");
-					emptyLecturerIDLabel.setText("Please enter lecturer ID!");
-					emptyLecturerIDLabel.setStyle("-fx-background-color:#F24444;-fx-background-radius: 100px;");
-					emptyLecturerIDLabel.setVisible(true);
-				} else {
-					emptyLecturerIDLabel.setText("");//reset the style
-					emptyLecturerIDLabel.setStyle("-fx-background-color:#000000;-fx-background-radius: 100px;");
-					emptyLecturerIDLabel.setVisible(false);
-					LectuerID.setStyle("-fx-border-width: 0px;");
-					if (client.isConnected()) {
-						System.out.println("chose lecturer tenths");
-						client.sendToServer(new Request("SendLectuerIDtenth", LectuerID.getText()));
-						try {
-							Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+		Platform.runLater(() -> {
+			try {
+				client.openConnection();
+				if (event.getSource() == showLecturertentsButton) {
+					if (LectuerID.getText().isEmpty()) {// error handeling
+						LectuerID.setStyle("-fx-border-color: rgb(255,0,0);-fx-border-width: 2px;");
+						LectuerID.setPromptText("please enter lecturer ID");
+						emptyLecturerIDLabel.setText("Please enter lecturer ID!");
+						emptyLecturerIDLabel.setStyle("-fx-background-color:#F24444;-fx-background-radius: 100px;");
+						emptyLecturerIDLabel.setVisible(true);
 					} else {
-						System.out.println("Not connected to server.");
+						emptyLecturerIDLabel.setText("");// reset the style
+						emptyLecturerIDLabel.setStyle("-fx-background-color:#000000;-fx-background-radius: 100px;");
+						emptyLecturerIDLabel.setVisible(false);
+						LectuerID.setStyle("-fx-border-width: 0px;");
+						if (client.isConnected()) {
+							System.out.println("chose lecturer tenths");
+							client.sendToServer(new Request("SendLectuerIDtenth", LectuerID.getText()));
+							try {
+								Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						} else {
+							System.out.println("Not connected to server.");
+						}
 					}
 				}
-			}
 
-			if (event.getSource() == showCourseTenthsButton) {
-				if (ID_GradetextArea.getText().isEmpty()) {
+				if (event.getSource() == showCourseTenthsButton) {
+					if (ID_GradetextArea.getText().isEmpty()) {
 
-					ID_GradetextArea
-							.setStyle("-fx-border-color: rgb(255,0,0);-fx-border-width: 2px;");
-					ID_GradetextArea.setPromptText("please enter Course ID");
+						ID_GradetextArea
+								.setStyle("-fx-border-color: rgb(255,0,0);-fx-border-width: 2px;");
+						ID_GradetextArea.setPromptText("please enter Course ID");
 
-					emptyCourseIDLabel.setText("Please enter Course ID!");
-					emptyCourseIDLabel.setStyle("-fx-background-color:#F24444;-fx-background-radius: 100px;");
-					emptyCourseIDLabel.setVisible(true);
-
-				} else {
-					emptyCourseIDLabel.setText("");
-					emptyCourseIDLabel.setStyle("-fx-background-color:#000000;-fx-background-radius: 100px;");
-					emptyCourseIDLabel.setVisible(false);
-					ID_GradetextArea.setStyle("-fx-border-width: 0px;");
-
-					System.out.println("chose button correctly");
-					client.openConnection();
-					if (client.isConnected()) {
-						client.sendToServer(new Request("SendCourseIDtenth", ID_GradetextArea.getText()));
-						System.out.println("sent to server");
-						try {
-							Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					} else {
-						System.out.println("Not connected to server.");
-					}
-				}
-			}
-
-			if (event.getSource() == showStudentTenthsButton) {
-				if (ID_STUtextArea.getText().isEmpty()) {
-
-					ID_STUtextArea
-							.setStyle("-fx-border-color: rgb(255,0,0);-fx-border-width: 2px;");
-					ID_STUtextArea.setPromptText("please enter Student ID");
-					emptyStudentIDLabel.setText("Please enter Student ID!");
-					emptyStudentIDLabel.setStyle("-fx-background-color:#F24444;-fx-background-radius: 100px;");
-					emptyStudentIDLabel.setVisible(true);
-
-				} else {
-					emptyStudentIDLabel.setText("");
-					emptyStudentIDLabel.setStyle("-fx-background-color:#000000;-fx-background-radius: 100px;");
-					emptyStudentIDLabel.setVisible(false);
-					ID_STUtextArea.setStyle("-fx-border-width: 0px;");
-
-					if (client.isConnected()) {
-						client.sendToServer(new Request("SendStudentIDtenth", ID_STUtextArea.getText()));
-						try {
-							Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						emptyCourseIDLabel.setText("Please enter Course ID!");
+						emptyCourseIDLabel.setStyle("-fx-background-color:#F24444;-fx-background-radius: 100px;");
+						emptyCourseIDLabel.setVisible(true);
 
 					} else {
-						System.out.println("Not connected to server.");
+						emptyCourseIDLabel.setText("");
+						emptyCourseIDLabel.setStyle("-fx-background-color:#000000;-fx-background-radius: 100px;");
+						emptyCourseIDLabel.setVisible(false);
+						ID_GradetextArea.setStyle("-fx-border-width: 0px;");
 
+						System.out.println("chose button correctly");
+						client.openConnection();
+						if (client.isConnected()) {
+							client.sendToServer(new Request("SendCourseIDtenth", ID_GradetextArea.getText()));
+							System.out.println("sent to server");
+							try {
+								Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						} else {
+							System.out.println("Not connected to server.");
+						}
 					}
 				}
+
+				if (event.getSource() == showStudentTenthsButton) {
+					if (ID_STUtextArea.getText().isEmpty()) {
+
+						ID_STUtextArea
+								.setStyle("-fx-border-color: rgb(255,0,0);-fx-border-width: 2px;");
+						ID_STUtextArea.setPromptText("please enter Student ID");
+						emptyStudentIDLabel.setText("Please enter Student ID!");
+						emptyStudentIDLabel.setStyle("-fx-background-color:#F24444;-fx-background-radius: 100px;");
+						emptyStudentIDLabel.setVisible(true);
+
+					} else {
+						emptyStudentIDLabel.setText("");
+						emptyStudentIDLabel.setStyle("-fx-background-color:#000000;-fx-background-radius: 100px;");
+						emptyStudentIDLabel.setVisible(false);
+						ID_STUtextArea.setStyle("-fx-border-width: 0px;");
+
+						if (client.isConnected()) {
+							client.sendToServer(new Request("SendStudentIDtenth", ID_STUtextArea.getText()));
+							try {
+								Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
+						} else {
+							System.out.println("Not connected to server.");
+
+						}
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		});
 
 	}
+
 	/**
-	 * Delete all information from the course's information screen 
+	 * Delete all information from the course's information screen
 	 * when you click the "Reset table" button
 	 * reset styles
 	 */
@@ -655,15 +650,13 @@ public class HDController implements Initializable {
 		median_GradesTextArea1.setText("");
 		GPA_GradestextArea1.setText("");
 		sdlabelCourseNumber1.setText("");
-		
+
 		NumberOfTestCourse.setText("");
 
-		
-		
-
 	}
+
 	/**
-	 * Delete all information from the lecturer's information screen 
+	 * Delete all information from the lecturer's information screen
 	 * when you click the "Reset table" button
 	 * reset styles
 	 */
@@ -681,19 +674,20 @@ public class HDController implements Initializable {
 		emptyLecturerIDLabel.setStyle("-fx-background-color:#000000;-fx-background-radius: 100px;");
 		emptyLecturerIDLabel.setVisible(false);
 		LectuerID.setStyle("-fx-border-width: 0px;");
-		
+
 		sdlabelLecturerNumber1.setText("");
 		GPA_LECtextArea1.setText("");
-		
+
 		Median_LECTextArea1.setText("");
 		NumberOfTestLectuer.setText("");
-		
 
 	}
+
 	/**
-	 * Delete all information from the student's information screen 
+	 * Delete all information from the student's information screen
 	 * when you click the "Reset table" button
 	 * reset styles
+	 * 
 	 * @param ActionEvent event
 	 */
 	@FXML
@@ -717,7 +711,6 @@ public class HDController implements Initializable {
 		median_STUtextArea.setText("");
 		median_STUtextArea1.setText("");
 		NumberOfTestStudent.setText("");
-		
 
 	}
 
@@ -725,6 +718,7 @@ public class HDController implements Initializable {
 	 * The function is called by the "show statistics" button on
 	 * each screen. The function brings information about grades according to
 	 * the screen from which it was called
+	 * 
 	 * @param ActionEvent event
 	 */
 	@FXML
@@ -864,6 +858,7 @@ public class HDController implements Initializable {
 
 	/**
 	 * Receives information about lecturer grades and displays on the screen
+	 * 
 	 * @param msg
 	 */
 	public void ImportLectuerStatistics(ArrayList<Grades> msg) {
@@ -875,6 +870,7 @@ public class HDController implements Initializable {
 			currentGrade = (int) msg.get(i++).getGrade();
 			justGrades.add(currentGrade);
 		}
+		Platform.runLater(() -> {
 		handleAddDataToChart(justGrades, barChartLec);
 		LectuerName.setText(msg.get(0).getCourseName());// show course name
 		GPA_LECtextArea.setText(String.valueOf(calcAVG(msg)));// show the avarge
@@ -883,10 +879,15 @@ public class HDController implements Initializable {
 		String formatNumber = decimalFormat.format(calculateStandardDeviation(msg));
 		sdlabelLecturerNumber.setText(formatNumber);
 		NumberOfTestLectuer.setText(String.valueOf(msg.size()));// show the number of test
+		});
+
 
 	}
+
 	/**
-	 * Receives information about lecturer grades and displays on the screen, divided to tenths
+	 * Receives information about lecturer grades and displays on the screen,
+	 * divided to tenths
+	 * 
 	 * @param msg
 	 */
 	public void ImportLectuerStatisticsTenths(ArrayList<Grades> msg) {
@@ -895,9 +896,10 @@ public class HDController implements Initializable {
 		int currentGrade = 0;
 		for (Grades grade : msg) {
 
-			currentGrade = (int) msg.get(i++).getGrade();
+			currentGrade = (int) grade.getGrade();
 			justGrades.add(currentGrade);
 		}
+		Platform.runLater(() -> {
 		handleAddDataToChartTents(justGrades, barChartLec);
 		LectuerName.setText(msg.get(0).getCourseName());// show course name
 		GPA_LECtextArea.setText(String.valueOf(calcAVG(msg)));// show the avarge
@@ -905,7 +907,7 @@ public class HDController implements Initializable {
 		DecimalFormat decimalFormat = new DecimalFormat("#.00");
 		String formatNumber = decimalFormat.format(calculateStandardDeviation(msg));
 		sdlabelLecturerNumber.setText(formatNumber);
-
+		});
 	}
 
 	/**
@@ -937,8 +939,11 @@ public class HDController implements Initializable {
 		NumberOfTestStudent.setText(String.valueOf(msg.size()));// show the number of test
 
 	}
+
 	/**
-	 *  Receives information about student grades and displays on the screen,divided to tenths
+	 * Receives information about student grades and displays on the screen,divided
+	 * to tenths
+	 * 
 	 * @param msg
 	 */
 	public void ImportStudentGradeStatisticsTenths(ArrayList<Grades> msg) {
@@ -968,6 +973,7 @@ public class HDController implements Initializable {
 
 	/**
 	 * receives information about course grades and displays on the screen
+	 * 
 	 * @param msg
 	 */
 	public void ImportCourseGradeStatistics(ArrayList<Grades> msg) {
@@ -990,10 +996,13 @@ public class HDController implements Initializable {
 		}
 		handleAddDataToChart(justGrades, barChartCourse);
 	}
-/**
- * receives information about course grades and displays on the screen,divided to tenths
- * @param msg
- */
+
+	/**
+	 * receives information about course grades and displays on the screen,divided
+	 * to tenths
+	 * 
+	 * @param msg
+	 */
 	public void ImportCourseGradeStatisticstenths(ArrayList<Grades> msg) {
 		ArrayList<Integer> justGrades = new ArrayList<>();
 		int currentGrade = 0;
@@ -1013,11 +1022,13 @@ public class HDController implements Initializable {
 		}
 		handleAddDataToChartTents(justGrades, barChartCourse);
 	}
+
 	/**
-	 *get the array of the grades of the exams
-	  that we want to calculate and return the standard deviation
-	  @param ArrayList<Grades> grades
-	  @return standard deviation as double
+	 * get the array of the grades of the exams
+	 * that we want to calculate and return the standard deviation
+	 * 
+	 * @param ArrayList<Grades> grades
+	 * @return standard deviation as double
 	 */
 	public double calculateStandardDeviation(ArrayList<Grades> grades) {
 		double avg, mean;
@@ -1038,10 +1049,11 @@ public class HDController implements Initializable {
 	}
 
 	/**
-	 *get the array of the grades of the exams
-	  that we want to calculate and return the avarage of then
-	  @param ArrayList<Grades> msg
-	  @returns avg of grades as double
+	 * get the array of the grades of the exams
+	 * that we want to calculate and return the avarage of then
+	 * 
+	 * @param ArrayList<Grades> msg
+	 * @returns avg of grades as double
 	 */
 
 	public double calcAVG(ArrayList<Grades> msg) {
@@ -1054,10 +1066,11 @@ public class HDController implements Initializable {
 	}
 
 	/**
-	 *get the array of the grades of the exams
-	  that we want to calculate and return the median
-	  @param ArrayList<Grades> grades
-	  @returns median of the grades as double
+	 * get the array of the grades of the exams
+	 * that we want to calculate and return the median
+	 * 
+	 * @param ArrayList<Grades> grades
+	 * @returns median of the grades as double
 	 */
 	public double calcMedian(ArrayList<Grades> grades) {/// 1 2 3 6 7 8
 		int[] justgrades = new int[grades.size()];
@@ -1085,6 +1098,7 @@ public class HDController implements Initializable {
 
 	/***
 	 * updaute the bar chart of the grade statistics
+	 * 
 	 * @param ArrayList<Integer> grades, BarChart chart
 	 **/
 	private void handleAddDataToChart(ArrayList<Integer> grades, BarChart chart) {
@@ -1115,6 +1129,7 @@ public class HDController implements Initializable {
 		});
 
 	}
+
 	/**
 	 * Add data to the bar chart accourding to the chart we want to change
 	 * 
@@ -1177,9 +1192,11 @@ public class HDController implements Initializable {
 
 		return gradeCountMap;
 	}
+
 	/**
 	 * import data for the compare action
-	 *  when the head of department press on ""compare to:" button
+	 * when the head of department press on ""compare to:" button
+	 * 
 	 * @param ActionEvent event
 	 */
 	@FXML
@@ -1187,9 +1204,9 @@ public class HDController implements Initializable {
 		ArrayList<String> idsToCompare = new ArrayList<>();
 
 		if (event.getSource() == compareinStudent) {// btnCompareTwoStudents) {
-			if(secondStudentID.getText().isEmpty()){
+			if (secondStudentID.getText().isEmpty()) {
 				secondStudentID.setStyle("-fx-border-color:red;-fx-border-width:2px;");
-			}else{
+			} else {
 				secondStudentID.setStyle("-fx-border-width:0px;");
 			}
 			try {
@@ -1218,9 +1235,9 @@ public class HDController implements Initializable {
 
 		}
 		if (event.getSource() == compareinCourse) {// btnCompareTwoStudents) {
-			if(secondCourseID.getText().isEmpty()){
+			if (secondCourseID.getText().isEmpty()) {
 				secondCourseID.setStyle("-fx-border-color:red;-fx-border-width:2px;");
-			}else{
+			} else {
 				secondCourseID.setStyle("-fx-border-width:0px;");
 			}
 			try {
@@ -1249,9 +1266,9 @@ public class HDController implements Initializable {
 
 		}
 		if (event.getSource() == compareinLecturer) {// btnCompareTwoStudents) {
-			if(secondLecturerID.getText().isEmpty()){
+			if (secondLecturerID.getText().isEmpty()) {
 				secondLecturerID.setStyle("-fx-border-color:red;-fx-border-width:2px;");
-			}else{
+			} else {
 				secondLecturerID.setStyle("-fx-border-width:0px;");
 			}
 			try {
@@ -1280,9 +1297,11 @@ public class HDController implements Initializable {
 		}
 
 	}
+
 	/**
 	 * Gets information about the two students we want to compare,
-	 *  compares their data and displays on the screen
+	 * compares their data and displays on the screen
+	 * 
 	 * @param ArrayList<Grades> grades, ArrayList<Grades> grades2
 	 */
 	public void compareTwoStudents(ArrayList<Grades> grades, ArrayList<Grades> grades2) {
@@ -1323,19 +1342,20 @@ public class HDController implements Initializable {
 			GPA_STUtextArea1.setText(String.valueOf(calcAVG(grades2)));
 			median_STUtextArea.setText(String.valueOf(calcMedian(grades)));
 			median_STUtextArea1.setText(String.valueOf(calcMedian(grades2)));
-			if(grades.size()<grades2.size()){
+			if (grades.size() < grades2.size()) {
 				NumberOfTestStudent.setText(String.valueOf(grades.size()));
-			}else{
+			} else {
 				NumberOfTestStudent.setText(String.valueOf(grades2.size()));
 			}
-			
 
 		});
 
 	}
+
 	/**
 	 * Gets information about the two lectuers we want to compare,
-	 *  compares their data and displays on the screen
+	 * compares their data and displays on the screen
+	 * 
 	 * @param ArrayList<Grades> grades, ArrayList<Grades> grades2
 	 */
 	public void compareTwoLectuers(ArrayList<Grades> grades, ArrayList<Grades> grades2) {
@@ -1374,18 +1394,20 @@ public class HDController implements Initializable {
 			GPA_LECtextArea1.setText(String.valueOf(calcAVG(grades2)));
 			Median_LECTextArea.setText(String.valueOf(calcMedian(grades)));
 			Median_LECTextArea1.setText(String.valueOf(calcMedian(grades2)));
-						if(grades.size()<grades2.size()){
+			if (grades.size() < grades2.size()) {
 				NumberOfTestLectuer.setText(String.valueOf(grades.size()));
-			}else{
+			} else {
 				NumberOfTestLectuer.setText(String.valueOf(grades2.size()));
 			}
 
 		});
 
 	}
+
 	/**
 	 * Gets information about the two courses we want to compare,
-	 *  compares their data and displays on the screen
+	 * compares their data and displays on the screen
+	 * 
 	 * @param ArrayList<Grades> grades, ArrayList<Grades> grades2
 	 */
 	public void compareTwoCourses(ArrayList<Grades> grades, ArrayList<Grades> grades2) {
@@ -1424,9 +1446,9 @@ public class HDController implements Initializable {
 			GPA_GradestextArea1.setText(String.valueOf(calcAVG(grades2)));
 			median_GradesTextArea.setText(String.valueOf(calcMedian(grades)));
 			median_GradesTextArea1.setText(String.valueOf(calcMedian(grades2)));
-			if(grades.size()<grades2.size()){
+			if (grades.size() < grades2.size()) {
 				NumberOfTestCourse.setText(String.valueOf(grades.size()));
-			}else{
+			} else {
 				NumberOfTestCourse.setText(String.valueOf(grades2.size()));
 			}
 
