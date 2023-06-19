@@ -57,7 +57,13 @@ public class StudentPageController {
     @FXML
     private Label dataLabel;
     
-    public void setStudentAndClient(Users Student,ChatClient client) {
+    /**
+	 * This function sets the student and chat client for a user.
+	 * 
+	 * @param Student An object of the class Users representing a student.
+	 * @param client connection between server and current user
+	 */
+	public void setStudentAndClient(Users Student,ChatClient client) {
     	this.student=Student;
     	this.client=client;
     }
@@ -73,7 +79,7 @@ public class StudentPageController {
 		
     }
     /**
-	 * when student clicks on start Digita Test button
+	 * when student clicks on start Digital Test button , loads the "enter code screen"
 	 */
     @FXML
     public void TakeDigitalExamForm() {
@@ -170,7 +176,7 @@ public class StudentPageController {
 	/**
 	 * this methood will be activated when new grade is approved from lecturer
 	 * it shos popout window with the grade details
-	 * @param exam
+	 * @param exam which includes the students grade and course name 
 	 */
     public void showNewApprovedgrade(Exam exam){
 		Platform.runLater(() -> {
@@ -197,7 +203,7 @@ public class StudentPageController {
 	}
     
 	/**
-	 * when student clicks on start Manual Test button
+	 * when student clicks on start Manual Test button, loads the "enter code screen"
 	 */
     @FXML
     public void takeManualExam() {
