@@ -208,7 +208,7 @@ public class ServerCommandsStudent {
 	/**
 	 * if the students starts manual exam then this request is called when he clicks on download buttun,
 	 * it will send the exam file in data base with the same testid whuch recived
-	 * @param testid
+	 * @param testid represents the id of wanted test
 	 * @param client
 	 */
 	public void downloadManuelExam(int testid, ConnectionToClient client) {
@@ -238,7 +238,7 @@ public class ServerCommandsStudent {
 
     /**
 	 * when student starts test then this request is called to send the test info from data base to client
-	 * @param t
+	 * @param t presents the code of the exam , and the tybe (manual/Digital)
 	 * @param client
 	 */
 	public void getExam(TestCode t, ConnectionToClient client) {
@@ -340,7 +340,7 @@ public class ServerCommandsStudent {
     /**
 	 * this function will be called when students finish digital exam anש submit
 	 * it to save his answers, grade, in data base
-	 * @param studentInTest
+	 * @param studentInTest this objects includes all the students answers info , test info 
 	 * @param client
 	 */
 	public void submitTest(StudentInTest studentInTest, ConnectionToClient client) {
