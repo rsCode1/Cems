@@ -21,6 +21,7 @@ import gui.pastExamsController;
 import gui.TimeRequestController;
 import gui.StudentHistoryController;
 import gui.StudentManualTestController;
+import gui.StudentPageController;
 import gui.TakeExamController;
 import gui.writeQuestionController;
 import javafx.application.Platform;
@@ -50,7 +51,6 @@ import java.util.List;
 
 import javax.security.auth.Subject;
 
-
 import javax.security.auth.Subject;
 
 import ocsf.client.*;
@@ -73,6 +73,7 @@ public class ChatClient extends AbstractClient
 	private LecturerStatisticsController lecturerStatisticsController;
 	private pastExamsController pastExamsController;
 	private HDController hdcontroller;
+	private StudentPageController studentPageController;
 	private String ip = "";
 	private int portServer;
 	// Instance variables **********************************************
@@ -152,9 +153,13 @@ public class ChatClient extends AbstractClient
 					break;
 				case "approveGradeSuccess":
 					lecturerApprovalController.approveGradeSuccess();
+					if (lecturerPageController != null)
+						lecturerPageController.showNewApprovedgrade((Exam) response.getResponseParam());
 					break;
 				case "changeGradeSuccess":
 					lecturerApprovalController.changeGradeSuccess();
+					if (studentPageController != null)
+						lecturerPageController.showNewApprovedgrade((Exam) response.getResponseParam());
 					break;
 				case "requestTimeSuccess":
 					TimeRequestController.requestTimeSuccess();
@@ -333,13 +338,14 @@ public class ChatClient extends AbstractClient
 			e.printStackTrace();
 		}
 		System.out.println(user.getRole());
-}
-
-
-	
+	}
 
 	public void setController(LecturerApprovalController controller) {
 		this.lecturerApprovalController = controller;
+	}
+
+	public void setController(StudentPageController controller) {
+		this.studentPageController = controller;
 	}
 
 	public void setController(LoginScreenController controller) {

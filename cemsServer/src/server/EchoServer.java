@@ -161,10 +161,10 @@ public class EchoServer extends AbstractServer {
 					lecturerCommands.getGrades(client, (Users) request.getRequestParam());
 					break;
 				case "approveGrade":
-					lecturerCommands.approveGrade(client, (Exam) request.getRequestParam());
+					approveGrade(client, (Exam) request.getRequestParam());
 					break;
 				case "changeGrade":
-					lecturerCommands.changeGrade(client, (Exam) request.getRequestParam());
+					changeGrade(client, (Exam) request.getRequestParam());
 					break;
 				case "RequestTime":
 					lecturerCommands.requestTime(client, (RequestTime) request.getRequestParam());
@@ -216,7 +216,7 @@ public class EchoServer extends AbstractServer {
 
 					break;
 				case "SendStudentIDtenth":
-					
+
 					try {
 						serverCommandsHD.importStudentDataTenths((String) request.getRequestParam(), client);
 					} catch (IOException e) {
@@ -226,11 +226,10 @@ public class EchoServer extends AbstractServer {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
 
 					break;
 				case "SendLectuerIDtenth":
-					
+
 					try {
 						serverCommandsHD.importLectuerDataTenths((String) request.getRequestParam(), client);
 					} catch (IOException e) {
@@ -240,12 +239,10 @@ public class EchoServer extends AbstractServer {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				
 
 					break;
 
 				case "SendCourseID":
-					
 
 					try {
 						serverCommandsHD.importCourseData((String) request.getRequestParam(), client);
@@ -258,7 +255,6 @@ public class EchoServer extends AbstractServer {
 
 				case "SendStudentID":
 
-					
 					try {
 						serverCommandsHD.importStudentData((String) request.getRequestParam(), client);
 					} catch (IOException e) {
@@ -268,13 +264,11 @@ public class EchoServer extends AbstractServer {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
 
 					break;
 				case "SendLectuerID":
 					System.out.println("sendID:" + request.getRequestParam());
 
-					
 					try {
 						serverCommandsHD.importLectuerData((String) request.getRequestParam(), client);
 					} catch (IOException e) {
@@ -284,7 +278,7 @@ public class EchoServer extends AbstractServer {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
+
 					break;
 				case "GetTwoStudentsGrades":
 					serverCommandsHD.ImportTwoStudentsSGrades((ArrayList<String>) request.getRequestParam(), client);
@@ -301,14 +295,45 @@ public class EchoServer extends AbstractServer {
 		}
 	}
 
-	
+	private void changeGrade(ConnectionToClient client, Exam exam) {
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			System.out.println("SQL connection succeed");
+			String command = "UPDATE grades SET status='approved',notes = ?,grade = ? WHERE examId = ? and studentId = ? and lecturerID = ?";
+			PreparedStatement stmt = conn.prepareStatement(command);
+			stmt.setString(1, exam.getNotesForChange());
+			stmt.setInt(2, exam.getGrade());
+			stmt.setInt(3, exam.getExamId());
+			stmt.setInt(4, exam.getStudentId());
+			stmt.setInt(5, exam.getLecturer().getId());
+			stmt.executeUpdate();
+			Response response = new Response("changeGradeSuccess", exam);
+			this.sendToAllClients(response);
 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-	
+	private void approveGrade(ConnectionToClient client, Exam exam) {
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			System.out.println("SQL connection succeed");
+			String command = "UPDATE grades SET status='approved' WHERE examId = ? and studentId = ? and lecturerID = ?";
+			PreparedStatement stmt = conn.prepareStatement(command);
+			stmt.setInt(1, exam.getExamId());
+			stmt.setInt(2, exam.getStudentId());
+			stmt.setInt(3, exam.getLecturer().getId());
+			stmt.executeUpdate();
+			Response response = new Response("approveGradeSuccess", exam);
+			this.sendToAllClients(response);
 
-	
-
-
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void closeExam(ConnectionToClient client, Exam exam) {
 		Response response = new Response("closeExam", exam.getExamId());
@@ -324,7 +349,6 @@ public class EchoServer extends AbstractServer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 
 	}
 
