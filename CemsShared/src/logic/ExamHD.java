@@ -2,6 +2,11 @@ package logic;
 
 import java.io.Serializable;
 
+// This class is used to create objects that
+// represent an exam in the system. It has instance variables to store information about the exam such as exam ID,
+// written by, test subject, course name, exam number, and time. It also has methods to get and set
+// these variables.
+
 public class ExamHD implements Serializable {
 String examID;
 String writtenBy;
@@ -44,33 +49,6 @@ public void setcourseName(String courseName) {this.courseName = courseName;}
 public void setexamNumber(String examNumber) {this.examNumber = examNumber;}
 public String toString(){return "exam id:"+examID;}
 
-/**
- * Exam ex1=new Exam();
- * 
- * createExam{
- * 
- * sendtoserver: "course,subject,examn number"
- * in server:
- * using sql:
- * SELECT * from exams Where exemID=%d AND subject",requests.getExamID();)
- * we will get all tests
- * 
- * 
- * 
- * }
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- */
 
 
 

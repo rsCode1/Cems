@@ -4,6 +4,10 @@ package logic;
 ////
 import java.io.Serializable;
 
+// This class has two private instance
+// variables `userName` and `password`, a constructor that initializes these variables, and two getter
+// methods to retrieve the values of these variables.
+
 public class LogInInfo implements Serializable  {
 	/**
 	 *

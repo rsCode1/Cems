@@ -2,6 +2,10 @@ package logic;
 
 import java.io.Serializable;
 
+// This class is used to represent
+// a logged-in user and contains properties such as `id`, `firstName`, `lastName`, `userName`, and
+// `role`. It also has getter and setter methods for these properties.
+
 public class LoggedUsers implements Serializable {
 
 	private int id;

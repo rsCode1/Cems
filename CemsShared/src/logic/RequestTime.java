@@ -2,6 +2,11 @@ package logic;
 
 import java.io.Serializable;
 
+// This class is used to create
+// objects that represent a request for extra time for an exam. It has private instance variables for
+// exam ID, request ID, requester name, reason for the request, and the amount of extra time requested.
+// It also has getter and setter methods for these variables.
+
 public class RequestTime implements Serializable {
     private String examID;
     private String requestID;

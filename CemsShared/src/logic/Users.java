@@ -2,6 +2,11 @@ package logic;
 
 import java.io.Serializable;
 
+// This class is used to create objects that
+// represent users in a system. It contains properties such as `id`, `firstName`, `lastName`,
+// `userName`, `password`, `isLogged`, `role`, and `flag`, as well as methods to get and set these
+// properties.
+
 public class Users implements Serializable {
 
 	private  int id;

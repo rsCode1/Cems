@@ -2,6 +2,10 @@ package logic;
 
 import java.io.Serializable;
 
+// This class is used to represent
+// an uploaded file by a student for a particular test. It contains information about the file, the
+// student who uploaded it, and the test for which it was uploaded. It also has methods to get and set
+// the values of these attributes.
 public class UploadFile implements Serializable  {
 	private StudentInTest studentInTest;
 	private MyFile myfile;

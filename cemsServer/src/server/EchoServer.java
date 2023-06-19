@@ -440,6 +440,7 @@ public class EchoServer extends AbstractServer {
 				rs.getInt(7));
 	}
 
+
 	private void logOut(LogInInfo login, ConnectionToClient client) {
 
 		try {
