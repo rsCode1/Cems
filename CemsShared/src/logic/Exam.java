@@ -5,14 +5,18 @@ import java.util.ArrayList;
 
 import javafx.collections.ObservableList;
 
+/**
+ * The Exam class represents an exam with all of exams info plus other fields , which will be used 
+ * for the lecturer screens  .
+ */
 public class Exam implements Serializable {
     private int examId;
     private String courseName;
     private String subject;
-    ArrayList<Question> questions;
+    ArrayList<Question> questions; //exam questions
     private Users lecturer;
     private int testTime;
-    private String lecturerComments;
+    private String lecturerComments;  
     private String studentComments;
     private int code;
     private int time_remaning;

@@ -2,6 +2,10 @@ package logic;
 
 import java.io.Serializable;
 
+/**
+ * The Course class represents a course with a lecturer, course ID, course name, lecturer ID, and
+ * grade
+ */
 public class Course implements Serializable{
 	String lectuer;
 	String courseID;
