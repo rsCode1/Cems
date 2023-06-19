@@ -6,20 +6,13 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.effect.InnerShadow?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="createQuestionForm" prefHeight="731.0" prefWidth="1067.0" styleClass="b" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LecturerPageController">
+<Pane fx:id="createQuestionForm" prefHeight="731.0" prefWidth="1067.0" styleClass="background" stylesheets="@../../../CemsShared/src/Styles/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LecturerPageController">
    <children>
-      <ImageView fitHeight="758.0" fitWidth="1067.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@images/background.jpeg" />
-         </image>
-      </ImageView>
       <Label layoutX="48.0" layoutY="3.0" prefHeight="58.0" prefWidth="123.0" text="Cems" textFill="#00ffbd">
          <font> 
             <Font name="Calibri Bold" size="50.0" />
@@ -44,7 +37,7 @@
             <Font name="Calibri Bold" size="41.0" />
          </font>
       </Label>
-      <Button fx:id="logOutBtn" layoutX="14.0" layoutY="682.0" mnemonicParsing="false" onAction="#logOut" prefHeight="35.0" prefWidth="108.0" style="-fx-background-color: #FAA0A0;" text="Log-out">
+      <Button fx:id="logOutBtn" layoutX="14.0" layoutY="682.0" mnemonicParsing="false" onAction="#logOut" prefHeight="37.0" prefWidth="136.0" styleClass="declineButton" text="Log-out">
          <effect>
             <InnerShadow>
                <color>
@@ -69,7 +62,7 @@
             <Font name="Calibri" size="16.0" />
          </font>
       </Label>
-      <Button fx:id="writeQuestionBtn" layoutX="437.0" layoutY="184.0" mnemonicParsing="false" onAction="#showCreateQuestionForm" prefHeight="49.0" prefWidth="194.0" style="-fx-background-color: #02c3bc;" text="Write a question">
+      <Button fx:id="writeQuestionBtn" layoutX="437.0" layoutY="201.0" mnemonicParsing="false" onAction="#showCreateQuestionForm" prefHeight="49.0" prefWidth="194.0" text="Write a question">
          <effect>
             <InnerShadow>
                <color>
@@ -81,7 +74,7 @@
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
-      <Button fx:id="CreateExamBtn" layoutX="437.0" layoutY="245.0" mnemonicParsing="false" onAction="#showCreateExamForm" prefHeight="49.0" prefWidth="194.0" style="-fx-background-color: #02c3bc;" text="Create an Exam">
+      <Button fx:id="CreateExamBtn" layoutX="437.0" layoutY="262.0" mnemonicParsing="false" onAction="#showCreateExamForm" prefHeight="49.0" prefWidth="194.0" text="Create an Exam">
          <effect>
             <InnerShadow>
                <color>
@@ -93,7 +86,7 @@
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
-      <Button fx:id="StartExamBtn" layoutX="437.0" layoutY="370.0" mnemonicParsing="false" onAction="#startExam" prefHeight="49.0" prefWidth="194.0" style="-fx-background-color: #37da83;" text="Start an Exam">
+      <Button fx:id="StartExamBtn" layoutX="437.0" layoutY="387.0" mnemonicParsing="false" onAction="#startExam" prefHeight="49.0" prefWidth="194.0" styleClass="ApprovedButton" text="Start an Exam">
          <effect>
             <InnerShadow>
                <color>
@@ -130,12 +123,12 @@
             <Font name="Calibri Bold" size="41.0" />
          </font>
       </Label>
-      <Button fx:id="CloseExamBtn" layoutX="251.0" layoutY="602.0" mnemonicParsing="false" onAction="#closeExam" prefHeight="49.0" prefWidth="136.0" style="-fx-background-color: #f56060;" text="Close an Exam">
+      <Button fx:id="CloseExamBtn" layoutX="251.0" layoutY="602.0" mnemonicParsing="false" onAction="#closeExam" prefHeight="49.0" prefWidth="170.0" text="Close an Exam">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
-      <Button fx:id="TimeRequestBtn" layoutX="738.0" layoutY="600.0" mnemonicParsing="false" onAction="#showTimeRequestForm" prefHeight="49.0" prefWidth="147.0" style="-fx-background-color: #37da83;" text="Time Request">
+      <Button fx:id="TimeRequestBtn" layoutX="691.0" layoutY="602.0" mnemonicParsing="false" onAction="#showTimeRequestForm" prefHeight="49.0" prefWidth="194.0" style="-fx-background-color: #37da83;" styleClass="ApprovedButton" text="Time Request">
          <effect>
             <InnerShadow>
                <color>
@@ -147,7 +140,7 @@
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
-      <Button fx:id="pastExamsBtn" layoutX="437.0" layoutY="306.0" mnemonicParsing="false" onAction="#pastExams" prefHeight="49.0" prefWidth="194.0" style="-fx-background-color: #02c3bc;" text="Past Exams">
+      <Button fx:id="pastExamsBtn" layoutX="437.0" layoutY="323.0" mnemonicParsing="false" onAction="#pastExams" prefHeight="49.0" prefWidth="194.0" text="Past Exams">
          <effect>
             <InnerShadow>
                <color>
