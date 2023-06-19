@@ -399,12 +399,8 @@ public class ChatClient extends AbstractClient
 	}
 
 	private void getExam(Test test) {
-		try {
 			takeExamController.ShowStudentEnterIdScreen(test);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 
 	public void setStudentManualTestController(StudentManualTestController controller) {

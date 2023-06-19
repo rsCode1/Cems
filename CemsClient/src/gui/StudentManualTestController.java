@@ -54,6 +54,12 @@ public class StudentManualTestController {
 	private MyFile downloadFile;
 	private UploadFile uploadFile;
 
+	/**
+	 * This function sets the download file for a given object.
+	 * 
+	 * @param downloadFile The parameter downloadFile is an instance of the class MyFile, which represents
+	 * a test file 
+	 */
 	public void setDownloadFile(MyFile downloadFile) {
 		this.downloadFile = downloadFile;
 	}
@@ -65,9 +71,11 @@ public class StudentManualTestController {
 	private Test test;
 	private ChatClient client;
 	private Users student;
-	private boolean locked = false;
 	private AddedTime added = new AddedTime();
 
+	/**
+	 * This function sets the student in a test info , such as answers array , questions id list , course id 
+	 */
 	public void setStudentInTest() {
 		this.studentInTest = new StudentInTest(student.getId(), test.getCourseName(), test.getQuesSize(),
 				test.getTestId(), test.getLecturerId(), test.getCourseId());
@@ -83,6 +91,13 @@ public class StudentManualTestController {
 		return added;
 	}
 
+	/**
+	 * This function sets the student, chat client, and student manual test controller for a user.
+	 * 
+	 * @param Student An object of the class Users representing a student.
+	 * @param client the connection between server and current client doing the manual test.
+	 * @param controller represents the object which responsible for the Manual test screen
+	 */
 	public void setStudentAndClient(Users Student, ChatClient client, StudentManualTestController controller) {
 		this.student = Student;
 		this.client = client;

@@ -28,16 +28,15 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class InExamController {
-	private int remainingTime;
-	private StudentInTest studentInTest;
-	private ChatClient client;
+	private int remainingTime; //represents the test time in min
+	private StudentInTest studentInTest; // includes the answers and test info 
+	private ChatClient client; 
 	private Users student;
-	private int questionIndex = 0;
-	private Test test;
-	private int selectedAns;
-	private int answeredNum = 0;
-	private boolean locked = false;
-	private AddedTime added = new AddedTime();
+	private int questionIndex = 0; //for navigating between questions
+	private Test test; 
+	private int selectedAns; // represents the answer been choosen at the moment
+	private int answeredNum = 0; //represents the number of answered questions
+	private AddedTime added = new AddedTime(); //if lectuere added time for the test we will save it in this obj
 
 	public AddedTime getAdded() {
 		return added;
@@ -67,6 +66,17 @@ public class InExamController {
 		this.studentInTest.setTest(test);
 	}
 
+
+	/**
+	 * This function sets the student and client objects and also sets the InExamController for the client
+	 * object.
+	 * 
+	 * @param Student An object of the class Users representing a student.
+	 * @param client The ChatClient object that represents the connection between the student and the
+	 * server..
+	 * @param controller The parameter "controller" is an object of the class "InExamController". It is
+	 * the class which responsiple for controlling Digital exam screen.
+	 */
 	public void setStudentAndClient(Users Student, ChatClient client, InExamController controller) {
 		this.student = Student;
 		this.client = client;
@@ -129,6 +139,11 @@ public class InExamController {
 	private Button subBtn;
 
 	@FXML
+	/** This function is called when the "Next" button is clicked on the Digital Exam screen. It increments
+	* the questionIndex variable to move to the next question in the test, and updates the radio buttons
+	* to reflect the student's previously selected answer for the new question. It also updates the text
+	* fields to display the new question and answer options.
+	*/
 	void GoToNextQuestion(ActionEvent event) {
 		int answer;
 		questionIndex++;
@@ -173,6 +188,11 @@ public class InExamController {
 	}
 
 	@FXML
+    /** This function is called when the "Previous" button is clicked on the Digital Exam screen. It decreases
+	* the questionIndex variable to move to the Previous question in the test, and updates the radio buttons
+	* to reflect the student's previously selected answer for the new question. It also updates the text
+	* fields to display the new question and answer options.
+	*/
 	void goToPreviousQuestion(ActionEvent event) {
 		int answer;
 		questionIndex--;
@@ -216,6 +236,10 @@ public class InExamController {
 	}
 
 	@FXML
+	/**
+	 * this function will be called when students chooses first answer, 
+	 * it will save his answer in studentInTest object.
+	*/
 	void ansBtn1Clicked(ActionEvent event) {
 		if (studentInTest.getAnswer(questionIndex) == 0) {
 			answeredNum++;
@@ -225,7 +249,11 @@ public class InExamController {
 		ansNum.setText(answeredNum + "");
 
 	}
-
+    
+	/**
+	 * this function will be called when students chooses second answer, 
+	 * it will save his answer in studentInTest object.
+	*/
 	@FXML
 	void ansBtn2Clicked(ActionEvent event) {
 		if (studentInTest.getAnswer(questionIndex) == 0) {
@@ -237,6 +265,10 @@ public class InExamController {
 
 	}
 
+	/**
+	 * this function will be called when students chooses third answer, 
+	 * it will save his answer in studentInTest object.
+	*/
 	@FXML
 	void ansBtn3Clicked(ActionEvent event) {
 		if (studentInTest.getAnswer(questionIndex) == 0) {
@@ -248,6 +280,10 @@ public class InExamController {
 
 	}
 
+	/**
+	 * this function will be called when students chooses fourth answer, 
+	 * it will save his answer in studentInTest object.
+	*/
 	@FXML
 	void ansBtn4Clicked(ActionEvent event) {
 		if (studentInTest.getAnswer(questionIndex) == 0) {
@@ -258,6 +294,11 @@ public class InExamController {
 		ansNum.setText(answeredNum + "");
 	}
 
+	/**
+	 * this function will be called when students clicks on submit button .
+	 * it will save his answers and load new screen "ApproveSubmit" ,
+	 * where he chooses to continue with the submition.
+	 */
 	@FXML
 	void submit(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ApproveSubmit.fxml"));
@@ -292,7 +333,7 @@ public class InExamController {
 	/**
 	 * this function is userd when the lecturer request to lock the exam
 	 * 
-	 * @param testid
+	 * @param testid presents the test id that the lectuerer wants to lock 
 	 */
 	public void LockExam(int testid) {
 		if (testid == test.getTestId()) {
@@ -349,6 +390,20 @@ public class InExamController {
 	private Thread timeThread;
 	boolean addedTime = false;
 
+	/**
+	 * this function will be called when students starts the test , it will activate thread ,
+	 * which represents the timer of the test 
+	 * 
+	 */
+	/**
+	 * This function starts a timer that counts down from a given time and checks if the duration of a
+	 * test has been changed during the countdown.
+	 * 
+	 * @param timeInSeconds The initial time in seconds for the timer. This is the amount of time that the
+	 * timer will start counting down from.
+	 * @param duration The duration parameter is not used in the startTimer method. It is not clear what
+	 * it represents without further context.
+	 */
 	private void startTimer(int timeInSeconds, int duration) {
 		TestSourceTime testSourceTime = new TestSourceTime(test.getDuration(), test.getTestId());
 		stopThread = false; // Reset stopThread flag

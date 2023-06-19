@@ -23,7 +23,9 @@ import logic.StudentData;
 
 import logic.Users;
 
-
+/**
+ * this class is responsble  for controlling the students Grade screen 
+ */
 
 public class StudentHistoryController {
 
@@ -33,7 +35,7 @@ public class StudentHistoryController {
     
 	/**
 	 * sets the grade data array that would be used later
-	 * @param data
+	 * @param data represents the grade detail includes course name and grade
 	 */
 	public void setStudentDataList(ArrayList<StudentData>  data) {
 		this.studentGradesInfo=data ;
@@ -71,11 +73,13 @@ public class StudentHistoryController {
 
     /**
 	 * sets the student,client and controller that would be used in this form
-	 * @param Student
-	 * @param client
-	 * @param SH
+	 * 
+	 * @param Student An object of the class Users representing a student.
+	 * @param client  represents the connection between user and server
+	 * @param SH SH is an instance of the StudentHistoryController class, 
+	 * which responsible for controlling the student's grade screen 
 	 */
-    public void setStudentAndClient(Users Student,ChatClient client,StudentHistoryController SH) {
+	public void setStudentAndClient(Users Student,ChatClient client,StudentHistoryController SH) {
     	this.student=Student;
     	this.client=client;
     	this.client.setStudentHistoryController(SH);

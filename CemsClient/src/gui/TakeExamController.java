@@ -55,6 +55,14 @@ public class TakeExamController {
 	private Test test;
 	private InTestQuestion[] qLst;
 
+	/**
+	 * This function sets the student and client objects and also sets the TakeExamController for the
+	 * client object.
+	 * 
+	 * @param Student An object of the class Users representing a student who is taking an exam.
+	 * @param client connection between server and client
+	 * @param controller the object of current class wich responsible for the "enter code " screen
+	 */
 	public void setStudentAndClient(Users Student, ChatClient client, TakeExamController controller) {
 		this.student = Student;
 		this.client = client;
@@ -148,7 +156,13 @@ public class TakeExamController {
 
 	}
 
-	public void ShowStudentEnterIdScreen(Test test) throws IOException {
+	/**
+	 * This function shows the screen for entering a student ID for a test
+	 * 
+	 * @param test The test object info that the student is trying to enter.
+	 * it includes the students can enter id list and test info .
+	 */
+	public void ShowStudentEnterIdScreen(Test test)  {
 		// System.out.println("I arruved at show student test");
 		Platform.runLater(() -> {
 			if (test == null) {
@@ -188,8 +202,8 @@ public class TakeExamController {
 	 * //checks also if CheckBox is checked
 	 * //returns True if yes /
 	 * 
-	 * @param code
-	 * @return
+	 * @param code presents the code has been entered
+	 * @return value = true if the code is legal , false if the code is illegal
 	 */
 
 	public boolean CheckApplyingInfo(String code) {

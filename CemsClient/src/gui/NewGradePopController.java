@@ -1,3 +1,7 @@
+/**
+ * The NewGradePopController class is a JavaFX controller for a pop-up window that displays a new grade
+ * and course name to a student.
+ */
 package gui;
 
 import javafx.application.Platform;

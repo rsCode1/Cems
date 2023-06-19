@@ -25,7 +25,7 @@ public class EnterIdForTestController {
 	private int DigOrMan;
 
 	/**
-	 * return if the test is manual or digital
+	 * return if the test is manual (DigOrMan =1) or digital (DigOrMan=0)
 	 * 
 	 * @return
 	 */
@@ -35,7 +35,7 @@ public class EnterIdForTestController {
 
 	/**
 	 * sets the exam to be manual or digital
-	 * 
+	 * manual (DigOrMan =1), digital (DigOrMan=0)
 	 * @param digOrMan
 	 */
 	public void setDigOrMan(int digOrMan) {
@@ -46,11 +46,13 @@ public class EnterIdForTestController {
 	private Users student;
 	private Test test;
 
+
 	/**
-	 * sets the student and client that currently using the form
+	 * This function sets the student applying to test and client that currently using the form
 	 * 
-	 * @param Student
-	 * @param client
+	 * @param Student A variable of type "Users" that represents a student user in cems app applying for test.
+	 * @param client TThe ChatClient object that represents the connection between the student and the
+	 * server.
 	 */
 	public void setStudentAndClient(Users Student, ChatClient client) {
 		this.student = Student;
@@ -60,7 +62,9 @@ public class EnterIdForTestController {
 	/**
 	 * sets the test that we are going to initialize
 	 * 
-	 * @param test
+	 * @param test The "test" parameter is an object of the class "Test"
+	 * whuch includes all te test info such as testid, questions , score of each , duration,
+	 * list of students id's that can take the exam
 	 */
 	public void setTest(Test test) {
 		this.test = test;
@@ -96,6 +100,7 @@ public class EnterIdForTestController {
 			try {
 				int studentId = Integer.parseInt(id);
 				TestApplyInfo testApplyInfo = new TestApplyInfo(student.getId(), test.getTestId());
+				//if current student is in the list of students id then he can start the exam
 				if (test.getStudentsIdForTest().contains(studentId)) {
 					errTxt.setText("Correct Id");
 					client.sendToServer(new Request("AddStudentToInExamList", testApplyInfo));
@@ -114,12 +119,12 @@ public class EnterIdForTestController {
 
 	}
 
+
 	/**
-	 * the method the checks if the given ID is valid and matches the id of the
-	 * logged user
+	 * This function checks if a given code is valid and matches a student's ID.
 	 * 
-	 * @param code
-	 * @return
+	 * @param code a String variable representing an ID code that needs to be checked.
+	 * @return A boolean value is being returned.
 	 */
 	public boolean CheckApplyingInfo(String code) {
 		boolean ret = false;
@@ -141,19 +146,20 @@ public class EnterIdForTestController {
 		return ret;
 	}
 
+	
 	/**
-	 * depends on whether the test is digital or manual, opens the Corresponding
-	 * test form
-	 * to the student
+	 * This function displays a test screen for a student, either for a digital or manual exam, based on 
+	 * DigOrMan value in this class , if DigOrMan=0 then test is Digital , if DigOrMan=1 then test is Manual
 	 * 
-	 * @param test
+	 * @param test The test object that contains information about the exam that the student is going to
+	 * take.
 	 */
 	public void ShowStudentTestScreen(Test test) {
 		if (test == null) {
 			errTxt.setText("Id or Code is wrong!, please try again!");
 		}
 
-		else if (DigOrMan == 0) {
+		else if (DigOrMan == 0) { //Digital exam case
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/InExam.fxml"));
 			errTxt.setText("");
 			Parent root;
@@ -173,7 +179,7 @@ public class EnterIdForTestController {
 				e.printStackTrace();
 			}
 
-		} else if (DigOrMan == 1) {
+		} else if (DigOrMan == 1) { //Manual exam case
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/Take_manual_exam.fxml"));
 				Parent root = loader.load();
