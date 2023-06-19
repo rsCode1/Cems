@@ -153,13 +153,19 @@ public class ChatClient extends AbstractClient
 					break;
 				case "approveGradeSuccess":
 					lecturerApprovalController.approveGradeSuccess();
-					if (lecturerPageController != null)
-						lecturerPageController.showNewApprovedgrade((Exam) response.getResponseParam());
+					try {
+						Thread.sleep(150);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if (studentPageController != null)
+						studentPageController.showNewApprovedgrade((Exam) response.getResponseParam());
 					break;
 				case "changeGradeSuccess":
 					lecturerApprovalController.changeGradeSuccess();
 					if (studentPageController != null)
-						lecturerPageController.showNewApprovedgrade((Exam) response.getResponseParam());
+						studentPageController.showNewApprovedgrade((Exam) response.getResponseParam());
 					break;
 				case "requestTimeSuccess":
 					TimeRequestController.requestTimeSuccess();

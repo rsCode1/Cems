@@ -101,6 +101,7 @@ public class LoginScreenController {
 						studentController = loader.getController();
 						studentController.setStudentAndClient(user, client);
 						studentController.setWelcomeLabel(welcomeMsg);
+						client.setController(studentController);
 					}
 					if (user.getRole() == 2) {
 						hdccontroller = loader.getController();

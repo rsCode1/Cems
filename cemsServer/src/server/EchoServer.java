@@ -54,7 +54,7 @@ import logic.Response;
 import logic.StudentData;
 import gui.ServerStartScreenController;
 import logic.Exam;
-import logic.Grades;
+
 import logic.Exam;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 import client.ChatClient;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import logic.Exam;
 import logic.LogInInfo;
 import logic.Request;
 
@@ -158,6 +160,29 @@ public class StudentPageController {
     	}
     	
     }
+    public void showNewApprovedgrade(Exam exam){
+		Platform.runLater(() -> {
+		if (student.getId() == exam.getStudentId()) {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/NewGradePopout.fxml"));
+        
+        try {
+            Parent root = loader.load();
+            NewGradePopController controller = loader.getController();
+            String Mes="Your grade in "+ exam.getCourseName() + " is: " + exam.getGrade();
+            controller.setMes(Mes);
+            
+                Stage window = new Stage();
+                window.setScene(new Scene(root));
+                window.show();
+           
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+	 });
+
+		
+	}
 
     @FXML
     public void takeManualExam() {
