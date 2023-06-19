@@ -8,20 +8,13 @@
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.effect.InnerShadow?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="createQuestionForm" prefHeight="734.0" prefWidth="1081.0" style="-fx-background-color: #d8bfd8;" styleClass="b" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="createQuestionForm" prefHeight="734.0" prefWidth="1081.0" styleClass="background" stylesheets="@../../../CemsShared/src/Styles/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView fitHeight="758.0" fitWidth="1092.0" layoutX="-5.0" layoutY="-7.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../backgroundfinal1.jpg" />
-         </image>
-      </ImageView>
       <Button layoutX="23.0" layoutY="685.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="74.0" text="back" />
       <Label layoutX="50.0" layoutY="-1.0" prefHeight="58.0" prefWidth="123.0" text="Cems" textFill="#00ffbd">
          <font>
@@ -103,7 +96,7 @@
             <Font size="16.0" />
          </font>
       </TextField>
-      <Button fx:id="saveButton" alignment="CENTER" layoutX="803.0" layoutY="592.0" mnemonicParsing="false" onAction="#btnSaveQuestion" prefHeight="47.0" prefWidth="200.0" style="-fx-background-radius: 20;" styleClass="back" text="Save update">
+      <Button fx:id="saveButton" alignment="CENTER" layoutX="803.0" layoutY="592.0" mnemonicParsing="false" onAction="#btnSaveQuestion" prefHeight="47.0" prefWidth="200.0" styleClass="ApprovedButton" text="Save update">
          <font>
             <Font name="System Bold Italic" size="20.0" />
          </font>

@@ -8,20 +8,13 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.effect.InnerShadow?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="731.0" prefWidth="1067.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LecturerApprovalController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="731.0" prefWidth="1067.0" styleClass="background" stylesheets="@../../../CemsShared/src/Styles/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LecturerApprovalController">
    <children>
-      <ImageView fitHeight="758.0" fitWidth="1067.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@images/background.jpeg" />
-         </image>
-      </ImageView>
       <TableView fx:id="examsTable" layoutX="53.0" layoutY="193.0" prefHeight="286.0" prefWidth="979.0">
         <columns>
           <TableColumn fx:id="examId" prefWidth="122.0" text="Exam id" />
@@ -30,7 +23,10 @@
             <TableColumn fx:id="grade" prefWidth="284.0" text="grade" />
         </columns>
       </TableView>
-      <Button fx:id="approveBtn" layoutX="855.0" layoutY="536.0" mnemonicParsing="false" onAction="#approveGrade" prefHeight="69.0" prefWidth="177.0" text="Approve grade" />
+      <Button fx:id="approveBtn" layoutX="785.0" layoutY="550.0" mnemonicParsing="false" onAction="#approveGrade" prefHeight="69.0" prefWidth="247.0" styleClass="ApprovedButton" text="Approve grade">
+         <font>
+            <Font size="11.0" />
+         </font></Button>
       <Button fx:id="changeBtn" layoutX="360.0" layoutY="550.0" mnemonicParsing="false" onAction="#changeGrade" prefHeight="69.0" prefWidth="149.0" text="change grade" />
       <TextField fx:id="newGrade" layoutX="359.0" layoutY="502.0" prefHeight="34.0" prefWidth="149.0" promptText="Enter new grade" />
       <TextArea fx:id="changeGradeReason" layoutX="53.0" layoutY="502.0" prefHeight="115.0" prefWidth="286.0" promptText="Enter reasong for grade change" />
