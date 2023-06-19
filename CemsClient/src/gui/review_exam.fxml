@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="createQuestionForm" prefHeight="731.0" prefWidth="1067.0" style="-fx-background-color: #d8bfd8;" styleClass="b" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ReviewExamController">
+<Pane fx:id="createQuestionForm" prefHeight="731.0" prefWidth="1067.0" style="-fx-background-color: #d8bfd8;" styleClass="b" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ReviewExamController">
    <children>
       <ImageView fitHeight="758.0" fitWidth="1067.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -78,11 +78,6 @@
          </font>
       </Text>
       <TextField layoutX="270.0" layoutY="20.0" prefHeight="25.0" prefWidth="193.0" text="Home &gt; Exam creation &gt; Review" />
-      <Button layoutX="855.0" layoutY="519.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="175.0" text="Show/Update selected">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </Button>
       <Label layoutX="147.0" layoutY="136.0" prefHeight="35.0" prefWidth="74.0" text="Subject:" textFill="#1e1f26">
          <font>
             <Font name="Calibri" size="16.0" />
