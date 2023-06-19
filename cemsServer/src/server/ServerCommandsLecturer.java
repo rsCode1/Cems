@@ -18,6 +18,13 @@ import ocsf.server.ConnectionToClient;
 
 public class ServerCommandsLecturer {
 
+    /**
+     * This Java function retrieves past exams from a MySQL database and sends them to a client.
+     * 
+     * @param client The client parameter is an instance of the ConnectionToClient class.
+     * @param lecturer The parameter "lecturer" is an object of type "Users" which represents a user
+     * who is a lecturer in the system.
+     */
     public void getPastExams(ConnectionToClient client, Users lecturer) {
         try {
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
@@ -50,6 +57,13 @@ public class ServerCommandsLecturer {
         }
     }
 
+    /**
+     * The function inserts a new row into a MySQL database table with information about a time request
+     * for an exam.
+     * 
+     * @param client A ConnectionToClient object representing the client who sent the request.
+     * @param requestTime 
+     */
     public void requestTime(ConnectionToClient client, RequestTime requestTime) {
         try {
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
@@ -71,6 +85,15 @@ public class ServerCommandsLecturer {
     }
 
 
+
+    /**
+     * This Java function retrieves grades from a MySQL database and sends
+     * them to a client.
+     * 
+     * @param client The client object represents the connection to the client who requested the grades
+     * information.
+     * @param lecturer The parameter "lecturer" is an object of the class "Users".
+     */
     public void getGrades(ConnectionToClient client, Users lecturer) {
         try {
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
@@ -101,6 +124,17 @@ public class ServerCommandsLecturer {
 
     }
 
+
+
+
+    /**
+     * The function starts an exam for a client by checking if the exam code is valid.
+     * 
+     * @param client The client object represents the connection to the client who requested to start
+     * the exam.
+     * @param exam an object of type Exam, which contains information about the exam such as exam ID,
+     * code, and test time.
+     */
     public void startExam(ConnectionToClient client, Exam exam) {
         try {
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
@@ -129,6 +163,15 @@ public class ServerCommandsLecturer {
         }
     }
 
+
+    /**
+     * This Java function retrieves ongoing exams from a MySQL database and sends them to a client.
+     * 
+     * @param client The client parameter is an instance of the ConnectionToClient class, which
+     * represents a connection to a client in a client-server application.
+     * @param lecturer The parameter "lecturer" is an object of the class "Users" representing a user
+     * who is a lecturer in the system.
+     */
     public void getOngoingExams(ConnectionToClient client, Users lecturer) {
         try {
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
@@ -155,6 +198,15 @@ public class ServerCommandsLecturer {
         }
     }
 
+    /**
+     * This Java function retrieves exams from a database based on a given lecturer's ID and sends the
+     * results to a client.
+     * 
+     * @param client The client parameter is an instance of the ConnectionToClient class, which
+     * represents a connection to a client.
+     * @param lecturer The lecturer parameter is an instance of the Users class, which represents a
+     * user in the system.
+     */
     public void getExamsByLecturer(ConnectionToClient client, Users lecturer) {
         try {
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
@@ -177,7 +229,18 @@ public class ServerCommandsLecturer {
         }
     }
 
-    // save the exam to the database using the exam class
+    
+    /**
+     * This Java function saves an exam object and its associated questions to a MySQL database and
+     * sends a response to a client.
+     * 
+     * @param exam an object of type Exam, which contains information about the exam being saved,
+     * including the course name, lecturer, comments, student comments, test time, and a list of
+     * questions.
+     * @param client The client parameter is an instance of the ConnectionToClient class, which
+     * represents the connection between the server and the client that requested to save the exam. It
+     * is used to send a response back to the client.
+     */
     public void saveExam(Exam exam, ConnectionToClient client) {
         try {
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
@@ -192,11 +255,8 @@ public class ServerCommandsLecturer {
             rs.next();
             int examId = rs.getInt(1);
 
-            // just now remembered that i can use prepared statements ):
-            // wasted ton of time on this
-
             PreparedStatement stmt2;
-            // now, insert the exam's questions into the exam_questions table
+            //insert the exam's questions into the exam_questions table
             for (Question question : exam.getQuestions()) {
                 command = "INSERT INTO exam_questions (exam_id, question_id, score) VALUES (?, ?, ?)";
                 stmt2 = conn.prepareStatement(command);
@@ -221,6 +281,13 @@ public class ServerCommandsLecturer {
 
     }
 
+   /**
+    * This Java function retrieves questions from a MySQL database based on a given course and sends
+    * them to a client.
+    * 
+    * @param client A ConnectionToClient object representing the client who requested the questions.
+    * @param course The name of the course for which the questions are being requested.
+    */
     public void getQuestions(ConnectionToClient client, String course) {
 
         try {
@@ -257,7 +324,15 @@ public class ServerCommandsLecturer {
         }
     }
 
-    // same as getSubjects but for courses
+    
+   /**
+    * This Java function retrieves a list of courses based on a given subject from a MySQL database and
+    * sends it to a client.
+    * 
+    * @param client The client parameter is an instance of the ConnectionToClient class, which
+    * represents a connection to a client in a client-server application.
+    * @param subject The subject for which the courses are being requested.
+    */
     public void getCourses(ConnectionToClient client, String subject) {
         try {
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
@@ -282,6 +357,13 @@ public class ServerCommandsLecturer {
         }
     }
 
+    /**
+     * The function retrieves a list of subject names from a MySQL database and sends it as a response
+     * to a client.
+     * 
+     * @param client The parameter "client" is an object of type ConnectionToClient, which represents a
+     * client connected to the server through a socket connection.
+     */
     public void getSubjects(ConnectionToClient client) {
 
         try {
@@ -306,9 +388,15 @@ public class ServerCommandsLecturer {
         }
     }
 
-    // save the question in the DB
-    // uses Question class from cemsShared
 
+    /**
+     * The function writes a new question to a MySQL database.
+     * 
+     * @param question an object of the class Question, which contains the details of the question to
+     * be written to the database.
+     * @param client The client parameter is an object of type ConnectionToClient, which represents the
+     * connection to the client who sent the question to be written to the database.
+     */
     public void writeQuestion(Question question, ConnectionToClient client) {
         try {
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
@@ -329,6 +417,15 @@ public class ServerCommandsLecturer {
         }
     }
 
+   /**
+    * This Java function retrieves the course ID from a database based on the course name.
+    * 
+    * @param courseName A string representing the name of a course.
+    * @param conn The "conn" parameter is a Connection object that represents a connection to a
+    * database.
+    * @return The method is returning an integer value which represents the course ID of a given course
+    * name. If the course name is not found in the database, the method returns -1.
+    */
     public int getCourseId(String courseName, Connection conn) {
         Statement stmt;
         String command;

@@ -20,7 +20,14 @@ import logic.Users;
 import ocsf.server.ConnectionToClient;
 
 public class ServerCommandsHD {
-    	public void ImportTwoStudentsSGrades(ArrayList<String> requestParam, ConnectionToClient client) {
+    	/**
+		 * This function retrieves the grades of two students from a database and sends them to a client.
+		 * 
+		 * @param requestParam An ArrayList of Strings containing two student IDs.
+		 * @param client The "client" parameter is an instance of the "ConnectionToClient" class, which
+		 * represents a connection to a client
+		 */
+		public void ImportTwoStudentsSGrades(ArrayList<String> requestParam, ConnectionToClient client) {
 		ArrayList<Grades> firstIDGrades = new ArrayList<Grades>();
 		ArrayList<Grades> secondIDGrades = new ArrayList<Grades>();
 		ArrayList<ArrayList<Grades>> alldata = new ArrayList<ArrayList<Grades>>();
@@ -68,6 +75,13 @@ public class ServerCommandsHD {
 
 	}
 
+	/**
+	 * This Java function retrieves grades for two different courses and sends them to a client.
+	 * 
+	 * @param requestParam An ArrayList of Strings containing two course IDs.
+	 * @param client The client parameter is an instance of the ConnectionToClient class, which represents
+	 * a connection to a client in a client-server communication.
+	 */
 	public void ImportTwoCourseGrades(ArrayList<String> requestParam, ConnectionToClient client) {
 		ArrayList<Grades> firstIDGrades = new ArrayList<Grades>();
 		ArrayList<Grades> secondIDGrades = new ArrayList<Grades>();
@@ -116,6 +130,15 @@ public class ServerCommandsHD {
 
 	}
 
+	/**
+	 * This function retrieves grades data from a database for two different lecturer IDs and sends it to
+	 * a client.
+	 * 
+	 * @param requestParam An ArrayList of Strings containing two elements, representing the IDs of two
+	 * lecturers.
+	 * @param client The "client" parameter is an object of type ConnectionToClient, which represents the
+	 * client that is connected to the server and will receive the response.
+	 */
 	public void ImportTwoLectuerGrades(ArrayList<String> requestParam, ConnectionToClient client) {
 		ArrayList<Grades> firstIDGrades = new ArrayList<Grades>();
 		ArrayList<Grades> secondIDGrades = new ArrayList<Grades>();
@@ -164,6 +187,16 @@ public class ServerCommandsHD {
 
 	}
 
+	/**
+	 * This function retrieves information about extra time requests from a MySQL database and sends it to
+	 * a client.
+	 * 
+	 * @param requestTime An object of the class RequestTime, which contains information about a request
+	 * for extra time for an exam.
+	 * @param client The client parameter is an instance of the ConnectionToClient class, which represents
+	 * the connection between the server and a specific client. It is used to send responses back to the
+	 * client.
+	 */
 	public void getRequestTimeInfo(RequestTime requestTime, ConnectionToClient client) {
 		System.out.println("in request time");
 
@@ -192,6 +225,14 @@ public class ServerCommandsHD {
 		}
 	}
 
+	/**
+	 * This function searches for a specific exam request and either approves or rejects it, updating the
+	 * exam time and sending a response to the client accordingly.
+	 * 
+	 * @param rq A Request object that contains the exam ID and the request type (approve or reject).
+	 * @param client The client parameter is an instance of the ConnectionToClient class, which represents
+	 * a connection to a client in a client-server communication system.
+	 */
 	public void searchExam(Request rq, ConnectionToClient client) {
 		String examID = (String) rq.getRequestParam();
 		String status = rq.getRequestType();// approve or reject
@@ -244,6 +285,16 @@ public class ServerCommandsHD {
 		}
 	}
 
+	/**
+	 * This function retrieves student data from a MySQL database and sends it to a client, either for all
+	 * students or for a specific student ID.
+	 * 
+	 * @param gID gID is a String parameter that represents the student ID. If it is null, the method
+	 * retrieves all the grades from the database. If it is not null, the method retrieves only the grades
+	 * of the student with the given ID.
+	 * @param client The parameter "client" is of type ConnectionToClient, which represents a connection
+	 * to a client in a client-server architecture. It is used to send data back to the client.
+	 */
 	public void importStudentData(String gID, ConnectionToClient client) throws IOException, SQLException {
 		ArrayList<Grades> grades = new ArrayList<>();
 		try {
@@ -288,6 +339,16 @@ public class ServerCommandsHD {
 		}
 	}
 
+	/**
+	 * This Java function retrieves student grades data from a MySQL database and sends it to a client,
+	 * either for all students or for a specific student ID.
+	 * 
+	 * @param gID gID is a String parameter that represents the ID of a student. If it is null, the method
+	 * retrieves grades for all students. If it is not null, the method retrieves grades only for the
+	 * student with the specified ID.
+	 * @param client The "client" parameter is an object of type "ConnectionToClient", which represents a
+	 * connection to a client in a client-server communication system.
+	 */
 	public void importStudentDataTenths(String gID, ConnectionToClient client) throws IOException, SQLException {
 		ArrayList<Grades> grades = new ArrayList<>();
 		try {
@@ -333,6 +394,16 @@ public class ServerCommandsHD {
 		}
 	}
 
+	/**
+	 * This Java function imports grades data from a MySQL database based on a given lecturer ID and sends
+	 * it to a client.
+	 * 
+	 * @param gID gID is a String parameter representing the ID of a lecturer. It is used to filter the
+	 * results of the SQL query to only include grades that were given by that specific lecturer. If gID
+	 * is null, then all grades are returned.
+	 * @param client The parameter "client" is of type ConnectionToClient, which is a class representing a
+	 * connection to a client
+	 */
 	public void importLectuerData(String gID, ConnectionToClient client) throws IOException, SQLException {
 		ArrayList<Grades> grades = new ArrayList<>();
 		try {
@@ -376,6 +447,16 @@ public class ServerCommandsHD {
 		}
 	}
 
+	/**
+	 * This Java function retrieves grades data from a MySQL database based on a lecturer ID and sends it
+	 * to a client.
+	 * 
+	 * @param gID gID is a String parameter that represents the ID of a lecturer. It is used to filter the
+	 * results of the SQL query to retrieve only the grades that belong to the specified lecturer. If gID
+	 * is null, then all grades are retrieved.
+	 * @param client The "client" parameter is an object of type "ConnectionToClient", which represents a
+	 * connection to a client
+	 */
 	public void importLectuerDataTenths(String gID, ConnectionToClient client) throws IOException, SQLException {
 		ArrayList<Grades> grades = new ArrayList<>();
 		try {
@@ -420,6 +501,14 @@ public class ServerCommandsHD {
 		}
 	}
 
+	/**
+	 * This Java function imports course data from a MySQL database and sends it to a client.
+	 * 
+	 * @param gID gID is a String parameter that represents the course ID for which the grades are being
+	 * imported. If gID is null, then all grades for all courses will be imported.
+	 * @param client The parameter "client" is an object of type ConnectionToClient, which represents a
+	 * connection to a client.
+	 */
 	public void importCourseData(String gID, ConnectionToClient client) throws IOException {
 
 		ArrayList<Grades> grades = new ArrayList<>();
@@ -467,6 +556,15 @@ public class ServerCommandsHD {
 
 	}
 
+	/**
+	 * This Java function retrieves grades data from a MySQL database for a specific course ID and sends
+	 * it to a client.
+	 * 
+	 * @param gID gID is a String parameter that represents the course ID for which the grades are being
+	 * imported.
+	 * @param client The parameter "client" is of type ConnectionToClient, which is a class representing a
+	 * connection to a client in a server-client architecture. It is used to send data to the client.
+	 */
 	public void importCourseDatatenths(String gID, ConnectionToClient client) throws IOException {
 		System.out.println("in importcourseid " + gID);
 		ArrayList<Grades> grades = new ArrayList<>();
@@ -503,6 +601,15 @@ public class ServerCommandsHD {
 
 	
 
+	/**
+	 * This Java function retrieves the course ID from a database based on the course name.
+	 * 
+	 * @param courseName A String representing the name of a course.
+	 * @param conn The "conn" parameter is a Connection object that represents a connection to a database.
+	 * It is used to execute SQL statements and retrieve results from the database.
+	 * @return The method is returning an integer value which represents the course ID of a given course
+	 * name. If the course name is not found in the database, the method returns -1.
+	 */
 	public int getCourseId(String courseName, Connection conn) {
 		Statement stmt;
 		String command;
@@ -522,14 +629,17 @@ public class ServerCommandsHD {
 
 	}
 
-	// function to add all the users that are logged in to the logged to the table
-	// in server
-
-
-	// update the user as logged in DB , based on its username and password
-
-
-	// return user info from DB, based on its username and password
+	/**
+	 * This Java function retrieves user information from a database based on a given login and
+	 * connection.
+	 * 
+	 * @param login an object of type LogInInfo that contains the username and password of the user trying
+	 * to log in.
+	 * @param conn The "conn" parameter is a Connection object that represents a connection to a database.
+	 * It is used to execute SQL statements and retrieve results from the database.
+	 * @return The method is returning a Users object that contains the information of a user with the
+	 * given username and password. If no user is found with the given credentials, it returns null.
+	 */
 	public Users getUserInfo(LogInInfo login, Connection conn) throws SQLException {
 		// select user with username and password
 		Statement stmt = conn.createStatement();
