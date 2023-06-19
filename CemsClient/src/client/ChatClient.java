@@ -152,7 +152,8 @@ public class ChatClient extends AbstractClient
 						lecturerStatisticsController.setGradesArr(gradesArr);
 					break;
 				case "approveGradeSuccess":
-					lecturerApprovalController.approveGradeSuccess();
+					if (lecturerApprovalController != null)
+						lecturerApprovalController.approveGradeSuccess();
 					try {
 						Thread.sleep(150);
 					} catch (InterruptedException e) {
@@ -190,13 +191,14 @@ public class ChatClient extends AbstractClient
 					stdManController.setDownloadFile(file);
 					break;
 				case "closeExam":
-					lecturerPageController.getOngoingExamsTable(); // refresh table
+					
 					if (inExamController != null) {
 						inExamController.LockExam((int) response.getResponseParam());
 					}
 					if (stdManController != null) {
 						stdManController.LockExam((int) response.getResponseParam());
 					}
+					lecturerPageController.getOngoingExamsTable(); // refresh table
 					break;
 				case "LOGIN_success":
 					login((Users) response.getResponseParam());
