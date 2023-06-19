@@ -29,8 +29,14 @@ import logic.UploadFile;
 import ocsf.server.ConnectionToClient;
 
 public class ServerCommandsStudent {
-    /**
-	 * for getting the student grades from grades table in the data base where student id is passed as parameter
+    
+	/**
+	 * This Java function retrieves a student's grades information from a MySQL database and sends it to a
+	 * client.
+	 * 
+	 * @param studentId The ID of the student whose grades are being retrieved.
+	 * @param client The client parameter is an instance of the ConnectionToClient class,
+	 * containing the student grades information back to the client.
 	 */
 	public void getStudentGrades(int studentId, ConnectionToClient client) {
 
@@ -129,7 +135,7 @@ public class ServerCommandsStudent {
 			stmt3.executeUpdate(str3);
 			String testId = '"' + String.valueOf(answersFile.getTestId()) + '"';
 
-		    //this query is to check if the student is the last student in the exam
+		
 			String str4 = "SELECT (SELECT COUNT(*) FROM cems.student_inexam WHERE exam_id =" + testId
 					+ ") AS total_rows,";
 			str4 += "(SELECT COUNT(*) FROM cems.student_inexam WHERE exam_id =" + testId
@@ -140,7 +146,7 @@ public class ServerCommandsStudent {
 			rs = stmt4.executeQuery(str4);
 			if (rs.next()) { 
 				if (rs.getInt("total_rows") == rs.getInt("submitted_rows")) {
-					//if the student is the last student in the exam..
+					
 					int studentsnumber= rs.getInt("total_rows"); //number of students who did the exam
 					String str6= "SELECT test_time,code FROM cems.open_exams where exam_id=" +testId   +" ;"; //closing exam
 					stmt6= conn.createStatement();
@@ -181,7 +187,7 @@ public class ServerCommandsStudent {
 			        //if 20% of questions are "Cheated" then cheated is assured
 			        double percentage = (double) quesCheated / answersFile.getStudentInTest().getQesSize() * 100;
 			        if (percentage >= 35 & studentsnumber>1 & answersFile.getStudentInTest().getQesSize() >2) {
-			        	cheated=1; //if cheated=1 then there is cheating in the exam
+			        	cheated=1; 
 			        }
 			        String insertQuery = "INSERT INTO `cems`.`closed_exams` " +
 		                     "(`exam_id`, `code`, `test_time`, `date_start`, `date_end`, `cheat`, `students_number`, `lecturer_id`) " +
@@ -231,7 +237,7 @@ public class ServerCommandsStudent {
 	}
 
     /**
-	 * when student starts test then this request is called to send the test info from data base to client with the testCode=code recived
+	 * when student starts test then this request is called to send the test info from data base to client
 	 * @param t
 	 * @param client
 	 */
@@ -289,7 +295,15 @@ public class ServerCommandsStudent {
 
 	}
 
-	/** returns Question list if testid Existed in DataBase else null */ 
+	/**
+	 * This function retrieves a list of test questions from a database based on a given test ID.
+	 * 
+	 * @param conn The connection object used to connect to the database.
+	 * @param testid an integer representing the ID of the test for which the questions are being
+	 * retrieved.
+	 * @return This method returns an ArrayList of InTestQuestion objects. If there are no questions
+	 * found, it returns null.
+	 */
 	public ArrayList<InTestQuestion> getTestQuestions(Connection conn, int testid) {
 		ArrayList<InTestQuestion> qLst = new ArrayList<InTestQuestion>();
 		boolean f = false;
@@ -298,7 +312,6 @@ public class ServerCommandsStudent {
 			String id = '"' + String.valueOf(testid) + '"';
 			String str = "SELECT * FROM cems.exam_questions eq, cems.questions q where eq.exam_id=" + testid
 					+ " And eq.question_id = q.question_id ;";
-			// str= str+ " AND t.idTest = " + id + ";";
 			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(str);
 			int i = 0;
@@ -325,8 +338,8 @@ public class ServerCommandsStudent {
 
 	}
     /**
-	 * this function will be called when students finish digital exam an submit
-	 * it will save his answers, grade, in data base
+	 * this function will be called when students finish digital exam anש submit
+	 * it to save his answers, grade, in data base
 	 * @param studentInTest
 	 * @param client
 	 */
@@ -363,7 +376,6 @@ public class ServerCommandsStudent {
 					+ ") AND (`exam_id` = " + testId + ");";
 			stmt3 = conn.createStatement();
 			stmt3.executeUpdate(str3);
-			//this query is to check if the student is the last student in the exam
 			String str4 = "SELECT (SELECT COUNT(*) FROM cems.student_inexam WHERE exam_id =" + testId
 					+ ") AS total_rows,";
 			str4 += "(SELECT COUNT(*) FROM cems.student_inexam WHERE exam_id =" + testId
@@ -373,7 +385,6 @@ public class ServerCommandsStudent {
 			rs = stmt4.executeQuery(str4);
 			if (rs.next()) {
 				if (rs.getInt("total_rows") == rs.getInt("submitted_rows")) {
-					//if the student is the last student in the exam..
 					int studentsnumber= rs.getInt("total_rows"); //number of students who did the exam
 					String str6= "SELECT test_time,code FROM cems.open_exams where exam_id=" +testId   +" ;";
 					stmt6= conn.createStatement();
@@ -414,7 +425,7 @@ public class ServerCommandsStudent {
 			        //if 20% of questions are "Cheated" then cheated is assured
 			        double percentage = (double) quesCheated / studentInTest.getQesSize() * 100;
 			        if (percentage >= 35 & studentsnumber>1 & studentInTest.getQesSize() >2) {
-			        	cheated=1; //if cheated=1 then there is cheating in the exam
+			        	cheated=1; 
 			        }
 			        String insertQuery = "INSERT INTO `cems`.`closed_exams` " +
 		                     "(`exam_id`, `code`, `test_time`, `date_start`, `date_end`, `cheat`, `students_number` , `lecturer_id`) " +
@@ -431,8 +442,14 @@ public class ServerCommandsStudent {
 		}
 
 	}
-    /**
-	 * this request will be called to check if lectuerer added extra time for the exam
+
+	/**
+	 * This function checks if the duration of a test has changed and sends the difference in time to a
+	 * client.
+	 * 
+	 * @param testSourcetime An object of type TestSourceTime that contains information about the test
+	 * source time and test ID.
+	 * @param client 
 	 */
 	public void checkIfDurationChanged(TestSourceTime testSourcetime, ConnectionToClient client) {
 		String str;
@@ -480,7 +497,15 @@ public class ServerCommandsStudent {
 		}
 	}
 
-	// gets test Data from DataBase and puts it in Test Object and returns it;
+	/**
+	 * This function retrieves a test object from the database along with a list of student IDs who are
+	 * eligible to take the test.
+	 * 
+	 * @param conn The parameter "conn" is a Connection object that represents the connection to the
+	 * database.
+	 * @param testid an integer representing the ID of the test being retrieved from the database.
+	 * @return The method returns a Test object.
+	 */
 	public Test getTest(Connection conn, int testid) {
 		ArrayList<Integer> studentsIdForTest = new ArrayList<>();
 		Test test = null;
@@ -513,8 +538,16 @@ public class ServerCommandsStudent {
 		return test;
 	}
 
-	// Checks if Test Applying info is existed in Database in Student Applying list
-	// returns test Id if it does Exist, else -1
+	
+	/**
+	 * This function checks if a test code exists in a database table and returns the corresponding exam
+	 * ID if it does.
+	 * 
+	 * @param conn A Connection object representing a connection to a database.
+	 * @param t TestCode object that contains the code for the exam being checked.
+	 * @return The method is returning an integer value which represents the test ID of an open exam that
+	 * matches the provided test code. If no matching open exam is found, the method returns -1.
+	 */
 	public int ApplyingInfoExisted(Connection conn, TestCode t) {
 		Statement stmt;
 		int testid = -1;
