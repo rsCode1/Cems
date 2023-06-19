@@ -179,6 +179,7 @@ public class ChatClient extends AbstractClient
 					stdManController.setDownloadFile(file);
 					break;
 				case "closeExam":
+					lecturerPageController.getOngoingExamsTable(); // refresh table
 					if (inExamController != null) {
 						inExamController.LockExam((int) response.getResponseParam());
 					}

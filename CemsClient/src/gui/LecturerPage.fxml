@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="createQuestionForm" prefHeight="731.0" prefWidth="1067.0" styleClass="b" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LecturerPageController">
+<Pane fx:id="createQuestionForm" prefHeight="731.0" prefWidth="1067.0" styleClass="b" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LecturerPageController">
    <children>
       <ImageView fitHeight="758.0" fitWidth="1067.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -64,12 +64,12 @@
             <Font name="Calibri" size="16.0" />
          </font>
       </Label>
-      <Label layoutX="477.0" layoutY="164.0" prefHeight="35.0" prefWidth="114.0" text="Quick actions:" textFill="#1e1f26">
+      <Label layoutX="477.0" layoutY="147.0" prefHeight="35.0" prefWidth="114.0" text="Quick actions:" textFill="#1e1f26">
          <font>
             <Font name="Calibri" size="16.0" />
          </font>
       </Label>
-      <Button fx:id="writeQuestionBtn" layoutX="437.0" layoutY="201.0" mnemonicParsing="false" onAction="#showCreateQuestionForm" prefHeight="49.0" prefWidth="194.0" style="-fx-background-color: #02c3bc;" text="Write a question">
+      <Button fx:id="writeQuestionBtn" layoutX="437.0" layoutY="184.0" mnemonicParsing="false" onAction="#showCreateQuestionForm" prefHeight="49.0" prefWidth="194.0" style="-fx-background-color: #02c3bc;" text="Write a question">
          <effect>
             <InnerShadow>
                <color>
@@ -81,7 +81,7 @@
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
-      <Button fx:id="CreateExamBtn" layoutX="437.0" layoutY="262.0" mnemonicParsing="false" onAction="#showCreateExamForm" prefHeight="49.0" prefWidth="194.0" style="-fx-background-color: #02c3bc;" text="Create an Exam">
+      <Button fx:id="CreateExamBtn" layoutX="437.0" layoutY="245.0" mnemonicParsing="false" onAction="#showCreateExamForm" prefHeight="49.0" prefWidth="194.0" style="-fx-background-color: #02c3bc;" text="Create an Exam">
          <effect>
             <InnerShadow>
                <color>
@@ -93,7 +93,7 @@
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
-      <Button fx:id="StartExamBtn" layoutX="437.0" layoutY="387.0" mnemonicParsing="false" onAction="#startExam" prefHeight="49.0" prefWidth="194.0" style="-fx-background-color: #37da83;" text="Start an Exam">
+      <Button fx:id="StartExamBtn" layoutX="437.0" layoutY="370.0" mnemonicParsing="false" onAction="#startExam" prefHeight="49.0" prefWidth="194.0" style="-fx-background-color: #37da83;" text="Start an Exam">
          <effect>
             <InnerShadow>
                <color>
@@ -135,7 +135,7 @@
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
-      <Button fx:id="TimeRequestBtn" layoutX="738.0" layoutY="602.0" mnemonicParsing="false" onAction="#showTimeRequestForm" prefHeight="49.0" prefWidth="147.0" style="-fx-background-color: #37da83;" text="Time Request">
+      <Button fx:id="TimeRequestBtn" layoutX="738.0" layoutY="600.0" mnemonicParsing="false" onAction="#showTimeRequestForm" prefHeight="49.0" prefWidth="147.0" style="-fx-background-color: #37da83;" text="Time Request">
          <effect>
             <InnerShadow>
                <color>
@@ -147,7 +147,7 @@
             <Font name="System Bold" size="15.0" />
          </font>
       </Button>
-      <Button fx:id="pastExamsBtn" layoutX="437.0" layoutY="323.0" mnemonicParsing="false" onAction="#pastExams" prefHeight="49.0" prefWidth="194.0" style="-fx-background-color: #02c3bc;" text="Past Exams">
+      <Button fx:id="pastExamsBtn" layoutX="437.0" layoutY="306.0" mnemonicParsing="false" onAction="#pastExams" prefHeight="49.0" prefWidth="194.0" style="-fx-background-color: #02c3bc;" text="Past Exams">
          <effect>
             <InnerShadow>
                <color>

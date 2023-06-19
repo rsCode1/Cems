@@ -29,231 +29,358 @@ import logic.Request;
 import logic.Users;
 
 public class writeQuestionController {
-    private ChatClient client;
-    private Users lecturer;
+	private ChatClient client;
+	private Users lecturer;
 
-    @FXML
-    private TextField answer1;
+	@FXML
+	private TextField answer1;
 
-    @FXML
-    private TextField answer2;
+	@FXML
+	private TextField answer2;
 
-    @FXML
-    private TextField answer3;
+	@FXML
+	private TextField answer3;
 
-    @FXML
-    private TextField answer4;
+	@FXML
+	private TextField answer4;
 
-    @FXML
-    private Button backBtn;
+	@FXML
+	private Button backBtn;
 
-    @FXML
-    private ToggleGroup correctAnswer;
+	@FXML
+	private ToggleGroup correctAnswer;
 
-    @FXML
-    private ToggleGroup correctAnswer1;
+	@FXML
+	private ToggleGroup correctAnswer1;
 
-    @FXML
-    private ComboBox<String> coursesComboBox;
+	@FXML
+	private ComboBox<String> coursesComboBox;
 
-    @FXML
-    private Pane createQuestionForm;
+	@FXML
+	private Pane createQuestionForm;
 
-    @FXML
-    private ComboBox<String> professionsComboBox;
+	@FXML
+	private ComboBox<String> professionsComboBox;
 
-    @FXML
-    private TextArea questionDescriptionField;
+	@FXML
+	private TextArea questionDescriptionField;
 
-    @FXML
-    private RadioButton radio1;
+	@FXML
+	private RadioButton radio1;
 
-    @FXML
-    private RadioButton radio2;
+	@FXML
+	private RadioButton radio2;
 
-    @FXML
-    private RadioButton radio3;
+	@FXML
+	private RadioButton radio3;
 
-    @FXML
-    private RadioButton radio4;
+	@FXML
+	private RadioButton radio4;
 
-    @FXML
-    private Button saveButton;
+	@FXML
+	private Button saveButton;
 
-    @FXML
-    private Text toolCreateExams;
+	@FXML
+	private Text toolCreateExams;
 
-    @FXML
-    private Text toolGrade;
+	@FXML
+	private Text toolGrade;
 
-    @FXML
-    private Text toolStatistics;
+	@FXML
+	private Text toolStatistics;
 
-    @FXML
-    private Text toolTimeRequest;
 
-    @FXML
-    private Text toolWriteQuestion;
+	@FXML
+	private Text toolWriteQuestions;
 
-    @FXML
-    private Label saveLabelBtn;
+	@FXML
+	private Label saveLabelBtn;
 
-    @FXML
-    void backToMainScreen(ActionEvent event) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LecturerPage.fxml")); // specify the path to the
-                                                                                           // main screen FXML file
-        Parent parent = null;
-        try {
-            parent = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Scene mainScene = new Scene(parent);
+	@FXML
+	void backToMainScreen(ActionEvent event) {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LecturerPage.fxml")); // specify the path to the
+																								// main screen FXML file
+		Parent parent = null;
+		try {
+			parent = loader.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Scene mainScene = new Scene(parent);
 
-        // Get the main screen's controller and pass the ChatClient and lecturer
-        // instances to it
+		// Get the main screen's controller and pass the ChatClient and lecturer
+		// instances to it
 		LecturerPageController controller = loader.getController();
 		controller.setLecturerAndClient(lecturer, client);
 		controller.getOngoingExamsTable();
 		client.setController(controller);
 
-        // Get the Stage information
-        Stage window = (Stage) backBtn.getScene().getWindow();
-        window.setScene(mainScene);
-        window.show();
-    }
+		// Get the Stage information
+		Stage window = (Stage) backBtn.getScene().getWindow();
+		window.setScene(mainScene);
+		window.show();
+	}
 
-    public void setClientAndLecturer(ChatClient client, Users lecturer) {
-        this.client = client;
-        this.lecturer = lecturer;
-    }
+	public void setClientAndLecturer(ChatClient client, Users lecturer) {
+		this.client = client;
+		this.lecturer = lecturer;
+	}
 
-    // sends the question to the server
-    // uses the Question class from CemsShared
-    // creates a Request object with the question and sends it to the server
-    @FXML
-    public void btnSaveQuestion(ActionEvent event) {
-        String questionDescription = questionDescriptionField.getText();
-        String answer1 = this.answer1.getText();
-        String answer2 = this.answer2.getText();
-        String answer3 = this.answer3.getText();
-        String answer4 = this.answer4.getText();
-        int correctAnswer = 0;
-        if (radio1.isSelected()) {
-            correctAnswer = 1;
-        } else if (radio2.isSelected()) {
-            correctAnswer = 2;
-        } else if (radio3.isSelected()) {
-            correctAnswer = 3;
-        } else if (radio4.isSelected()) {
-            correctAnswer = 4;
-        }
-        
-        String course = coursesComboBox.getValue();
-        String subject = professionsComboBox.getValue();
-        if (questionDescription.equals("") || answer1.equals("") || answer2.equals("") || answer3.equals("")
-            || answer4.equals("") || correctAnswer == 0 || course == null || subject == null) {
-                saveLabelBtn.setText("Please fill all the fields");
-                return;
-            }
+	// sends the question to the server
+	// uses the Question class from CemsShared
+	// creates a Request object with the question and sends it to the server
+	@FXML
+	public void btnSaveQuestion(ActionEvent event) {
+		String questionDescription = questionDescriptionField.getText();
+		String answer1 = this.answer1.getText();
+		String answer2 = this.answer2.getText();
+		String answer3 = this.answer3.getText();
+		String answer4 = this.answer4.getText();
+		int correctAnswer = 0;
+		if (radio1.isSelected()) {
+			correctAnswer = 1;
+		} else if (radio2.isSelected()) {
+			correctAnswer = 2;
+		} else if (radio3.isSelected()) {
+			correctAnswer = 3;
+		} else if (radio4.isSelected()) {
+			correctAnswer = 4;
+		}
 
-        
+		String course = coursesComboBox.getValue();
+		String subject = professionsComboBox.getValue();
+		if (questionDescription.equals("") || answer1.equals("") || answer2.equals("") || answer3.equals("")
+				|| answer4.equals("") || correctAnswer == 0 || course == null || subject == null) {
+			saveLabelBtn.setText("Please fill all the fields");
+			return;
+		}
 
-        String author = lecturer.getFirstName()+" "+lecturer.getLastName();
-        int authorID = lecturer.getId();
-        // create a Question object
-        Question question = new Question(questionDescription, answer1, answer2, answer3, answer4, correctAnswer,
-                course, authorID,author);
-        // create a Request object
-        Request request = new Request("writeQuestion", question);
-        // send the request to the server
-        try {
-            client.sendToServer(request);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        saveLabelBtn.setText("Question saved successfully");
+		String author = lecturer.getFirstName() + " " + lecturer.getLastName();
+		int authorID = lecturer.getId();
+		// create a Question object
+		Question question = new Question(questionDescription, answer1, answer2, answer3, answer4, correctAnswer, course,
+				authorID, author);
+		// create a Request object
+		Request request = new Request("writeQuestion", question);
+		// send the request to the server
+		try {
+			client.sendToServer(request);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		saveLabelBtn.setText("Question saved successfully");
 
-    }
+	}
 
-    public void updateSubjectsComboBox(ArrayList<String> subjects) {
-        Platform.runLater(() -> {
-            ObservableList<String> list = FXCollections.observableArrayList(subjects);
-            professionsComboBox.setItems(list);
-        });
-    }
+	public void updateSubjectsComboBox(ArrayList<String> subjects) {
+		Platform.runLater(() -> {
+			ObservableList<String> list = FXCollections.observableArrayList(subjects);
+			professionsComboBox.setItems(list);
+		});
+	}
 
-    public void updateCoursesComboBox(ArrayList<String> courses) {
-        Platform.runLater(() -> {
-            ObservableList<String> list = FXCollections.observableArrayList(courses);
-            coursesComboBox.setItems(list);
-        });
+	public void updateCoursesComboBox(ArrayList<String> courses) {
+		Platform.runLater(() -> {
+			ObservableList<String> list = FXCollections.observableArrayList(courses);
+			coursesComboBox.setItems(list);
+		});
 
-    }
-    // @FXML
-    // public void btnSelectCourse(ActionEvent event) {
-    // // add some courses to the comboBox depending on the subject currently
-    // selected
-    // String subject = professionsComboBox.getValue();
-    // if (subject.equals("Select Subject"))
-    // return;
-    // Request request = new Request("getCourses", subject);
-    // try {
-    // client.sendToServer(request);
-    // }catch(Exception e) {
-    // e.printStackTrace();
-    // }
+	}
 
-    // }
+	// update all toolsBar
+	private void questionTool() {
 
-    // @FXML
-    // public void btnSelectProfession(MouseDragEvent event) {
-    // System.out.println("btnSelectProfession");
-    // // add some subjects to the comboBox
-    // Request request = new Request("getSubjects", null);
-    // try {
-    // client.sendToServer(request);
-    // } catch (Exception e) {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // }
-    // }
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/write_question.fxml")); // specify
 
-    @FXML
-    public void initialize() {
-        radio1.setToggleGroup(correctAnswer);
-        radio2.setToggleGroup(correctAnswer);
-        radio3.setToggleGroup(correctAnswer);
-        radio4.setToggleGroup(correctAnswer);
+		Parent parent = null;
+		try {
+			parent = loader.load();
 
-        professionsComboBox.setOnMouseClicked(event -> {
-            // add some subjects to the comboBox
-            Request request = new Request("getSubjects", null);
-            try {
-                client.openConnection();
-                client.sendToServer(request);
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        });
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		Scene nextScene = new Scene(parent);
 
-        coursesComboBox.setOnMouseClicked(event -> {
-            // add some courses to the comboBox depending on the subject currently selected
-            String subject = professionsComboBox.getValue();
-            if (subject!=null) {
-                Request request = new Request("getCourses", subject);
-                try {
-                    client.openConnection();
-                    client.sendToServer(request);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+		// Get the new scene's controller and pass the ChatClient instance to it
+		writeQuestionController controller = loader.getController();
+		controller.setClientAndLecturer(this.client, lecturer);
+		client.setController(controller);
 
-        });
+		// Get the Stage information
+		Stage window = (Stage) toolGrade.getScene().getWindow();
+		window.setScene(nextScene);
+		window.show();
 
-    }
+	}
+
+	private void GradeTool() {
+
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/lecturerApproval.fxml")); // specify
+
+		Parent parent = null;
+		try {
+			parent = loader.load();
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		Scene nextScene = new Scene(parent);
+
+		// Get the new scene's controller and pass the ChatClient instance to it
+		LecturerApprovalController controller = loader.getController();
+		controller.setClientAndLecturer(this.client, lecturer);
+		controller.getGrades();
+		client.setController(controller);
+
+		// Get the Stage information
+		Stage window = (Stage) toolGrade.getScene().getWindow();
+		window.setScene(nextScene);
+		window.show();
+
+	}
+
+	private void ExamsTool() {
+
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/create_exam.fxml")); // specify
+
+		Parent parent = null;
+		try {
+			parent = loader.load();
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		Scene nextScene = new Scene(parent);
+
+		// Get the new scene's controller and pass the ChatClient instance to it
+		createExamController controller = loader.getController();
+		controller.setClientAndLecturer(this.client, lecturer);
+		client.setController(controller);
+
+		// Get the Stage information
+		Stage window = (Stage) toolGrade.getScene().getWindow();
+		window.setScene(nextScene);
+		window.show();
+	}
+
+	private void StatisticsTool() {
+		Platform.runLater(() -> {
+
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/lecturerStatistics.fxml")); // specify
+
+			Parent parent = null;
+			try {
+				parent = loader.load();
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			Scene nextScene = new Scene(parent);
+
+			// Get the new scene's controller and pass the ChatClient instance to it
+			LecturerStatisticsController controller = loader.getController();
+			controller.setClientAndLecturer(this.client, lecturer);
+			controller.getExamsTable();
+			controller.getGrades();
+			client.setController(controller);
+
+			// Get the Stage information
+			Stage window = (Stage) toolGrade.getScene().getWindow();
+			window.setScene(nextScene);
+			window.show();
+		});
+	}
+
+	// end toolsBar
+	
+	// @FXML
+	// public void btnSelectCourse(ActionEvent event) {
+	// // add some courses to the comboBox depending on the subject currently
+	// selected
+	// String subject = professionsComboBox.getValue();
+	// if (subject.equals("Select Subject"))
+	// return;
+	// Request request = new Request("getCourses", subject);
+	// try {
+	// client.sendToServer(request);
+	// }catch(Exception e) {
+	// e.printStackTrace();
+	// }
+
+	// }
+
+	// @FXML
+	// public void btnSelectProfession(MouseDragEvent event) {
+	// System.out.println("btnSelectProfession");
+	// // add some subjects to the comboBox
+	// Request request = new Request("getSubjects", null);
+	// try {
+	// client.sendToServer(request);
+	// } catch (Exception e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// }
+
+	@FXML
+	public void initialize() {
+		radio1.setToggleGroup(correctAnswer);
+		radio2.setToggleGroup(correctAnswer);
+		radio3.setToggleGroup(correctAnswer);
+		radio4.setToggleGroup(correctAnswer);
+
+		professionsComboBox.setOnMouseClicked(event -> {
+			// add some subjects to the comboBox
+			Request request = new Request("getSubjects", null);
+			try {
+				client.openConnection();
+				client.sendToServer(request);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+
+		coursesComboBox.setOnMouseClicked(event -> {
+			// add some courses to the comboBox depending on the subject currently selected
+			String subject = professionsComboBox.getValue();
+			if (subject != null) {
+				Request request = new Request("getCourses", subject);
+				try {
+					client.openConnection();
+					client.sendToServer(request);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+		});
+		toolWriteQuestions.setOnMouseClicked(e -> {
+			Platform.runLater(() -> {
+				questionTool();
+			});
+
+		});
+		toolCreateExams.setOnMouseClicked(e -> {
+			Platform.runLater(() -> {
+				ExamsTool();
+			});
+
+		});
+
+		toolGrade.setOnMouseClicked(e -> {
+			Platform.runLater(() -> {
+				GradeTool();
+			});
+		});
+		toolStatistics.setOnMouseClicked(e -> {
+			Platform.runLater(() -> {
+				StatisticsTool();
+			});
+
+		});
+
+	}
 
 }
