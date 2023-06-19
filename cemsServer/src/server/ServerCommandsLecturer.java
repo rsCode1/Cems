@@ -70,45 +70,6 @@ public class ServerCommandsLecturer {
         }
     }
 
-    public void changeGrade(ConnectionToClient client, Exam exam) {
-        try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
-                    "Aa123456");
-            System.out.println("SQL connection succeed");
-            String command = "UPDATE grades SET status='approved',notes = ?,grade = ? WHERE examId = ? and studentId = ? and lecturerID = ?";
-            PreparedStatement stmt = conn.prepareStatement(command);
-            stmt.setString(1, exam.getNotesForChange());
-            stmt.setInt(2, exam.getGrade());
-            stmt.setInt(3, exam.getExamId());
-            stmt.setInt(4, exam.getStudentId());
-            stmt.setInt(5, exam.getLecturer().getId());
-            stmt.executeUpdate();
-            Response response = new Response("changeGradeSuccess", null);
-            client.sendToClient(response);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void approveGrade(ConnectionToClient client, Exam exam) {
-        try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
-                    "Aa123456");
-            System.out.println("SQL connection succeed");
-            String command = "UPDATE grades SET status='approved' WHERE examId = ? and studentId = ? and lecturerID = ?";
-            PreparedStatement stmt = conn.prepareStatement(command);
-            stmt.setInt(1, exam.getExamId());
-            stmt.setInt(2, exam.getStudentId());
-            stmt.setInt(3, exam.getLecturer().getId());
-            stmt.executeUpdate();
-            Response response = new Response("approveGradeSuccess", null);
-            client.sendToClient(response);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public void getGrades(ConnectionToClient client, Users lecturer) {
         try {
