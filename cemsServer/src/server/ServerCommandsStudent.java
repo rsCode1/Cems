@@ -225,6 +225,7 @@ public class ServerCommandsStudent {
 			client.sendToClient(response);
 		} catch (Exception e) {
 			System.out.println("Error sending exam file to Server");
+			e.printStackTrace();
 		}
 
 	}
