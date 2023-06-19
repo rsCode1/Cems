@@ -112,9 +112,11 @@ public class pastExamsController implements Initializable {
     }
 
     public void setExamsTable(ArrayList<Exam> exams) {
+		Platform.runLater(() -> {
         this.exams = exams;
         pastExamsTable.getItems().clear();
         pastExamsTable.getItems().setAll(exams);
+		});
     }
     public void getPastExams(){
         Request request = new Request("getPastExams", lecturer);

@@ -9,16 +9,18 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="587.0" prefWidth="860.0" styleClass="background" stylesheets="@../../../CemsShared/src/Styles/style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.pastExamsController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="731.0" prefWidth="1067.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.pastExamsController">
    <children>
-      <Text layoutX="353.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="past exams" wrappingWidth="182.12191772460938">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font></Text>
-      <TableView fx:id="pastExamsTable" layoutX="78.0" layoutY="109.0" prefHeight="369.0" prefWidth="734.0">
+      <ImageView fitHeight="758.0" fitWidth="1067.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/background.jpeg" />
+         </image>
+      </ImageView>
+      <TableView fx:id="pastExamsTable" layoutX="98.0" layoutY="211.0" prefHeight="360.0" prefWidth="879.0">
         <columns>
           <TableColumn fx:id="examId" prefWidth="78.0" text="exam id" />
           <TableColumn fx:id="code" minWidth="0.0" prefWidth="92.0" text="code" />
