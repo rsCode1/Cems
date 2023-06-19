@@ -861,24 +861,17 @@ public class HDController implements Initializable {
 	 * 
 	 * @param msg
 	 */
-	public void ImportLectuerStatistics(ArrayList<Grades> msg) {
-		ArrayList<Integer> justGrades = new ArrayList<>();
-		int i = 0;
-		int currentGrade = 0;
-		for (Grades grade : msg) {
-
-			currentGrade = (int) msg.get(i++).getGrade();
-			justGrades.add(currentGrade);
-		}
+	public void ImportLectuerStatistics(ArrayList<Grades> grades) {
+	
 		Platform.runLater(() -> {
-		handleAddDataToChart(justGrades, barChartLec);
-		LectuerName.setText(msg.get(0).getCourseName());// show course name
-		GPA_LECtextArea.setText(String.valueOf(calcAVG(msg)));// show the avarge
-		Median_LECTextArea.setText(String.valueOf(calcMedian(msg)));// shoe median
+		handleAddDataToChart(grades, barChartLec,LectuerID);
+		LectuerName.setText(grades.get(0).getCourseName());// show course name
+		GPA_LECtextArea.setText(String.valueOf(calcAVG(grades)));// show the avarge
+		Median_LECTextArea.setText(String.valueOf(calcMedian(grades)));// shoe median
 		DecimalFormat decimalFormat = new DecimalFormat("#.00");
-		String formatNumber = decimalFormat.format(calculateStandardDeviation(msg));
+		String formatNumber = decimalFormat.format(calculateStandardDeviation(grades));
 		sdlabelLecturerNumber.setText(formatNumber);
-		NumberOfTestLectuer.setText(String.valueOf(msg.size()));// show the number of test
+		NumberOfTestLectuer.setText(String.valueOf(grades.size()));// show the number of test
 		});
 
 
@@ -917,16 +910,9 @@ public class HDController implements Initializable {
 	 */
 	public void ImportStudentGradeStatistics(ArrayList<Grades> msg) {
 		StudentCount++;
-		ArrayList<Integer> justGrades = new ArrayList<>();
-		int i = 0;
-		int currentGrade = 0;
-		for (Grades grade : msg) {
+		
 
-			currentGrade = (int) msg.get(i++).getGrade();
-			justGrades.add(currentGrade);
-		}
-
-		handleAddDataToChart(justGrades, barChartStud);
+		handleAddDataToChart(msg, barChartStud,ID_STUtextArea);
 		System.out.println("BDIKAAA" + StudentCount);
 		if (StudentCount == 1) {// if we take data about one student
 			StudentName.setText(msg.get(0).getCourseName());// show course name
@@ -977,10 +963,7 @@ public class HDController implements Initializable {
 	 * @param msg
 	 */
 	public void ImportCourseGradeStatistics(ArrayList<Grades> msg) {
-		ArrayList<Integer> justGrades = new ArrayList<>();
-		int currentGrade = 0;
-
-		int i = 0;
+		
 		CourseName.setText(msg.get(0).getCourseName());// show course name
 		GPA_GradestextArea.setText(String.valueOf(calcAVG(msg)));// show the avarge
 		median_GradesTextArea.setText(String.valueOf(calcMedian(msg)));// shoe median
@@ -989,12 +972,7 @@ public class HDController implements Initializable {
 		sdlabelCourseNumber.setText(formatNumber);
 		NumberOfTestCourse.setText(String.valueOf(msg.size()));// show the number of test
 
-		for (Grades grade : msg) {
-
-			currentGrade = (int) msg.get(i++).getGrade();
-			justGrades.add(currentGrade);
-		}
-		handleAddDataToChart(justGrades, barChartCourse);
+		handleAddDataToChart(msg, barChartCourse,ID_GradetextArea);
 	}
 
 	/**
@@ -1101,24 +1079,18 @@ public class HDController implements Initializable {
 	 * 
 	 * @param ArrayList<Integer> grades, BarChart chart
 	 **/
-	private void handleAddDataToChart(ArrayList<Integer> grades, BarChart chart) {
+	private void handleAddDataToChart(ArrayList<Grades> grades, BarChart chart,TextField textField) {
 		// Create data series
 		Platform.runLater(() -> {
 			XYChart.Series<String, Number> series = new XYChart.Series<>();
-			series.setName("Series");
-			int[] grades1 = new int[grades.size()];
-			int i = 0;
-			for (int i1 : grades) {
-				grades1[i] = grades.get(i);
-				i++;
-
-			}
+			series.setName(textField.getText());
+		
 			// Add data points to series
-			for (i = 0; i < grades.size(); i++) {
+			for (Grades grade :grades){
 
-				series.getData().add(new XYChart.Data<>("exam" + i + 1, grades1[i]));
+				series.getData().add(new XYChart.Data<>(grade.getExamID(), grade.getGrade()));
+			
 			}
-
 			// Add series to the bar chart
 			ObservableList<XYChart.Series<String, Number>> data = FXCollections.observableArrayList();
 			data.add(series);

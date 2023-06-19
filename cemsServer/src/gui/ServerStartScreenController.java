@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -45,21 +46,8 @@ public class ServerStartScreenController implements Initializable {
 	private TableView<LoggedUsers> table;
 
 	@FXML
-	private TextField iPAddress;
-	@FXML
-	private TextField dbUserNameField;
-	@FXML
-	private TextField portField;
-	@FXML
-	private PasswordField passwordField;
-	@FXML
-	private TextField textField;
-	@FXML
-	private CheckBox showPasswordCheckBox;
-	@FXML
 	private Circle colorCircle;
-	 @FXML
-    private Text passwordText;
+	
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -68,26 +56,7 @@ public class ServerStartScreenController implements Initializable {
 		lastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
 		userName.setCellValueFactory(new PropertyValueFactory<>("userName"));
 		role.setCellValueFactory(new PropertyValueFactory<>("role"));
-		try {
-			InetAddress localHost = InetAddress.getLocalHost();
-			iPAddress.setText(localHost.getHostAddress());
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-
-		passwordField.textProperty().bindBidirectional(passwordText.textProperty());
-
-		showPasswordCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-			if (newValue) {
-				passwordField.setVisible(false);
-				passwordText.setVisible(true);
-			} else {
-				passwordField.setVisible(true);
-				passwordText.setVisible(false);
-			}
-		});
+	
 
 	}
 
@@ -100,21 +69,20 @@ public class ServerStartScreenController implements Initializable {
 	@FXML
 	public void startServer() {
 
-		try {
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST",
-					dbUserNameField.getText(),
-					passwordField.getText());
-			if (server != null && conn != null) {
-				server.listen(); // Start listening for connections
+		
+			if (server != null  ) {
+				try {
+					server.listen();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} // Start listening for connections
 				colorCircle.setFill(Color.web("#21ff25"));;
 			} else {
 				System.out.println("ERROR - Server is not initialized!");
 				 colorCircle.setFill(Color.RED);
 			}
-		} catch (Exception ex) {
-			System.out.println("ERROR - Could not listen for clients!");
-			 colorCircle.setFill(Color.RED);
-		}
+		
 	}
 
 	public void setServer(EchoServer server) {
