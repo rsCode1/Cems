@@ -2,17 +2,21 @@ package logic;
 
 import java.io.Serializable;
 
+/**
+ * this class for saving the student finished the exam details,
+ * it includes student info, test info, list of his answers
+ */
 public class StudentInTest implements Serializable {
-	private int studentId;
-	private int testId;
+	private int studentId; 
+	private int testId;   
 	private String CourseName;
-	private int [] ansArr;
-	private int score=0;
-	private int qesSize;
-	private int [] quesIdArr;
+	private int [] ansArr; //list of his answers number
+	private int score=0;  // student score
+	private int qesSize; //number of questions
+	private int [] quesIdArr; //question ids array 
 	private int lecturerId;
 	private int courseId;
-    private Test test;
+    private Test test;//test info
     public void setTest (Test test) {
     	this.test=test;
     }

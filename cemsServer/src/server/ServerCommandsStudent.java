@@ -29,7 +29,9 @@ import logic.UploadFile;
 import ocsf.server.ConnectionToClient;
 
 public class ServerCommandsStudent {
-
+    /**
+	 * for getting the student grades from grades table in the data base where student id is passed as parameter
+	 */
 	public void getStudentGrades(int studentId, ConnectionToClient client) {
 
 		ArrayList<StudentData> studentGradesInfo = new ArrayList<>();
@@ -62,6 +64,11 @@ public class ServerCommandsStudent {
 
 	}
 
+	/**
+	 * when student starts an exam , this method is called for adding him the student_inexam table in the data base
+	 * @param testApplyInfo includes student id and test id
+	 * @param client
+	 */
 	public void addStudentToInExamList(TestApplyInfo testApplyInfo, ConnectionToClient client) {
 		Statement stmt;
 		try {
@@ -81,15 +88,20 @@ public class ServerCommandsStudent {
 		}
 
 	}
-
+    /**
+	 * when student submit manual exam this request is called for saving his answers file in the data base
+	 * @param answersFile -> students file data
+	 * @param client
+	 */
 	public void submitManualExam(UploadFile answersFile, ConnectionToClient client) {
 		try {
 
 			boolean Submitted = true;
 			String status = "Not Submitted- manualy";
-			if (answersFile.getMyfile() == null)
+			if (answersFile.getMyfile() == null) // if answers file = null then student is not submitted
 				Submitted = false;
 			if (Submitted) {
+				//if student submitted, first we save his answers file in the data base in Submitted_Manual_Exams_Files folder
 				String LocalfilePath = "Submitted_Manual_Exams_Files\\" + answersFile.getMyfile().getFileName();
 				File newFile = new File(LocalfilePath);
 				FileOutputStream fis = new FileOutputStream(newFile);
@@ -97,39 +109,47 @@ public class ServerCommandsStudent {
 				bis.write(answersFile.getMyfile().getMybytearray(), 0, answersFile.getMyfile().getSize());
 				bis.close();
 				status = "Submitted- Manualy";
-			}//answersFile.getStudentInTest()
+			}
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
 					"Aa123456");
 			Statement stmt2, stmt3, stmt4, stmt5,stmt6,stmt7,stmt8;
+			//second we add his info tho the grades table in data base , status column will let the teacher now to check manualy his exam.
 			String str2 = "INSERT INTO `cems`.`grades` (`examId`, `studentId`, `courseID`, `grade`, `lecturerID`, `courseName`, `status`)";
 			str2 += " VALUES ('" + answersFile.getStudentInTest().getTestId() + "', '" + answersFile.getStudentInTest().getStudentId() + "', '"
 					+ answersFile.getStudentInTest().getCourseId() + "', '" + answersFile.getStudentInTest().getScore();
-			str2 += "', '" + answersFile.getStudentInTest().getLecturerId() + "', '" + answersFile.getStudentInTest().getCourseName() + "','" + "pending"
+			str2 += "', '" + answersFile.getStudentInTest().getLecturerId() + "', '" + answersFile.getStudentInTest().getCourseName() + "','" + status
 					+ "');";
 			stmt2 = conn.createStatement();
 			stmt2.executeUpdate(str2);
+
+			//third we update the student_inexam table in data base and change the submiited column for 1
 			String str3 = "UPDATE `cems`.`student_inexam` SET `submitted` = '1' WHERE (`student_id` ="
 					+ answersFile.getStudentId() + ") AND (`exam_id` = " + answersFile.getTestId() + ");";
 			stmt3 = conn.createStatement();
 			stmt3.executeUpdate(str3);
 			String testId = '"' + String.valueOf(answersFile.getTestId()) + '"';
+
+		    //this query is to check if the student is the last student in the exam
 			String str4 = "SELECT (SELECT COUNT(*) FROM cems.student_inexam WHERE exam_id =" + testId
 					+ ") AS total_rows,";
 			str4 += "(SELECT COUNT(*) FROM cems.student_inexam WHERE exam_id =" + testId
 					+ "AND submitted = 1) AS submitted_rows;";
 			stmt4 = conn.createStatement();
 			ResultSet rs,rs2,rs3;
+			
 			rs = stmt4.executeQuery(str4);
-			if (rs.next()) {
+			if (rs.next()) { 
 				if (rs.getInt("total_rows") == rs.getInt("submitted_rows")) {
+					//if the student is the last student in the exam..
 					int studentsnumber= rs.getInt("total_rows"); //number of students who did the exam
-					String str6= "SELECT test_time,code FROM cems.open_exams where exam_id=" +testId   +" ;";
+					String str6= "SELECT test_time,code FROM cems.open_exams where exam_id=" +testId   +" ;"; //closing exam
 					stmt6= conn.createStatement();
 					rs2=stmt6.executeQuery(str6);
 					rs2.next();
 					int duration=rs2.getInt("test_time");//test duration
 					int code=rs2.getInt("code");//test code
 					rs2.close();
+					//closing exam (all students finished)
 					String str5 = "DELETE FROM cems.open_exams where exam_id =" + answersFile.getTestId() + " ;";
 					stmt5 = conn.createStatement();
 					stmt5.executeUpdate(str5);
@@ -179,7 +199,12 @@ public class ServerCommandsStudent {
 
 	}
 
-	// finished
+	/**
+	 * if the students starts manual exam then this request is called when he clicks on download buttun,
+	 * it will send the exam file in data base with the same testid whuch recived
+	 * @param testid
+	 * @param client
+	 */
 	public void downloadManuelExam(int testid, ConnectionToClient client) {
 		MyFile msg2 = new MyFile(testid + ".docx");
 		String LocalfilePath = "Manual_Exams_Files\\" + testid + ".docx";
@@ -204,24 +229,27 @@ public class ServerCommandsStudent {
 
 	}
 
-	// if applying info is correct the function gets requested Test from data base
-	// and sends it to Client
+    /**
+	 * when student starts test then this request is called to send the test info from data base to client with the testCode=code recived
+	 * @param t
+	 * @param client
+	 */
 	public void getExam(TestCode t, ConnectionToClient client) {
 		int testid;
 		try {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
 					"Aa123456");
-			testid = ApplyingInfoExisted(conn, t);
+			testid = ApplyingInfoExisted(conn, t); //checking if there is an opened test  with code=t 
 			if (testid != -1) {
-				Test test = getTest(conn, testid);
+				Test test = getTest(conn, testid); //getting test info from data base
 				if (test != null) {
 					ArrayList<InTestQuestion> qLst = getTestQuestions(conn, testid);
 					if (qLst != null) {
-						test.setQLst(qLst);
+						test.setQLst(qLst); //getting test question from data base
 						test.setquesSize(qLst.size());
 						try {
 							Response response = new Response("GetExam", test);
-							client.sendToClient(response);
+							client.sendToClient(response);//sending the client test
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -260,7 +288,7 @@ public class ServerCommandsStudent {
 
 	}
 
-	// returns Question list if testid Existed in DataBase else null
+	/** returns Question list if testid Existed in DataBase else null */ 
 	public ArrayList<InTestQuestion> getTestQuestions(Connection conn, int testid) {
 		ArrayList<InTestQuestion> qLst = new ArrayList<InTestQuestion>();
 		boolean f = false;
@@ -295,7 +323,12 @@ public class ServerCommandsStudent {
 		return null;
 
 	}
-
+    /**
+	 * this function will be called when students finish digital exam an submit
+	 * it will save his answers, grade, in data base
+	 * @param studentInTest
+	 * @param client
+	 */
 	public void submitTest(StudentInTest studentInTest, ConnectionToClient client) {
 		Statement stmt, stmt2, stmt3, stmt4, stmt5,stmt6,stmt7,stmt8;
 		String str;
@@ -306,6 +339,7 @@ public class ServerCommandsStudent {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
 					"Aa123456");
 			stmt = conn.createStatement();
+			//saving student answers in students_answers table
 			for (int i = 0; i < studentInTest.getQesSize(); i++) {
 				String answer = '"' + String.valueOf(studentInTest.getAnswer(i)) + '"';
 				String quesId = '"' + String.valueOf(studentInTest.getQuesIdArr()[i]) + '"';
@@ -315,6 +349,7 @@ public class ServerCommandsStudent {
 				stmt.executeUpdate(str);
 				str = "";
 			}
+			//saving student grade in grades table
 			String str2 = "INSERT INTO `cems`.`grades` (`examId`, `studentId`, `courseID`, `grade`, `lecturerID`, `courseName`, `status`)";
 			str2 += " VALUES ('" + studentInTest.getTestId() + "', '" + studentInTest.getStudentId() + "', '"
 					+ studentInTest.getCourseId() + "', '" + studentInTest.getScore();
@@ -322,10 +357,12 @@ public class ServerCommandsStudent {
 					+ "');";
 			stmt2 = conn.createStatement();
 			stmt2.executeUpdate(str2);
+			//updating submitted to 1 in student_inexam table
 			String str3 = "UPDATE `cems`.`student_inexam` SET `submitted` = '1' WHERE (`student_id` =" + studentId
 					+ ") AND (`exam_id` = " + testId + ");";
 			stmt3 = conn.createStatement();
 			stmt3.executeUpdate(str3);
+			//this query is to check if the student is the last student in the exam
 			String str4 = "SELECT (SELECT COUNT(*) FROM cems.student_inexam WHERE exam_id =" + testId
 					+ ") AS total_rows,";
 			str4 += "(SELECT COUNT(*) FROM cems.student_inexam WHERE exam_id =" + testId
@@ -335,6 +372,7 @@ public class ServerCommandsStudent {
 			rs = stmt4.executeQuery(str4);
 			if (rs.next()) {
 				if (rs.getInt("total_rows") == rs.getInt("submitted_rows")) {
+					//if the student is the last student in the exam..
 					int studentsnumber= rs.getInt("total_rows"); //number of students who did the exam
 					String str6= "SELECT test_time,code FROM cems.open_exams where exam_id=" +testId   +" ;";
 					stmt6= conn.createStatement();
@@ -343,6 +381,7 @@ public class ServerCommandsStudent {
 					int duration=rs2.getInt("test_time");//test duration
 					int code=rs2.getInt("code");//test code
 					rs2.close();
+					//closing exam (all students finished)
 					String str5 = "DELETE FROM cems.open_exams where exam_id =" + testId + ";";
 					stmt5 = conn.createStatement();
 					stmt5.executeUpdate(str5);
@@ -391,7 +430,9 @@ public class ServerCommandsStudent {
 		}
 
 	}
-
+    /**
+	 * this request will be called to check if lectuerer added extra time for the exam
+	 */
 	public void checkIfDurationChanged(TestSourceTime testSourcetime, ConnectionToClient client) {
 		String str;
 		int currentD = testSourcetime.getSourceTime();

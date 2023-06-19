@@ -3,9 +3,12 @@ package logic;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * this class for saving test informatin from data base to show it in student's test screen
+ */
 public class Test implements Serializable{
-	private ArrayList<InTestQuestion> qLst ;
-	private String courseName;
+	private ArrayList<InTestQuestion> qLst ; //test question list
+	private String courseName; 
 	private int testId;
 	private int lecturerId;
 	private int courseId;

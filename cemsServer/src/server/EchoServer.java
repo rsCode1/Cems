@@ -59,8 +59,8 @@ import logic.Exam;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import logic.AddedTime;
-import logic.DownloadManualExaminController;
-import logic.FileDownloadInfo;
+
+
 import logic.RequestTime;
 import logic.Response;
 import logic.StudentInTest;
