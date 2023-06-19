@@ -76,6 +76,11 @@ public class LecturerApprovalController implements Initializable {
 	@FXML
 	private Text toolWriteQuestions;
     @FXML
+    // Gets the selected exam from the table view,
+    // and if there is no selection, it displays an error message. If an exam is selected, it creates a
+    // `Request` object with the action "approveGrade" and the selected exam as its parameter, and
+    // sends it to the server.
+
     void approveGrade(ActionEvent event) {
         Exam exam = examsTable.getSelectionModel().getSelectedItem();
         if (exam == null) {
@@ -93,6 +98,13 @@ public class LecturerApprovalController implements Initializable {
 
     }
 
+   /**
+    * This function changes the grade of a selected exam and sends a request to the server with the
+    * updated information.
+    * 
+    * @param event An ActionEvent object that represents the user's action that triggered the method
+    * call.
+    */
     @FXML
     void changeGrade(ActionEvent event) {
         Exam exam = examsTable.getSelectionModel().getSelectedItem();
@@ -127,6 +139,9 @@ public class LecturerApprovalController implements Initializable {
 
     }
 
+    /**
+     * This function sends a request to the server to get grades for a specific lecturer.
+     */
     public void getGrades() {
         Request request = new Request("getGrades", lecturer);
 
@@ -139,6 +154,11 @@ public class LecturerApprovalController implements Initializable {
         }
     }
 
+    /**
+     * This function sets the grades table with a list of exams and updates the UI.
+     * 
+     * @param exams An ArrayList of Exam objects that contains the data to be displayed in a table.
+     */
     public void setGradesTable(ArrayList<Exam> exams) {
         Platform.runLater(() -> {
             this.exams = exams;

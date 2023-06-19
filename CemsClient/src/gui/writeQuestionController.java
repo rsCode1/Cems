@@ -97,6 +97,7 @@ public class writeQuestionController {
 	private Label saveLabelBtn;
 
 	@FXML
+	
 	void backToMainScreen(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LecturerPage.fxml")); // specify the path to the
 																								// main screen FXML file
@@ -188,7 +189,10 @@ public class writeQuestionController {
 
 	}
 
-	// update all toolsBar
+	 /**
+	 * This function loads a new scene for a questions tool  and sets the controller and client for the
+	 * new scene.
+	 */
 	private void questionTool() {
 
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/write_question.fxml")); // specify
@@ -213,6 +217,11 @@ public class writeQuestionController {
 		window.show();
 
 	}
+
+     /**
+	 * This function loads a new scene for a grades tool  and sets the controller and client for the
+	 * new scene.
+	 */
 
 	private void GradeTool() {
 
@@ -240,6 +249,11 @@ public class writeQuestionController {
 
 	}
 
+     /**
+	 * This function loads a new scene for a exams tool  and sets the controller and client for the
+	 * new scene.
+	 */
+
 	private void ExamsTool() {
 
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/create_exam.fxml")); // specify
@@ -264,6 +278,10 @@ public class writeQuestionController {
 		window.show();
 	}
 
+	/**
+	 * This function loads a new scene for a statistics tool and sets the controller and client for the
+	 * new scene.
+	 */
 	private void StatisticsTool() {
 		Platform.runLater(() -> {
 
@@ -291,37 +309,6 @@ public class writeQuestionController {
 			window.show();
 		});
 	}
-
-	// end toolsBar
-	
-	// @FXML
-	// public void btnSelectCourse(ActionEvent event) {
-	// // add some courses to the comboBox depending on the subject currently
-	// selected
-	// String subject = professionsComboBox.getValue();
-	// if (subject.equals("Select Subject"))
-	// return;
-	// Request request = new Request("getCourses", subject);
-	// try {
-	// client.sendToServer(request);
-	// }catch(Exception e) {
-	// e.printStackTrace();
-	// }
-
-	// }
-
-	// @FXML
-	// public void btnSelectProfession(MouseDragEvent event) {
-	// System.out.println("btnSelectProfession");
-	// // add some subjects to the comboBox
-	// Request request = new Request("getSubjects", null);
-	// try {
-	// client.sendToServer(request);
-	// } catch (Exception e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// }
 
 	@FXML
 	public void initialize() {

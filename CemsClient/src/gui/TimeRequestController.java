@@ -58,6 +58,12 @@ public class TimeRequestController {
 
 
 
+    /**
+     * This function sends a request for additional time for an exam to the server.
+     * 
+     * @param event An ActionEvent object that represents the user's action of clicking a button or
+     * pressing the Enter key.
+     */
     @FXML
     void requestTime(ActionEvent event) {
         int examID = exam.getExamId();

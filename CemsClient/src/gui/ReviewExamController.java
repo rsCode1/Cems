@@ -113,6 +113,12 @@ public class ReviewExamController implements Initializable {
         });
     }
 
+   /**
+    * This function saves the lecturer and student comments for an exam and sends a request to the
+    * server to save the exam.
+    * 
+    * @param event The event that triggered the method, which is an ActionEvent in this case.
+    */
     @FXML
     void saveExam(ActionEvent event) {
         exam.setLecturerComments(lecturetComments.getText());
@@ -126,6 +132,9 @@ public class ReviewExamController implements Initializable {
 
     }
 
+    /**
+     * This function sets the data table with information about an exam.
+     */
     public void setDataTable() {
         Platform.runLater(() -> {
         ExamQuestionTable.getItems().addAll(exam.getQuestions());

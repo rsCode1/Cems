@@ -60,6 +60,13 @@ public class LoginScreenController {
 		}
 	}
 
+	/**
+	 * This function shows the welcome screen for a user based on their role and loads the appropriate
+	 * FXML file.
+	 * 
+	 * @param user The user object represents the user who has just logged in and is being welcomed to the
+	 * system. It contains information about the user such as their role, first name, and last name.
+	 */
 	public void ShowUserWelcomeScreen(Users user) throws IOException {
 		Platform.runLater(() -> {
 			String Studentpath = "/gui/StudentPage.fxml";

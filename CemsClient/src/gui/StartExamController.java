@@ -67,6 +67,13 @@ public class StartExamController implements Initializable {
     @FXML
     private Text toolWriteQuestions;
 
+    /**
+     * This function checks if a user has selected an exam and entered a valid 4 digit code before
+     * sending a request to start the exam to the server.
+     * 
+     * @param event An object representing the event that triggered the method call, such as a button
+     * click or key press.
+     */
     @FXML
     void startExamBtn(ActionEvent event) {
         Exam exam = examsTable.getSelectionModel().getSelectedItem();

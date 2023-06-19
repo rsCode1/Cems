@@ -111,7 +111,10 @@ public class pastExamsController implements Initializable {
         this.lecturer = lecturer;
     }
 
-    public void setExamsTable(ArrayList<Exam> exams) {
+    // This method clears the existing items in the table and then sets the
+	// new items using the `setAll()` method. 
+
+	public void setExamsTable(ArrayList<Exam> exams) {
 		Platform.runLater(() -> {
         this.exams = exams;
         pastExamsTable.getItems().clear();

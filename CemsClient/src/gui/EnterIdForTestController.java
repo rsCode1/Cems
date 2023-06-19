@@ -199,19 +199,16 @@ public class EnterIdForTestController {
 
 	}
 
+	
 	/**
-	 * adding the lecturer notes in the test form
+	 * This function sets the lecture notes and test label for a course.
 	 */
 	public void SetLectureNotes() {
 		lecnotesArea.setText(test.getStudentNotes());
 		testLbl.setText("Welcome to " + test.getCourseName() + " Test");
 	}
 
-	/**
-	 * returns the controller used in that form
-	 * 
-	 * @return
-	 */
+	
 	public EnterIdForTestController getController() {
 		return this;
 	}

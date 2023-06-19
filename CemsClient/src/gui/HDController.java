@@ -314,6 +314,12 @@ public class HDController implements Initializable {
 		this.client.setController(controller); // also set the controller on the client
 	}
 
+	/**
+	 * The function logs out the user and sends a logout request to the server.
+	 * 
+	 * @param event The event that triggered the method, which is an ActionEvent in this case. It is not
+	 * used in the method implementation.
+	 */
 	@FXML
 	public void ToLogOut(ActionEvent event) {
 		Platform.runLater(() -> {

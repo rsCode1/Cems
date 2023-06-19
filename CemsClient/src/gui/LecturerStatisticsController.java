@@ -209,6 +209,9 @@ public class LecturerStatisticsController implements Initializable {
 			label.setText("Exam already started with this code");
 		});
 	}
+/**
+ * This function sends a request to the server to get grades and sets a flag for the lecturer.
+ */
 
 	public void getGrades() {
 		lecturer.setFlag(1);
@@ -228,6 +231,10 @@ public class LecturerStatisticsController implements Initializable {
 		this.gradesArr = gradesArr;
 	}
 
+	/**
+	 * This function calculates the GPA by summing up the grades of all exams and dividing by the total
+	 * number of exams.
+	 */
 	public void calculateGpa() {
 		int sum = 0;
 		for (Exam exam : gradesArr) {
@@ -236,6 +243,9 @@ public class LecturerStatisticsController implements Initializable {
 		GPA = sum / gradesArr.size();
 	}
 
+	/**
+	 * This function calculates the median of a list of grades.
+	 */
 	public void calculateMedian(){
 		int medianIndex = gradesArr.size() / 2;
 		if (gradesArr.size() % 2 == 0) {
