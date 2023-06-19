@@ -35,7 +35,7 @@ import logic.Exam;
 import logic.LogInInfo;
 import logic.Response;
 import logic.AddedTime;
-import logic.DownloadManualExaminController;
+
 import logic.MyFile;
 import logic.Test;
 import logic.Users;

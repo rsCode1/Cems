@@ -1,7 +1,9 @@
 package logic;
 
 import java.io.Serializable;
-
+/**
+ * this class is for checking if the test time has been added in data base 
+ */
 public class TestSourceTime implements Serializable {
 	private int sourceTime;
 	public TestSourceTime(int sourceTime, int testId) {

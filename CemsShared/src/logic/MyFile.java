@@ -1,7 +1,9 @@
 package logic;
 
 import java.io.Serializable;
-
+/**
+ * this class is for sending and getting files from data base and client
+ */
 public class MyFile implements Serializable {
 	
 	private String Description=null;

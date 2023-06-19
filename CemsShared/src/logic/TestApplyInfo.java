@@ -1,7 +1,9 @@
 package logic;
 
 import java.io.Serializable;
-
+/**
+ * this class for saving students id and test id for server check if he can do the exam
+ */
 public class TestApplyInfo  implements Serializable {
 	private int studentId;
 	private int testId;

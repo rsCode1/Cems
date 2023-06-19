@@ -72,7 +72,9 @@ public class StudentPageController {
         dateLabel.setText("Date : " + dtf.format(now));  
 		
     }
-    
+    /**
+	 * when student clicks on start Digita Test button
+	 */
     @FXML
     public void TakeDigitalExamForm() {
     	try {
@@ -92,6 +94,9 @@ public class StudentPageController {
     
     }
    
+	/**
+	 * when student clicks on logout button
+	 */
     @FXML
     void LogOut(ActionEvent event) {
     	LogInInfo loginData = new LogInInfo(student.getUserName(), student.getPassword());
@@ -134,7 +139,9 @@ public class StudentPageController {
 		}
 	
 
-
+   /**
+	 * when student clicks on show results button
+	 */
     @FXML
     public void ShowResults(ActionEvent event) {
         try {
@@ -160,6 +167,11 @@ public class StudentPageController {
     	}
     	
     }
+	/**
+	 * this methood will be activated when new grade is approved from lecturer
+	 * it shos popout window with the grade details
+	 * @param exam
+	 */
     public void showNewApprovedgrade(Exam exam){
 		Platform.runLater(() -> {
 		if (student.getId() == exam.getStudentId()) {
@@ -183,7 +195,10 @@ public class StudentPageController {
 
 		
 	}
-
+    
+	/**
+	 * when student clicks on start Manual Test button
+	 */
     @FXML
     public void takeManualExam() {
     	try {
@@ -200,16 +215,6 @@ public class StudentPageController {
     	catch (IOException e) {
         e.printStackTrace();
     	}
-    	
-      /*  try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/Take_manual_exam.fxml"));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-    }*/
     }
     public StudentPageController getController() {
 		return this;
