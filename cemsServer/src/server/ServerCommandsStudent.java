@@ -108,7 +108,7 @@ public class ServerCommandsStudent {
 				Submitted = false;
 			if (Submitted) {
 				//if student submitted, first we save his answers file in the data base in Submitted_Manual_Exams_Files folder
-				String LocalfilePath = "Submitted_Manual_Exams_Files\\" + answersFile.getMyfile().getFileName();
+				String LocalfilePath = "C:\\Submitted_Manual_Exams_Files\\" + answersFile.getMyfile().getFileName();
 				File newFile = new File(LocalfilePath);
 				FileOutputStream fis = new FileOutputStream(newFile);
 				BufferedOutputStream bis = new BufferedOutputStream(fis);
@@ -213,7 +213,7 @@ public class ServerCommandsStudent {
 	 */
 	public void downloadManuelExam(int testid, ConnectionToClient client) {
 		MyFile msg2 = new MyFile(testid + ".docx");
-		String LocalfilePath = "Manual_Exams_Files\\" + testid + ".docx";
+		String LocalfilePath = "C:\\Manual_Exams_Files\\" + testid + ".docx";
 
 		try {
 
