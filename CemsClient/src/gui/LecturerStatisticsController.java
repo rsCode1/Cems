@@ -28,6 +28,10 @@ import logic.Exam;
 import logic.Request;
 import logic.Users;
 
+/**
+ * The LecturerStatisticsController class is a Java class that represents the controller for a GUI
+ * screen that displays statistics for exams taken by a lecturer.
+ */
 public class LecturerStatisticsController implements Initializable {
 	private ChatClient client;
 	private Users lecturer;
@@ -77,6 +81,9 @@ public class LecturerStatisticsController implements Initializable {
 	private Text toolWriteQuestions;
 
 	@FXML
+	// The above code is a method in Java that is triggered by an ActionEvent. It is likely part of a
+	// larger program or application. The specific functionality of the method is not clear without seeing
+	// the implementation code.
 	void viewStats(ActionEvent event) {
 		Exam exam = examsTable.getSelectionModel().getSelectedItem();
 		if (exam == null) {
@@ -95,6 +102,10 @@ public class LecturerStatisticsController implements Initializable {
 	}
 
 	@Override
+	// The `initialize` method is a method that is called automatically when the FXML file is loaded. It
+	// is used to initialize the controller and set up any necessary components or data. In this specific
+	// code, the method sets up the columns for the exams table, sets up the event handlers for the
+	// toolbar buttons, and initializes the GPA and median text fields to be empty.
 	public void initialize(URL location, ResourceBundle resources) {
 
 		examId.setCellValueFactory(new PropertyValueFactory<Exam, Integer>("examId"));
@@ -129,11 +140,22 @@ public class LecturerStatisticsController implements Initializable {
 		});
 	}
 
+	/**
+	 * This function sets the items in an exams table to a given ArrayList of Exam objects.
+	 * 
+	 * @param exam An ArrayList of Exam objects that will be used to populate a table view called
+	 * "examsTable". The method first clears any existing items in the table view and then adds all the
+	 * Exam objects from the ArrayList to the table view.
+	 */
 	public void setExamsTable(ArrayList<Exam> exam) {
 		examsTable.getItems().clear();
 		examsTable.getItems().addAll(exam);
 	}
 
+
+	/**
+	 * This function sends a request to the server to retrieve exams by a specific lecturer.
+	 */
 	public void getExamsTable() {
 
 		Request request = new Request("getExamsByLecturer", lecturer);
@@ -145,24 +167,56 @@ public class LecturerStatisticsController implements Initializable {
 		}
 	}
 
+	/**
+	 * This function sets the client and lecturer for a chat session.
+	 * 
+	 * @param client The ChatClient object that represents the user who is setting the client and
+	 * lecturer.
+	 * @param lecturer The lecturer parameter is an instance of the Users class, which represents a user
+	 * in the chat system. It likely contains information such as the user's name, ID, and other relevant
+	 * details.
+	 */
 	public void setClientAndLecturer(ChatClient client, Users lecturer) {
 		this.client = client;
 		this.lecturer = lecturer;
 	}
 
+	/**
+	 * This function sets the list of exams for a particular object.
+	 * 
+	 * @param exams The parameter "exams" is an ArrayList of objects of type "Exam". This method sets the
+	 * value of the instance variable "exams" to the value of the parameter "exams".
+	 */
 	public void setExams(ArrayList<Exam> exams) {
 		this.exams = exams;
 	}
 
+	/**
+	 * This function returns an ArrayList of Exam objects.
+	 * 
+	 * @return An ArrayList of Exam objects is being returned.
+	 */
 	public ArrayList<Exam> getExams() {
 		return exams;
 	}
 
+	/**
+	 * This Java function sets the text of a label.
+	 * 
+	 * @param label The label parameter is a String that represents the text to be set on a label
+	 * component. The method setLabel() takes this parameter and sets the text of the label component to
+	 * the specified value.
+	 */
 	public void setLabel(String label) {
 		this.label.setText(label);
 	}
 
 	@FXML
+	// This function is called when the "back" button is clicked and it loads the main screen for the
+	// lecturer. It uses FXMLLoader to load the FXML file for the main screen, sets the lecturer and
+	// client instances for the controller of the main screen, gets the ongoing exams table, and sets the
+	// controller for the ChatClient instance. Finally, it gets the Stage information and sets the scene
+	// to the main screen.
 	void backToMainScreen(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LecturerPage.fxml")); // specify the path to the
 																								// main screen FXML file
@@ -236,6 +290,9 @@ public class LecturerStatisticsController implements Initializable {
 	/**
 	 * This function calculates the median of a list of grades.
 	 */
+	/**
+	 * This function calculates the median of a list of grades.
+	 */
 	public void calculateMedian(){
 		int medianIndex = gradesArr.size() / 2;
 		if (gradesArr.size() % 2 == 0) {
@@ -245,6 +302,9 @@ public class LecturerStatisticsController implements Initializable {
 		}
 	}
 	// update all toolsBar
+		/**
+		 * This function loads a new scene for writing a question and sets the controller and client for it.
+		 */
 		private void questionTool() {
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/write_question.fxml")); // specify
@@ -269,6 +329,10 @@ public class LecturerStatisticsController implements Initializable {
 			window.show();
 
 		}
+		/**
+		 * This function loads a new scene for a grade tool and sets the controller and client for the new
+		 * scene.
+		 */
 		private void GradeTool() {
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/lecturerApproval.fxml")); // specify
@@ -294,6 +358,10 @@ public class LecturerStatisticsController implements Initializable {
 			window.show();
 
 		}
+		/**
+		 * This function loads a new scene for creating an exam and sets the controller and client for the
+		 * scene.
+		 */
 		private void ExamsTool() {
 
 
@@ -319,6 +387,9 @@ public class LecturerStatisticsController implements Initializable {
 				window.show();
 		}
 
+		/**
+		 * This function loads a new scene for a statistics tool in a Java application.
+		 */
 		private void StatisticsTool() {
 			Platform.runLater(() -> {
 
