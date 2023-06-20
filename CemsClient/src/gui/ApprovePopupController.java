@@ -11,6 +11,10 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Popup;
 
+/**
+ * this class is responsble for controlling the approve popout screen ' which will loads,
+ * when the head department clicks on approve button for time requests.
+ */
 public class ApprovePopupController implements Initializable {
     @FXML
     private ImageView approveImageView;;

@@ -31,6 +31,10 @@ import logic.Question;
 import logic.Request;
 import logic.Users;
 
+/**
+ * this class is the controller for the create exam page, witch will be used by the lecturers,
+ * every time they want to create a new exam , qusetions for exams will be imported from data base.
+ */
 public class createExamController implements Initializable {
 	private ChatClient client;
 	private Users lecturer;
@@ -119,6 +123,11 @@ public class createExamController implements Initializable {
 	}
 
 	@FXML
+	/**
+	 * this function will be called in the building exam process, lecturer will use it to
+	 * to check if the exams which created is valid.
+	 * @param event
+	 */
 	public void reviewExam(ActionEvent event) {
 		Platform.runLater(() -> {
 			// review the exam
@@ -186,6 +195,12 @@ public class createExamController implements Initializable {
 	}
 
 	@FXML
+	/**
+	 * this function will be called in building exam process , lecturer will enter the score points
+	 * for certain question in the score field then click the button to set the score of the selected question.
+	 * and save it.
+	 * @param event
+	 */
 	public void setScoreQuestion(ActionEvent event) {
 		Platform.runLater(() -> {
 			// set the score of the selected question
@@ -205,7 +220,11 @@ public class createExamController implements Initializable {
 		});
 
 	}
-
+    /**
+	 * this function will be called in building exam process , lecturer will click on the question from screen
+	 * then on remove button to remove the question from the exam .
+	 * @param event
+	 */
 	@FXML
 	public void removeQuetsionFromExam(ActionEvent event) {
 
@@ -226,6 +245,11 @@ public class createExamController implements Initializable {
 	}
 
 	@FXML
+	 /**
+	 * this function will be called in building exam process , lecturer will click on the question from screen
+	 * then on add button to add the question to the exam .
+	 * @param event
+	 */
 	public void addToExamView(ActionEvent event) {
 		Platform.runLater(() -> {
 			// add the selected question to the exam view table
@@ -242,12 +266,24 @@ public class createExamController implements Initializable {
 
 	}
 
+	/**
+	 * This function sets the client and lecturer for a chat session.
+	 * 
+	 * @param client The ChatClient object that representsthe connection with the server.
+	 * @param lecturer The lecturer parameter is an instance of the Users class, which represents a user
+	 * in the  system.
+	 */
 	public void setClientAndLecturer(ChatClient client, Users lecturer) {
 		this.client = client;
 		this.lecturer = lecturer;
 	}
 
 	@FXML
+	/**
+     * this function will be called in lecturer screens , when back button is clicked, 
+     * the main screen will be displayed.
+     * @param event
+     */
 	void backToMainScreen(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LecturerPage.fxml")); // specify the path to the
 																								// main screen FXML file
@@ -273,6 +309,12 @@ public class createExamController implements Initializable {
 	}
 
 	@FXML
+	/**
+	 * this function will be called in building exam process , lecturer will choose a subject and course for the exam
+	 * he wants to create , then clicks on the show questions to import the questions which are connected to the subject 
+	 * from data base and show it the lecturer screen.
+	 * @param event
+	 */
 	public void showQuestionView(ActionEvent event) {
 		// show the question view table
 		try {
@@ -301,6 +343,14 @@ public class createExamController implements Initializable {
 		});
 
 	}
+
+	/**
+	 * this function will be called when loading create exam screen ,
+	 * it  will get the exams subjects from database
+	 * 
+	 * @param location
+	 * @param resources
+	 */
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
