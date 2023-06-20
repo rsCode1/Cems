@@ -16,6 +16,9 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+/**
+ * This is a Java class for a reject pop-up window with an image, label, and exit button.
+ */
 public class RejectPopUpController implements Initializable {
     @FXML
     private ImageView rejectImageView;;
@@ -29,11 +32,23 @@ public class RejectPopUpController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
     }
+    /**
+     * This function sets the popup for a given object.
+     * 
+     * @param popup The parameter "popup" is an object of the class "Popup". This method sets the value
+     * of the instance variable "popup" to the value passed as the parameter.
+     */
     public void setPopup(Popup popup) {
     	
         this.popup = popup;
     }
 
+    /**
+     * This function hides a popup window when the "exit" button is clicked in a JavaFX application.
+     * 
+     * @param event The event parameter in the exit() method is an object of the ActionEvent class. It
+     * represents the user's action of clicking on the exit button or triggering the exit event.
+     */
     @FXML
     public void exit(ActionEvent event) {
         popup.hide();

@@ -521,6 +521,13 @@ public class createExamController implements Initializable {
 	
 	// end toolsBar
 
+	/**
+	 * This function updates a table view with an ArrayList of Question objects.
+	 * 
+	 * @param questionsArray An ArrayList of Question objects that contains the updated set of questions
+	 * to be displayed in the questionViewTABLE. The method clears the current items in the table and adds
+	 * all the questions in the updated ArrayList to the table.
+	 */
 	public void upadteQuestionViewTable(ArrayList<Question> questionsArray) {
 
 		questionViewTABLE.getItems().clear();
@@ -528,6 +535,13 @@ public class createExamController implements Initializable {
 
 	}
 
+	/**
+	 * This function updates a JavaFX ComboBox with a list of subjects in a separate thread using the
+	 * Platform.runLater() method.
+	 * 
+	 * @param subjects An ArrayList of Strings representing the subjects that will be displayed in a
+	 * ComboBox.
+	 */
 	public void updateSubjectsComboBox(ArrayList<String> subjects) {
 		Platform.runLater(() -> {
 			ObservableList<String> list = FXCollections.observableArrayList(subjects);
@@ -535,6 +549,13 @@ public class createExamController implements Initializable {
 		});
 	}
 
+	/**
+	 * This function updates a JavaFX ComboBox with a list of courses in a separate thread using the
+	 * Platform.runLater() method.
+	 * 
+	 * @param courses An ArrayList of Strings representing the courses that will be displayed in a
+	 * ComboBox.
+	 */
 	public void updateCoursesComboBox(ArrayList<String> courses) {
 		Platform.runLater(() -> {
 			ObservableList<String> list = FXCollections.observableArrayList(courses);

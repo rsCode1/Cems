@@ -24,6 +24,10 @@ import logic.LogInInfo;
 import logic.Request;
 import logic.Users;
 
+// The `public class LoginScreenController` is a Java class that serves as the controller for the login
+// screen of a GUI application. It contains methods and fields that handle user input and communicate
+// with the server to authenticate the user's login credentials. It also loads the appropriate welcome
+// screen based on the user's role and displays error messages if the login is unsuccessful.
 public class LoginScreenController {
 	private ChatClient client;
 
@@ -40,11 +44,29 @@ public class LoginScreenController {
 	@FXML
 	private Pane pane;
 
+	/**
+	 * This function sets the ChatClient and LoginScreenController objects and sets the controller on the
+	 * client.
+	 * 
+	 * @param client The ChatClient object that is being set in this method. It is likely an instance of a
+	 * class that handles the communication between the client and the server in a chat application.
+	 * @param controller The "controller" parameter is an instance of the LoginScreenController class,
+	 * which is responsible for controlling the behavior of the login screen in the chat application. It
+	 * is being passed as an argument to the "setClient" method along with an instance of the ChatClient
+	 * class, so that the client can
+	 */
 	public void setClient(ChatClient client, LoginScreenController controller) {
 		this.client = client;
 		this.client.setController(controller); // also set the controller on the client
 	}
 
+	/**
+	 * This function sends login data to a server using a client object.
+	 * 
+	 * @param event An ActionEvent object that represents the user's action of clicking a button or
+	 * pressing the Enter key while focused on a text field. This event is triggered when the user
+	 * attempts to log in by clicking the "Log In" button.
+	 */
 	@FXML
 	public void sendLoginDataToServer(ActionEvent event) {
 		LogInInfo loginData = new LogInInfo(userName.getText(), password.getText());
@@ -134,26 +156,56 @@ public class LoginScreenController {
 		});
 	}
 
+	/**
+	 * The function returns the current instance of the LoginScreenController class.
+	 * 
+	 * @return An instance of the `LoginScreenController` class is being returned.
+	 */
 	public LoginScreenController getController() {
 		return this;
 	}
 
+	/**
+	 * The function returns a ChatClient object.
+	 * 
+	 * @return The method is returning an object of type ChatClient.
+	 */
 	public ChatClient getClient() {
 		return client;
 	}
 
+	/**
+	 * The function returns a TextField object representing the user name.
+	 * 
+	 * @return A TextField object named "userName" is being returned.
+	 */
 	public TextField getUserName() {
 		return userName;
 	}
 
+	/**
+	 * This function returns a TextField object representing a password input field.
+	 * 
+	 * @return The method `getPassword()` is returning a `TextField` object named `password`.
+	 */
 	public TextField getPassword() {
 		return password;
 	}
 
+	/**
+	 * The function returns a Button object representing the login button.
+	 * 
+	 * @return The method is returning a Button object named "loginBtn".
+	 */
 	public Button getLoginBtn() {
 		return loginBtn;
 	}
 
+	/**
+	 * This function returns a Label object representing the login status.
+	 * 
+	 * @return The method is returning a Label object named "loginStatus".
+	 */
 	public Label getLoginStatus() {
 		return loginStatus;
 	}

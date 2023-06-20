@@ -28,6 +28,10 @@ import logic.Question;
 import logic.Request;
 import logic.Users;
 
+/**
+ * This is a Java class for a write question controller that handles user input for creating and saving
+ * questions in a GUI.
+ */
 public class writeQuestionController {
 	private ChatClient client;
 	private Users lecturer;
@@ -98,6 +102,8 @@ public class writeQuestionController {
 
 	@FXML
 	
+	// This function is responsible for loading the main screen of the application when the user clicks on
+	// the "back" button.
 	void backToMainScreen(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LecturerPage.fxml")); // specify the path to the
 																								// main screen FXML file
@@ -122,6 +128,15 @@ public class writeQuestionController {
 		window.show();
 	}
 
+	/**
+	 * This function sets the client and lecturer for a chat session.
+	 * 
+	 * @param client The ChatClient object that represents the user who is setting the client and
+	 * lecturer.
+	 * @param lecturer The lecturer parameter is an instance of the Users class, which represents a user
+	 * in the chat system. It likely contains information such as the user's name, ID, and other relevant
+	 * details.
+	 */
 	public void setClientAndLecturer(ChatClient client, Users lecturer) {
 		this.client = client;
 		this.lecturer = lecturer;
@@ -174,6 +189,12 @@ public class writeQuestionController {
 
 	}
 
+	/**
+	 * This function updates a JavaFX ComboBox with a list of subjects in a separate thread
+	 * 
+	 * @param subjects An ArrayList of Strings representing the subjects that will be displayed in a
+	 * ComboBox.
+	 */
 	public void updateSubjectsComboBox(ArrayList<String> subjects) {
 		Platform.runLater(() -> {
 			ObservableList<String> list = FXCollections.observableArrayList(subjects);
@@ -310,6 +331,8 @@ public class writeQuestionController {
 		});
 	}
 
+// The `initialize()` function is function in JavaFX that is called when the FXML file is
+// loaded and the controller is initialized. 
 	@FXML
 	public void initialize() {
 		radio1.setToggleGroup(correctAnswer);

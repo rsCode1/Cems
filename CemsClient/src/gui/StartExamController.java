@@ -25,6 +25,10 @@ import logic.Exam;
 import logic.Request;
 import logic.Users;
 
+/**
+ * This is a Java class that initializes and controls a GUI interface for displaying exams and related
+ * information.
+ */
 public class StartExamController implements Initializable {
     private ChatClient client;
     private Users lecturer;
@@ -98,6 +102,13 @@ public class StartExamController implements Initializable {
         }
     }
 
+    /**
+     * The function initializes the table columns and sets mouse click events for various tools.
+     * 
+     * @param location The location of the FXML file that contains the UI layout for this controller.
+     * @param resources A ResourceBundle object that contains the resources for the current locale. It
+     * is used to retrieve localized strings and other resources.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -134,11 +145,21 @@ public class StartExamController implements Initializable {
 
     }
 
+    /**
+     * This function sets the items in an exams table to a given ArrayList of Exam objects.
+     * 
+     * @param exam An ArrayList of Exam objects that will be used to populate a table view called
+     * "examsTable". The method first clears any existing items in the table view and then adds all the
+     * Exam objects from the ArrayList to the table view.
+     */
     public void setExamsTable(ArrayList<Exam> exam) {
         examsTable.getItems().clear();
         examsTable.getItems().addAll(exam);
     }
 
+   /**
+    * This function sends a request to the server to retrieve a table of exams for a specific lecturer.
+    */
     public void getExamsTable() {
 
         Request request = new Request("getExamsByLecturer", lecturer);
@@ -167,6 +188,12 @@ public class StartExamController implements Initializable {
         this.label.setText(label);
     }
 
+    /**
+     * This function loads the main screen FXML file and sets it as the current scene in the Stage.
+     * 
+     * @param event The event that triggered the method, which is an ActionEvent in this case. It is
+     * not used in the method implementation.
+     */
     @FXML
     void backToMainScreen(ActionEvent event) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LecturerPage.fxml")); // specify the path to the
@@ -191,6 +218,9 @@ public class StartExamController implements Initializable {
         window.setScene(mainScene);
         window.show();
     }
+/**
+ * This function updates a label to display a success message when an exam is started.
+ */
 
     public void startExamSuccess() {
         Platform.runLater(() -> {
@@ -199,6 +229,10 @@ public class StartExamController implements Initializable {
 
     }
 
+    /**
+     * This function sets the text of a label to "Exam already started with this code" using JavaFX's
+     * Platform.runLater() method.
+     */
     public void startExamFailed() {
         Platform.runLater(() -> {
             label.setText("Exam already started with this code");

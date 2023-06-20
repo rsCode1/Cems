@@ -16,6 +16,12 @@ import logic.Test;
 import logic.UploadFile;
 import logic.Users;
 
+
+
+/**
+ * The class "ApproveSubmitController" contains various variables related to a student's test
+ * submission and communication with a chat client.
+ */
 public class ApproveSubmitController {
 	private UploadFile answersFile;
 	private Test test;

@@ -21,6 +21,11 @@ import logic.TestApplyInfo;
 import logic.TestCode;
 import logic.Users;
 
+// This is a Java class that serves as a controller for a GUI form. It contains methods for setting
+// the student and client, setting the test, checking if a given ID is valid, displaying a test screen
+// for a student, and setting lecture notes and test label for a course. It also has a field for the
+// DigOrMan value, which determines whether the test is digital or manual. The class is used to handle
+// events and actions related to entering an ID for a test.
 public class EnterIdForTestController {
 	private int DigOrMan;
 
@@ -209,6 +214,11 @@ public class EnterIdForTestController {
 	}
 
 	
+	/**
+	 * The function returns an instance of the EnterIdForTestController class.
+	 * 
+	 * @return An instance of the class `EnterIdForTestController` is being returned.
+	 */
 	public EnterIdForTestController getController() {
 		return this;
 	}

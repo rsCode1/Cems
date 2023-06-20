@@ -25,6 +25,9 @@ import logic.Exam;
 import logic.Question;
 import logic.Request;
 
+/**
+ * This is a Java class for a review exam controller that initializes a chat client and an exam object.
+ */
 public class ReviewExamController implements Initializable {
 
     private ChatClient client;
@@ -82,6 +85,13 @@ public class ReviewExamController implements Initializable {
     private Button backBtn;
 
 
+   /**
+    * This function loads the create_exam.fxml file and sets it as the main scene when the goBack
+    * button is clicked.
+    * 
+    * @param event The event parameter is an object that represents the event that triggered the method
+    * call. In this case, it is most likely a button click event on the "back" button.
+    */
     @FXML
     public void goBack(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/create_exam.fxml")); // specify the path to the
@@ -107,6 +117,9 @@ public class ReviewExamController implements Initializable {
     }
 
 
+   /**
+    * This function sets the text of a label to "Exam saved successfully".
+    */
     public void setLabel() {
         Platform.runLater(() -> {
         errLabel.setText("Exam saved successfully");
@@ -144,6 +157,14 @@ public class ReviewExamController implements Initializable {
         });
 
     }
+   /**
+    * This function initializes the cell value factories for a table view in a Java program.
+    * 
+    * @param location The location of the FXML file that contains the UI layout for the controller
+    * class.
+    * @param resources The ResourceBundle object that contains the localized resources for the current
+    * user's locale. It can be used to retrieve localized strings, images, and other resources.
+    */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         
@@ -157,9 +178,19 @@ public class ReviewExamController implements Initializable {
 
     }
 
+    /**
+     * This function sets the ChatClient object for the current instance.
+     * 
+     * @param client The parameter "client" is an object of the class ChatClient. The method
+     * "setClient" sets the value of the instance variable "client" to the value passed as a parameter.
+    
+     */
     public void setClient(ChatClient client) {
         this.client = client;
     }
+    // The `setExam` method is a setter method that sets the value of the instance variable `exam` to
+    // the value passed as a parameter. It takes an object of the class `Exam` as a parameter and
+    // assigns it to the instance variable `exam`.
     public void  setExam(Exam exam) {
         this.exam = exam;
     }

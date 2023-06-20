@@ -104,10 +104,22 @@ public class StudentManualTestController {
 		this.client.setStudentManualTestController(controller);
 	}
 
+	/**
+	 * This function sets the value of the "added" variable to the input parameter "added".
+	 * 
+	 * @param added added is a variable of type AddedTime. It is being set using the setter method
+	 * setAdded(). The value passed as a parameter to this method will be assigned to the added variable.
+	 */
 	public void setAdded(AddedTime added) {
 		this.added = added;
 	}
 
+	/**
+	 * This Java function sets the value of a Test object.
+	 * 
+	 * @param test The "test" parameter is an object of the class "Test". The method "setTest" sets the
+	 * value of the instance variable "test" to the value of the "test" parameter.
+	 */
 	public void setTest(Test test) {
 		this.test = test;
 
@@ -170,6 +182,9 @@ public class StudentManualTestController {
 
 	}
 
+	/**
+	 * This function closes the current window in a Java application.
+	 */
 	public void CloseWindow() {
 		Platform.runLater(() -> {
 			Stage currentStage = (Stage) upload.getScene().getWindow();
@@ -177,6 +192,9 @@ public class StudentManualTestController {
 		});
 	}
 
+	/**
+	 * This function sets the initial values for various labels and buttons in a Java program.
+	 */
 	public void setWelcomeLabel() {
 		crsName.setText(test.getCourseName() + " Test");
 		subBtn.setDisable(true);
@@ -269,6 +287,11 @@ public class StudentManualTestController {
 		}
 	}
 
+	/**
+	 * The function updates a timer label with the time in minutes and seconds.
+	 * 
+	 * @param timeInSeconds The number of seconds to be converted and displayed in the timer label.
+	 */
 	private void updateTimerLabel(int timeInSeconds) {
 		// Convert seconds to minutes and seconds
 		int minutes = timeInSeconds / 60;
@@ -333,6 +356,9 @@ public class StudentManualTestController {
 		timeThread.start();
 	}
 
+	/**
+	 * This function stops a timer and sets the remaining time to zero.
+	 */
 	public void stopTimer() {
 		stopThread = true;
 		remainingTime = 0;
@@ -390,6 +416,11 @@ public class StudentManualTestController {
 		}
 	}
 
+	/**
+	 * The function returns the current instance of the StudentManualTestController class.
+	 * 
+	 * @return An instance of the class `StudentManualTestController` is being returned.
+	 */
 	public StudentManualTestController getController() {
 		return this;
 	}

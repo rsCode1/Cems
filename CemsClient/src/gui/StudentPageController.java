@@ -68,9 +68,19 @@ public class StudentPageController {
     	this.client=client;
     }
 
-    public void setWelcomeLabel(String txt) {
+    /**
+	 * This Java function sets the text of a welcome label.
+	 * 
+	 * @param txt The parameter "txt" is a String variable that represents the text that will be set to
+	 * the WelcomeLabel.
+	 */
+	public void setWelcomeLabel(String txt) {
       WelcomeLabel.setText(txt);
     }
+   /**
+	* This function sets the current date and time in the format of "dd/MM/yy" to a label in a JavaFX
+	* application.
+	*/
     @FXML
     public void initialize() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yy");  
@@ -222,7 +232,12 @@ public class StudentPageController {
         e.printStackTrace();
     	}
     }
-    public StudentPageController getController() {
+    /**
+	 * The function returns the current instance of the StudentPageController class.
+	 * 
+	 * @return An instance of the `StudentPageController` class is being returned.
+	 */
+	public StudentPageController getController() {
 		return this;
 	}
 }

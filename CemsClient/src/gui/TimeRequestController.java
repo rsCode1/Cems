@@ -22,6 +22,10 @@ import logic.Request;
 import logic.RequestTime;
 import logic.Users;
 
+/**
+ * The TimeRequestController class is a Java class that controls the time request form for an exam and
+ * includes various GUI elements.
+ */
 public class TimeRequestController {
 	private ChatClient client;
 	private Users lecturer;
@@ -85,11 +89,27 @@ public class TimeRequestController {
     }
 
     
+   /**
+    * This function sets the client and lecturer for a chat session.
+    * 
+    * @param client This parameter is of type ChatClient and is used to set the client object for the
+    * chat session. The ChatClient object represents the user who is currently logged in and
+    * participating in the chat session.
+    * @param lecturer The lecturer parameter is an instance of the Users class, which represents a user
+    * in the chat system. It likely contains information such as the user's name, ID, and other
+    * relevant details.
+    */
     public void setClientAndLecturer(ChatClient client, Users lecturer) {
         this.client = client;
         this.lecturer = lecturer;
     }
 
+   /**
+    * This function sets the exam object for a given class.
+    * 
+    * @param exam The parameter "exam" is an object of the class "Exam". The method "setExam" sets the
+    * value of the instance variable "exam" to the value of the parameter "exam".
+    */
     public void setExam(Exam exam) {
         this.exam = exam;
     }

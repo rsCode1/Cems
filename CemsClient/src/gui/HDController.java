@@ -55,6 +55,10 @@ import logic.RequestTime;
 import logic.Users;
 import ocsf.client.*;
 
+/**
+ * The HDController class initializes variables for a chat client, request time, users, and arrays for
+ * information selection and general grades.
+ */
 public class HDController implements Initializable {
 	private ChatClient client;
 	private RequestTime requestTime;
@@ -65,15 +69,39 @@ public class HDController implements Initializable {
 
 	private ArrayList<String> generalGradesArray = new ArrayList<String>();
 
+	/**
+	 * This function sets the head of department and chat client for a given user.
+	 * 
+	 * @param Hod This parameter is of type "Users" and represents the Head of Department that we want to
+	 * set for a particular object instance.
+	 * @param client The "client" parameter is an object of the "ChatClient" class, which is likely used
+	 * to establish a connection between the user and the chat system. It could contain information such
+	 * as the user's login credentials, chat history, and other settings related to the chat client.
+	 */
 	public void SetHeadOfDepartment(Users Hod, ChatClient client) {
 		this.HOD = Hod;
 		this.client = client;
 	}
 
+	/**
+	 * This is a setter method in Java that sets the value of a variable named "test".
+	 * 
+	 * @param test The parameter "test" is a String variable that is being set to the value passed as an
+	 * argument to the method. The "this" keyword is used to refer to the instance variable "test" of the
+	 * current object. This method is a setter method that sets the value of the "test"
+	 */
 	public void setTest(String test) {
 		this.test = test;
 	}
 
+	/**
+	 * This function sets the value of a class variable "generalGradesArray" to an ArrayList of Strings
+	 * passed as a parameter.
+	 * 
+	 * @param generalGradesArray An ArrayList of Strings that represents the general grades array that
+	 * needs to be set for an object. This method sets the value of the generalGradesArray instance
+	 * variable of the object to the value passed as a parameter.
+	 */
 	public void setGeneralArray(ArrayList<String> generalGradesArray) {
 		this.generalGradesArray = generalGradesArray;
 	}

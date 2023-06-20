@@ -29,6 +29,10 @@ import logic.LogInInfo;
 import logic.Request;
 import logic.Users;
 
+/**
+ * The class "LecturerPageController" contains a user object for a lecturer, a chat client, and an
+ * array list of ongoing exams.
+ */
 public class LecturerPageController implements Initializable {
 	private Users lecturer;
 	private ChatClient client;
@@ -83,11 +87,16 @@ public class LecturerPageController implements Initializable {
 	@FXML
 	private Button TimeRequestBtn;
 
+	/**
+	 * This function initializes the JavaFX GUI components and sets up event handlers for various tools.
+	 * 
+	 * @param location The location of the FXML file that contains the UI layout for this controller.
+	 * @param resources A bundle of resources, such as strings or images, that can be used by the
+	 * controller. It is typically used for internationalization and localization purposes.
+	 */
 	@FXML
 	public void initialize(URL location, ResourceBundle resources) {
-		// toolTimeRequest.setOnMouseClicked(e -> { make tool time request-> clickable
-		// showTimeRequestForm();
-		// });
+		
 
 		examId.setCellValueFactory(new PropertyValueFactory<Exam, Integer>("examId"));
 		examCode.setCellValueFactory(new PropertyValueFactory<Exam, Integer>("code"));
@@ -231,6 +240,13 @@ public class LecturerPageController implements Initializable {
 	
 	// end toolsBar
 
+	
+	/**
+	 * This function loads a new FXML file for past exams and sets the scene to display it.
+	 * 
+	 * @param event The event that triggered the method, which is an ActionEvent in this case. It is not
+	 * used in the method implementation.
+	 */
 	@FXML
 	public void pastExams(ActionEvent event) {
 		Platform.runLater(() -> {
@@ -259,6 +275,13 @@ public class LecturerPageController implements Initializable {
 		});
 	}
 
+	/**
+	 * This function closes an ongoing exam selected from a table and sends a request to the server to
+	 * close it.
+	 * 
+	 * @param event An ActionEvent object that represents the user's action of clicking a button or menu
+	 * item that triggers the closeExam() method.
+	 */
 	@FXML
 	public void closeExam(ActionEvent event) {
 		Exam exam = ongoingExamsTable.getSelectionModel().getSelectedItem();
@@ -285,6 +308,9 @@ public class LecturerPageController implements Initializable {
 		this.client = client;
 	}
 
+	/**
+	 * This function sends a request to the server to retrieve ongoing exams for a lecturer.
+	 */
 	@FXML
 	public void getOngoingExamsTable() {
 
@@ -297,6 +323,13 @@ public class LecturerPageController implements Initializable {
 		}
 	}
 
+
+	/**
+	 * This Java function updates an ongoing exams table with a given ArrayList of Exam objects.
+	 * 
+	 * @param exam An ArrayList of Exam objects that is used to update the data displayed in the
+	 * ongoingExamsTable
+	 */
 	@FXML
 	public void setOngoingExamsTable(ArrayList<Exam> exam) {
 		System.out.println("worked should update");
@@ -304,6 +337,12 @@ public class LecturerPageController implements Initializable {
 		ongoingExamsTable.getItems().addAll(exam);
 	}
 
+	/**
+	 * This Java function sets the ongoing exams to the given ArrayList of Exam objects.
+	 * 
+	 * @param exams The parameter "exams" is an ArrayList of objects of type "Exam". This method sets the
+	 * value of the instance variable "ongoingExams" to the value of the "exams" parameter.
+	 */
 	public void setExams(ArrayList<Exam> exams) {
 		this.ongoingExams = exams;
 	}
@@ -312,6 +351,12 @@ public class LecturerPageController implements Initializable {
 		return ongoingExams;
 	}
 
+	/**
+	 * This function loads a new FXML file for starting an exam and sets the scene for the new window.
+	 * 
+	 * @param event An ActionEvent object that represents the user's action that triggered the method
+	 * call.
+	 */
 	@FXML
 	public void startExam(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/start_exam.fxml")); // specify the path to the
@@ -337,6 +382,13 @@ public class LecturerPageController implements Initializable {
 		window.show();
 	}
 
+	/**
+	 * This function logs out the user, sends a request to the server, loads the login screen, sets the
+	 * client and controller, and displays the new scene.
+	 * 
+	 * @param event The ActionEvent that triggered the logOut method, which could be a button click or
+	 * other user interaction.
+	 */
 	@FXML
 	public void logOut(ActionEvent event) {
 		LogInInfo loginData = new LogInInfo(lecturer.getUserName(), lecturer.getPassword());
@@ -378,6 +430,13 @@ public class LecturerPageController implements Initializable {
 		window.show();
 	}
 
+	/**
+	 * This function loads a new FXML file and sets it as the scene for the current stage, passing a
+	 * ChatClient instance to the new scene's controller.
+	 * 
+	 * @param event The ActionEvent that triggered the method, which is usually a button click or key
+	 * press event.
+	 */
 	@FXML
 	public void showCreateQuestionForm(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/write_question.fxml")); // specify the path to
@@ -402,6 +461,12 @@ public class LecturerPageController implements Initializable {
 
 	}
 
+	/**
+	 * This function loads a new FXML file for creating an exam and sets the scene to display it.
+	 * 
+	 * @param event The ActionEvent that triggered the method, which is usually a button click or key
+	 * press event.
+	 */
 	@FXML
 	public void showCreateExamForm(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/create_exam.fxml")); // specify the path to
@@ -427,6 +492,13 @@ public class LecturerPageController implements Initializable {
 
 	}
 
+	/**
+	 * This function loads a new FXML file and sets up a new scene with a TimeRequestController, passing
+	 * in necessary data.
+	 * 
+	 * @param event The event that triggered the method, which is an ActionEvent in this case. It is not
+	 * used in the method implementation.
+	 */
 	@FXML
 	public void showTimeRequestForm(ActionEvent event) {
 		Exam exam = ongoingExamsTable.getSelectionModel().getSelectedItem();

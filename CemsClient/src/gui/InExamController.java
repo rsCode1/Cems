@@ -27,6 +27,10 @@ import logic.Users;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * The InExamController class manages the test-taking process for a student, including tracking time,
+ * answers, and navigation between questions.
+ */
 public class InExamController {
 	private int remainingTime; //represents the test time in min
 	private StudentInTest studentInTest; // includes the answers and test info 
@@ -38,14 +42,32 @@ public class InExamController {
 	private int answeredNum = 0; //represents the number of answered questions
 	private AddedTime added = new AddedTime(); //if lectuere added time for the test we will save it in this obj
 
+	/**
+	 * The function returns an object of type AddedTime.
+	 * 
+	 * @return The method `getAdded()` is returning an object of type `AddedTime`.
+	 */
 	public AddedTime getAdded() {
 		return added;
 	}
 
+/**
+ * This function sets the value of the "added" variable to the input parameter "added".
+ * 
+ * @param added added is a parameter of type AddedTime which is being set using the setter method
+ * setAdded(). The setter method is used to set the value of the private instance variable added to the
+ * value passed as a parameter.
+ */
 	public void setAdded(AddedTime added) {
 		this.added = added;
 	}
 
+	/**
+	 * This Java function sets the value of a Test object.
+	 * 
+	 * @param test The "test" parameter is an object of the class "Test". The method "setTest" sets the
+	 * value of the instance variable "test" to the value of the "test" parameter.
+	 */
 	public void setTest(Test test) {
 		this.test = test;
 
@@ -447,6 +469,10 @@ public class InExamController {
 		timeThread.start();
 	}
 
+	/**
+	 * The function "stopTimer()" sets the boolean variable "stopThread" to true, sets the remaining time
+	 * to 0, and updates the timer label.
+	 */
 	public void stopTimer() {
 		stopThread = true;
 		remainingTime = 0;

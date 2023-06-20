@@ -86,16 +86,6 @@ public class LecturerStatisticsController implements Initializable {
 		calculateGpa();
 		calculateMedian();
 
-		// if (gradesArr == null) {
-		// 	label.setText("No grades for this exam");
-		// 	return;
-		// }else {
-		// 	System.out.println(gradesArr.size());
-		// }
-		// for (Exam e : gradesArr) {
-		// 	System.out.println(e.getGrade());
-
-		//}
 
 		Platform.runLater(()->{
 			gpa.setText(String.valueOf(GPA));

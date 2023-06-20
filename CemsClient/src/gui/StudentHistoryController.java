@@ -145,6 +145,11 @@ public class StudentHistoryController {
     	    lblGPA.setText("Average GPA: " + average);
     }
     
+   /**
+	* The function returns an instance of the StudentHistoryController class.
+	* 
+	* @return An instance of the `StudentHistoryController` class is being returned.
+	*/
     public StudentHistoryController getController() {
 		return this;
 	}

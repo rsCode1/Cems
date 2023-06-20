@@ -94,6 +94,14 @@ public class TakeExamController {
 
 	private boolean checked = false;
 
+	/**
+	 * This function toggles a boolean variable "checked" between true and false when a checkbox is
+	 * checked or unchecked.
+	 * 
+	 * @param event The event parameter in this code is an instance of the ActionEvent class, which
+	 * represents a user action, such as clicking a button or selecting a checkbox. It is passed to the
+	 * ConfirmCheckBChecked method when the corresponding event occurs.
+	 */
 	@FXML
 	void ConfirmCheckBChecked(ActionEvent event) {
 		if (!checked)
@@ -102,6 +110,14 @@ public class TakeExamController {
 			checked = false;
 	}
 
+	/**
+	 * The function closes the current stage when the back button is clicked in a JavaFX application.
+	 * 
+	 * @param event The event parameter in this code is an instance of the ActionEvent class, which is
+	 * passed to the method when the backBtn is clicked. It contains information about the event that
+	 * occurred, such as the source of the event (in this case, the backBtn button) and any additional
+	 * data related to
+	 */
 	@FXML
 	void backBtnClicked(ActionEvent event) {
 		Stage currentStage = (Stage) backBtn.getScene().getWindow();
@@ -227,10 +243,20 @@ public class TakeExamController {
 		return ret;
 	}
 
+	/**
+	 * The function returns the current instance of the TakeExamController class.
+	 * 
+	 * @return An instance of the `TakeExamController` class is being returned.
+	 */
 	public TakeExamController getController() {
 		return this;
 	}
 
+	/**
+	 * The function returns a Button object named startBtn.
+	 * 
+	 * @return The method is returning a Button object named "startBtn".
+	 */
 	public Button getstartBtn() {
 		return startBtn;
 	}

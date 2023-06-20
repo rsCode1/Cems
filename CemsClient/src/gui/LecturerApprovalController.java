@@ -26,6 +26,10 @@ import logic.Exam;
 import logic.Request;
 import logic.Users;
 
+/**
+ * The LecturerApprovalController class initializes a chat client and manages a list of exams for a
+ * specific lecturer to approve.
+ */
 public class LecturerApprovalController implements Initializable {
 
     private ChatClient client;
@@ -167,12 +171,29 @@ public class LecturerApprovalController implements Initializable {
         });
     }
 
+    /**
+     * This function sets the client and lecturer for a chat session.
+     * 
+     * @param client An object of the ChatClient class that represents the client who is setting the
+     * lecturer.
+     * @param lecturer The lecturer parameter is an instance of the Users class, which represents a
+     * user in the chat system. It likely contains information such as the user's name, ID, and other
+     * relevant details.
+     */
     public void setClientAndLecturer(ChatClient client, Users lecturer) {
         this.client = client;
         this.lecturer = lecturer;
 
     }
 
+   /**
+    * The function initializes the table columns and sets mouse click events for various tools.
+    * 
+    * @param location The location of the FXML file that contains the UI layout for the controller
+    * class.
+    * @param resources A bundle of resources, such as strings or images, that can be used by the
+    * application. It is typically used for internationalization and localization purposes.
+    */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -208,6 +229,13 @@ public class LecturerApprovalController implements Initializable {
 
     }
 
+    /**
+     * This function loads the main screen FXML file and sets the scene to it, passing the ChatClient
+     * and lecturer instances to the controller.
+     * 
+     * @param event The ActionEvent that triggered the method call. It contains information about the
+     * event, such as the source of the event and any additional data associated with it.
+     */
     @FXML
     public void goBack(ActionEvent event) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LecturerPage.fxml")); // specify the path to the
@@ -234,14 +262,28 @@ public class LecturerApprovalController implements Initializable {
 
     }
 
+  /**
+   * The function returns an ArrayList of Exam objects.
+   * 
+   * @return An ArrayList of Exam objects is being returned.
+   */
     public ArrayList<Exam> getExams() {
         return exams;
     }
 
+    /**
+     * This function sets the list of exams for a particular object.
+     * 
+     * @param exams an ArrayList of Exam objects that is being set as the value of the "exams" instance
+     * variable in the current object.
+     */
     public void setExams(ArrayList<Exam> exams) {
         this.exams = exams;
     }
 
+    /**
+     * This function updates the error label and sets the grades table for a successful grade approval.
+     */
     public void approveGradeSuccess() {
         Platform.runLater(() -> {
             errLabel.setText("Grade approved successfully");
@@ -250,6 +292,9 @@ public class LecturerApprovalController implements Initializable {
 
     }
 
+    /**
+     * This function updates the error label and sets the grades table for exams.
+     */
     public void changeGradeSuccess() {
         Platform.runLater(() -> {
             errLabel.setText("Grade changed successfully");

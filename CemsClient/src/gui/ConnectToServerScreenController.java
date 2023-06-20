@@ -12,6 +12,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 //hi guys from tamer
+// The `public class ConnectToServerScreenController` is a Java class that serves as the controller for
+// the ConnectToServerScreen GUI. It contains methods that handle user actions, such as connecting to
+// the server, setting up the chat client, and showing the login form. It also contains references to
+// various GUI components, such as buttons, text fields, and labels, which are used to interact with
+// the user.
 public class ConnectToServerScreenController  {
 	ChatClient client= null;
 	

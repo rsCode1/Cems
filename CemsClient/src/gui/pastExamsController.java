@@ -23,6 +23,10 @@ import logic.Exam;
 import logic.Request;
 import logic.Users;
 
+/**
+ * The "pastExamsController" class initializes a chat client, a lecturer user, and an array list of
+ * past exams.
+ */
 public class pastExamsController implements Initializable {
 
     private ChatClient client;
@@ -69,7 +73,10 @@ public class pastExamsController implements Initializable {
 	private Text toolWriteQuestions;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    // `public void initialize(URL location, ResourceBundle resources)` is a method that is called when
+	// the FXML file is loaded. It initializes the GUI components and sets up event handlers for the
+	// toolbar buttons. It also sets up the table columns for the past exams table.
+	public void initialize(URL location, ResourceBundle resources) {
         examId.setCellValueFactory(new PropertyValueFactory<>("examId"));
         code.setCellValueFactory(new PropertyValueFactory<>("code"));
         testTime.setCellValueFactory(new PropertyValueFactory<>("testTime"));
@@ -106,7 +113,16 @@ public class pastExamsController implements Initializable {
     }
 
 
-    public void setClientAndLecturer(ChatClient client, Users lecturer) {
+    /**
+	 * This function sets the client and lecturer for a chat session.
+	 * 
+	 * @param client An object of the ChatClient class that represents the client who is setting the
+	 * lecturer.
+	 * @param lecturer The lecturer parameter is an instance of the Users class, which represents a
+	 * user in the chat system. It likely contains information such as the user's name, ID, and other
+	 * relevant details.
+	 */
+	public void setClientAndLecturer(ChatClient client, Users lecturer) {
         this.client = client;
         this.lecturer = lecturer;
     }
@@ -132,7 +148,11 @@ public class pastExamsController implements Initializable {
     }
 
     @FXML
-    void backToMainScreen(ActionEvent event) {
+    // `void backToMainScreen(ActionEvent event)` is a method that is called when the user clicks on
+	// the "back" button in the GUI. It loads the main screen FXML file, sets the lecturer and client
+	// instances to the main screen controller, gets the ongoing exams table, and sets the controller
+	// for the client. Finally, it gets the Stage information and sets the scene to the main screen.
+	void backToMainScreen(ActionEvent event) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LecturerPage.fxml")); // specify the path to the
                                                                                               // main screen FXML file
         Parent parent = null;
