@@ -392,17 +392,10 @@ public class InExamController {
 
 	/**
 	 * this function will be called when students starts the test , it will activate thread ,
-	 * which represents the timer of the test 
-	 * 
-	 */
-	/**
-	 * This function starts a timer that counts down from a given time and checks if the duration of a
-	 * test has been changed during the countdown.
-	 * 
-	 * @param timeInSeconds The initial time in seconds for the timer. This is the amount of time that the
+	 * which represents the timer of the test .
+	 *  @param timeInSeconds The initial time in seconds for the timer. This is the amount of time that the
 	 * timer will start counting down from.
-	 * @param duration The duration parameter is not used in the startTimer method. It is not clear what
-	 * it represents without further context.
+	 * @param duration  represents the test duration in minutes.
 	 */
 	private void startTimer(int timeInSeconds, int duration) {
 		TestSourceTime testSourceTime = new TestSourceTime(test.getDuration(), test.getTestId());
