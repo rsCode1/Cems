@@ -287,6 +287,8 @@ public class HDController implements Initializable {
 
 	/**
 	 * Data initialization on screens
+	 * initialized the x and y in the bar charts
+	 * initialize the columns in the table view for the requests
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -313,7 +315,11 @@ public class HDController implements Initializable {
 		this.client = client;
 		this.client.setController(controller); // also set the controller on the client
 	}
-
+/**log out, removes the user from oonline table users in the server ui and changes the isLogged attribute to 0 in the db
+ * send the login data to the server to remove it
+ * 
+ * @param event
+ */
 	@FXML
 	public void ToLogOut(ActionEvent event) {
 		Platform.runLater(() -> {
@@ -529,7 +535,7 @@ public class HDController implements Initializable {
 		Platform.runLater(() -> {
 			try {
 				client.openConnection();
-				if (event.getSource() == showLecturertentsButton) {
+				if (event.getSource() == showLecturertentsButton) {//case lecturertents button
 					if (LectuerID.getText().isEmpty()) {// error handeling
 						LectuerID.setStyle("-fx-border-color: rgb(255,0,0);-fx-border-width: 2px;");
 						LectuerID.setPromptText("please enter lecturer ID");
@@ -556,7 +562,7 @@ public class HDController implements Initializable {
 					}
 				}
 
-				if (event.getSource() == showCourseTenthsButton) {
+				if (event.getSource() == showCourseTenthsButton) {//casse course tenths	button
 					if (ID_GradetextArea.getText().isEmpty()) {
 
 						ID_GradetextArea
@@ -590,8 +596,8 @@ public class HDController implements Initializable {
 					}
 				}
 
-				if (event.getSource() == showStudentTenthsButton) {
-					if (ID_STUtextArea.getText().isEmpty()) {
+				if (event.getSource() == showStudentTenthsButton) {//case Student tenths button
+					if (ID_STUtextArea.getText().isEmpty()) {//erro hanfle' change style and text
 
 						ID_STUtextArea
 								.setStyle("-fx-border-color: rgb(255,0,0);-fx-border-width: 2px;");
@@ -601,7 +607,7 @@ public class HDController implements Initializable {
 						emptyStudentIDLabel.setVisible(true);
 
 					} else {
-						emptyStudentIDLabel.setText("");
+						emptyStudentIDLabel.setText("");//correct input change style and text to the original
 						emptyStudentIDLabel.setStyle("-fx-background-color:#000000;-fx-background-radius: 100px;");
 						emptyStudentIDLabel.setVisible(false);
 						ID_STUtextArea.setStyle("-fx-border-width: 0px;");
@@ -629,9 +635,11 @@ public class HDController implements Initializable {
 	}
 
 	/**
-	 * Delete all information from the course's information screen
+	 * Delete all information from the student's information screen
 	 * when you click the "Reset table" button
-	 * reset styles
+	 * reset styles,textfields and chart
+	 * 
+	 * @param ActionEvent event
 	 */
 	@FXML
 	public void resetTableCourse(ActionEvent event) {
@@ -656,9 +664,11 @@ public class HDController implements Initializable {
 	}
 
 	/**
-	 * Delete all information from the lecturer's information screen
+	 * Delete all information from the student's information screen
 	 * when you click the "Reset table" button
-	 * reset styles
+	 * reset styles,textfields and chart
+	 * 
+	 * @param ActionEvent event
 	 */
 	@FXML
 	public void resetTableLecturer(ActionEvent event) {
@@ -686,7 +696,7 @@ public class HDController implements Initializable {
 	/**
 	 * Delete all information from the student's information screen
 	 * when you click the "Reset table" button
-	 * reset styles
+	 * reset styles,textfields and chart
 	 * 
 	 * @param ActionEvent event
 	 */
@@ -718,6 +728,7 @@ public class HDController implements Initializable {
 	 * The function is called by the "show statistics" button on
 	 * each screen. The function brings information about grades according to
 	 * the screen from which it was called
+	 * handle errors in input, if there is an error changes the style and text to notify the user,else reset the style
 	 * 
 	 * @param ActionEvent event
 	 */
@@ -728,7 +739,7 @@ public class HDController implements Initializable {
 			client.openConnection();
 			if (event.getSource() == ShowLectuerBTN) {
 				if (LectuerID.getText().isEmpty()) {
-
+						//update fields style and text if empty
 					LectuerID.setStyle("-fx-border-color: rgb(255,0,0);-fx-border-width: 2px;");
 					LectuerID.setPromptText("please enter lecturer ID");
 					emptyLecturerIDLabel.setText("Please enter lecturer ID!");
@@ -738,6 +749,7 @@ public class HDController implements Initializable {
 				}
 
 				else {
+					//if successfull reset style
 					emptyLecturerIDLabel.setText("");
 					emptyLecturerIDLabel.setStyle("-fx-background-color:#000000;-fx-background-radius: 100px;");
 					emptyLecturerIDLabel.setVisible(false);
@@ -791,7 +803,7 @@ public class HDController implements Initializable {
 			// ! check if fied is epmty if yes the put error
 			if (event.getSource() == ShowCourseBTN) {
 				if (ID_GradetextArea.getText().isEmpty()) {
-
+					//handle no input and change style and text 
 					ID_GradetextArea
 							.setStyle("-fx-border-color: rgb(255,0,0);-fx-border-width: 2px;");
 					ID_GradetextArea.setPromptText("please enter Course ID");
@@ -801,6 +813,7 @@ public class HDController implements Initializable {
 					emptyCourseIDLabel.setVisible(true);
 
 				} else {
+					//valid inpit
 					emptyCourseIDLabel.setText("");
 					emptyCourseIDLabel.setStyle("-fx-background-color:#000000;-fx-background-radius: 100px;");
 					emptyCourseIDLabel.setVisible(false);
@@ -825,7 +838,7 @@ public class HDController implements Initializable {
 
 			if (event.getSource() == ShowStudentBTN) {
 				if (ID_STUtextArea.getText().isEmpty()) {
-
+					//handle incorrect inpit and alarm the user, change styke and text
 					ID_STUtextArea
 							.setStyle("-fx-border-color: rgb(255,0,0);-fx-border-width: 2px;");
 					ID_STUtextArea.setPromptText("please enter Student ID");
@@ -834,6 +847,7 @@ public class HDController implements Initializable {
 					emptyStudentIDLabel.setVisible(true);
 
 				} else {
+					//correct input reset the style
 					emptyStudentIDLabel.setText("");
 					emptyStudentIDLabel.setStyle("-fx-background-color:#000000;-fx-background-radius: 100px;");
 					emptyStudentIDLabel.setVisible(false);
@@ -858,7 +872,12 @@ public class HDController implements Initializable {
 
 	/**
 	 * Receives information about lecturer grades and displays on the screen
-	 * 
+	 * ends the grades it recieves to handleAddDataToChart where it will be added to the barchart
+	 * also updtaes the relevant textfields
+	 * @see handleAddDataToChart
+	 * @see calcMedian
+	 * @see calcAVG
+	 * @see calculateStandardDeviation
 	 * @param msg
 	 */
 	public void ImportLectuerStatistics(ArrayList<Grades> grades) {
@@ -880,7 +899,12 @@ public class HDController implements Initializable {
 	/**
 	 * Receives information about lecturer grades and displays on the screen,
 	 * divided to tenths
-	 * 
+	 * this mthod gets the gradees from Chatclient and
+	 * sends to handleAddDataToChartTents where it will be divided to tents and will be showed in the barchart it belongs
+	 * @see handleAddDataToChartTents
+	 * @see calcMedian
+	 * @see calcAVG
+	 * @see calculateStandardDeviation
 	 * @param msg
 	 */
 	public void ImportLectuerStatisticsTenths(ArrayList<Grades> msg) {
@@ -905,7 +929,12 @@ public class HDController implements Initializable {
 
 	/**
 	 * Receives information about student grades and displays on the screen
-	 * 
+	 * ends the grades it recieves to handleAddDataToChart where it will be added to the barchart
+	 * also updtaes the relevant textfields
+	 * @see handleAddDataToChart
+	 * @see calcMedian
+	 * @see calcAVG
+	 * @see calculateStandardDeviation
 	 * @param msg
 	 */
 	public void ImportStudentGradeStatistics(ArrayList<Grades> msg) {
@@ -927,9 +956,14 @@ public class HDController implements Initializable {
 	}
 
 	/**
-	 * Receives information about student grades and displays on the screen,divided
-	 * to tenths
-	 * 
+	 * Receives information about student grades and displays on the screen,
+	 * divided to tenths
+	 * this mthod gets the gradees from Chatclient and
+	 * sends to handleAddDataToChartTents where it will be divided to tents and will be showed in the barchart it belongs
+	 * @see handleAddDataToChartTents
+	 * @see calcMedian
+	 * @see calcAVG
+	 * @see calculateStandardDeviation
 	 * @param msg
 	 */
 	public void ImportStudentGradeStatisticsTenths(ArrayList<Grades> msg) {
@@ -958,8 +992,13 @@ public class HDController implements Initializable {
 	}
 
 	/**
-	 * receives information about course grades and displays on the screen
-	 * 
+	 * Receives information about course grades and displays on the screen
+	 * ends the grades it recieves to handleAddDataToChart where it will be added to the barchart
+	 * also updtaes the relevant textfields
+	 * @see handleAddDataToChart
+	 * @see calcMedian
+	 * @see calcAVG
+	 * @see calculateStandardDeviation
 	 * @param msg
 	 */
 	public void ImportCourseGradeStatistics(ArrayList<Grades> msg) {
@@ -976,9 +1015,14 @@ public class HDController implements Initializable {
 	}
 
 	/**
-	 * receives information about course grades and displays on the screen,divided
-	 * to tenths
-	 * 
+	 * Receives information about course grades and displays on the screen,
+	 * divided to tenths
+	 * this mthod gets the gradees from Chatclient and
+	 * sends to handleAddDataToChartTents where it will be divided to tents and will be showed in the barchart it belongs
+	 * @see handleAddDataToChartTents
+	 * @see calcMedian
+	 * @see calcAVG
+	 * @see calculateStandardDeviation
 	 * @param msg
 	 */
 	public void ImportCourseGradeStatisticstenths(ArrayList<Grades> msg) {
@@ -1046,6 +1090,7 @@ public class HDController implements Initializable {
 	/**
 	 * get the array of the grades of the exams
 	 * that we want to calculate and return the median
+	 * it sorts the array and checks if the size is even or odd, if odd then takes the middle number and if even it takes the AVG of the two midlle grades
 	 * 
 	 * @param ArrayList<Grades> grades
 	 * @returns median of the grades as double
@@ -1076,6 +1121,7 @@ public class HDController implements Initializable {
 
 	/***
 	 * updaute the bar chart of the grade statistics
+	 * initializes the series that will be added to the chart, and in for each loop adds the info to the series and then to the chart
 	 * 
 	 * @param ArrayList<Integer> grades, BarChart chart
 	 **/
@@ -1094,8 +1140,7 @@ public class HDController implements Initializable {
 			// Add series to the bar chart
 			ObservableList<XYChart.Series<String, Number>> data = FXCollections.observableArrayList();
 			data.add(series);
-			chart.setStyle("-fx-bar-fill:red;");
-
+			
 			chart.setData(data);
 
 		});
@@ -1104,6 +1149,9 @@ public class HDController implements Initializable {
 
 	/**
 	 * Add data to the bar chart accourding to the chart we want to change
+	 * it gets the grades and the corresponding chart, and divide it to tenths using divideToTenths method that returns mao with the tenths range and the amount
+	 * of grades in each tenth
+	 * then this puts the tenths in the correct order in the chart 
 	 * 
 	 * @param ArrayList<Integer> grades, BarChart chart
 	 */
@@ -1122,7 +1170,7 @@ public class HDController implements Initializable {
 			ObservableList<XYChart.Series<String, Number>> data = FXCollections.observableArrayList();
 			data.add(series);
 			chart.setData(data);
-			chart.setStyle("-fx-bar-fill:white;");
+			
 
 			if (chart == barChartLec) {
 				chart.setData(data);
@@ -1168,6 +1216,9 @@ public class HDController implements Initializable {
 	/**
 	 * import data for the compare action
 	 * when the head of department press on ""compare to:" button
+	 * it sends the ids to the server according to the button pressed
+	 * in the server its deciphered and operates accordingly
+	 * gets the values from the text fields corresponding to the button pressed
 	 * 
 	 * @param ActionEvent event
 	 */
@@ -1270,10 +1321,14 @@ public class HDController implements Initializable {
 
 	}
 
+	
 	/**
 	 * Gets information about the two students we want to compare,
 	 * compares their data and displays on the screen
-	 * 
+	 * gets the two lecturers ids and get the grades and puts them in the correspondng chart and updates the correct text fields
+	 * @see calcMedian
+	 * @see calcAVG
+	 * @see calculateStandardDeviation
 	 * @param ArrayList<Grades> grades, ArrayList<Grades> grades2
 	 */
 	public void compareTwoStudents(ArrayList<Grades> grades, ArrayList<Grades> grades2) {
@@ -1327,7 +1382,10 @@ public class HDController implements Initializable {
 	/**
 	 * Gets information about the two lectuers we want to compare,
 	 * compares their data and displays on the screen
-	 * 
+	 * gets the two lecturers ids and get the grades and puts them in the correspondng chart and updates the correct text fields
+	 * @see calcMedian
+	 * @see calcAVG
+	 * @see calculateStandardDeviation
 	 * @param ArrayList<Grades> grades, ArrayList<Grades> grades2
 	 */
 	public void compareTwoLectuers(ArrayList<Grades> grades, ArrayList<Grades> grades2) {
@@ -1379,18 +1437,13 @@ public class HDController implements Initializable {
 	/**
 	 * Gets information about the two courses we want to compare,
 	 * compares their data and displays on the screen
-	 * 
+	 * gets the two students grades list and puts them in the barchart and compares them' also updates the necessery textfields
+	  * @see calcMedian
+	 * @see calcAVG
+	 * @see calculateStandardDeviation
 	 * @param ArrayList<Grades> grades, ArrayList<Grades> grades2
 	 */
 	public void compareTwoCourses(ArrayList<Grades> grades, ArrayList<Grades> grades2) {
-
-		for (Grades g : grades) {
-
-			System.out.println("back in controller1" + g.toString());
-		}
-		for (Grades g2 : grades2) {
-			System.out.println("back in controller2" + g2.toString());
-		}
 
 		Platform.runLater(() -> {
 			XYChart.Series<String, Number> series = new XYChart.Series<>();
