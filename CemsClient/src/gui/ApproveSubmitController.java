@@ -31,7 +31,7 @@ public class ApproveSubmitController {
 	private InExamController inExamController;
 	private StudentManualTestController studentManualTest;
 	private int DigOrMan;
-
+    private boolean locked=false;
 	
 	/** 
 	 * @param answersFile The parameter "answersFile" is an object of type "UploadFile". It is  used
@@ -199,6 +199,7 @@ public class ApproveSubmitController {
 	public void forceSubmit() {
 		yesBtn.setDisable(true);
 		noBtn.setDisable(true);
+		if(locked == false)
 		lbl.setText("Time out!");
 
 		if (DigOrMan == 0) { // submiting the exam Digital test
@@ -236,7 +237,7 @@ public class ApproveSubmitController {
 		yesBtn.setDisable(true);
 		noBtn.setDisable(true);
 		lbl.setText("Sorry Exam is locked by luctuer!");
-
+        locked=true;
 		if (DigOrMan == 0) { //Digital exam case
 			try {
 				mesTxt.setText("Your answers are submitted automatically, Good Luck!");
