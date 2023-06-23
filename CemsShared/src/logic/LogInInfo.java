@@ -26,5 +26,11 @@ public class LogInInfo implements Serializable  {
 	public String getPassword() {
 		return password;
 	}
+    public void setUserName(String username) {
+    	this.userName=username;
+    }
+    public void setPassword(String password) {
+    	this.password=password;
+    }
 
 }

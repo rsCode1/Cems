@@ -96,6 +96,7 @@ import ocsf.server.AbstractServer;
 import ocsf.server.ConnectionToClient;
 
 public class EchoServer extends AbstractServer {
+	
 	private ServerStartScreenController serverScreenController;
 	private ServerCommandsLecturer lecturerCommands = new ServerCommandsLecturer();
 	private ServerCommandsStudent serverCommandsStudent = new ServerCommandsStudent();
@@ -103,8 +104,10 @@ public class EchoServer extends AbstractServer {
 	final public static int DEFAULT_PORT = 5555;
 
 	public EchoServer(int port) {
+	
 		super(port);
 	}
+
 
 	public void setController(ServerStartScreenController controller2) {
 		this.serverScreenController = controller2;
@@ -352,7 +355,7 @@ public class EchoServer extends AbstractServer {
 
 	}
 
-	private void checkUserLogin(LogInInfo loginInfo, ConnectionToClient client) {
+	public void checkUserLogin(LogInInfo loginInfo, ConnectionToClient client) {
 		try {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
 					"Aa123456");
@@ -368,6 +371,21 @@ public class EchoServer extends AbstractServer {
 			Response response = new Response("LOGIN", user);
 			client.sendToClient(response);
 
+		} catch (Exception ex) {
+			/* handle the error */
+			ex.printStackTrace();
+		}
+	}
+		public void checkUserLoginNoClient(LogInInfo loginInfo) {
+		try {
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
+					"Aa123456");
+			System.out.println("SQL connection succeed");
+			Users user = getUserInfo(loginInfo, conn);
+		
+			updateUserLoggedIn(loginInfo, conn);
+			//addUserToLoggedTable(conn);
+			
 		} catch (Exception ex) {
 			/* handle the error */
 			ex.printStackTrace();
