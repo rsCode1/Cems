@@ -153,6 +153,7 @@ public class createExamController implements Initializable {
 			}
 			// check if the exam time is valid
 			if (Integer.parseInt(setTimeTextField.getText()) < 1) {
+
 				errLabel.setText("Please enter a valid time");
 				return;
 			}
