@@ -4,9 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-
-
+import org.mockito.Mockito;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -42,6 +40,7 @@ class EchoServerTest {
 	 @Mock
 	 private Connection connMock;
 	ConnectionToClient connectionMock=Mockito.mock(ConnectionToClient.class);
+	
 	
 	ArrayList<Users> loggedUsers;
 
@@ -240,27 +239,6 @@ class EchoServerTest {
 
 	}
 
-
-public boolean AddExamtoDB( Exam exam,Connection conn) throws SQLException {
-		boolean isExist = false;
-		Integer examID=exam.getExamId();
-		String command = String.format("SELECT * FROM cems.exams WHERE exam_id= '%d'",exam.getExamId());
-		Statement stmt = conn.createStatement();
-		
-		ResultSet rs = stmt.executeQuery(command);
-		while (rs.next()) {
-			// get fields from resultSet
-			 examID = rs.getInt("exam_id");
-			
-				
-		}
-			
-		return (examID==null) ? false : true;
-
-	}
-
-
-
 	@Test
 	void CreateExam_SuccsesTest() {
 
@@ -277,7 +255,7 @@ public boolean AddExamtoDB( Exam exam,Connection conn) throws SQLException {
 			e.printStackTrace();
 		}
 		//create exam and insert to DB 
-        
+        saveExam(exam,conn);
 
 
 
