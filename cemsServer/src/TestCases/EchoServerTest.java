@@ -39,9 +39,9 @@ class EchoServerTest {
 	ObservableList<Question> questions;
 	Users lecturer;
 	Question question1,question2;
-	// @Mock
-	// private Connection connMock;
-	//ConnectionToClient connectionMock=Mockito.mock(ConnectionToClient.class);
+	 @Mock
+	 private Connection connMock;
+	ConnectionToClient connectionMock=Mockito.mock(ConnectionToClient.class);
 	
 	ArrayList<Users> loggedUsers;
 
@@ -239,21 +239,55 @@ class EchoServerTest {
 		return (examID==null) ? false : true;
 
 	}
+
+
+public boolean AddExamtoDB( Exam exam,Connection conn) throws SQLException {
+		boolean isExist = false;
+		Integer examID=exam.getExamId();
+		String command = String.format("SELECT * FROM cems.exams WHERE exam_id= '%d'",exam.getExamId());
+		Statement stmt = conn.createStatement();
+		
+		ResultSet rs = stmt.executeQuery(command);
+		while (rs.next()) {
+			// get fields from resultSet
+			 examID = rs.getInt("exam_id");
+			
+				
+		}
+			
+		return (examID==null) ? false : true;
+
+	}
+
+
+
 	@Test
 	void CreateExam_SuccsesTest() {
 
 		Connection conn = connect2DB();// check th
-		boolean isExist = false;
-		assertFalse(isExist);
+		boolean isExist;
+		
 		try {
 
 			isExist = checkIfExamIsExist(exam,conn);
+			assertFalse(isExist);
+
 		} catch (SQLException | IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		//create exam and insert to DB 
+        
+
+
+
 		//call to checkIfExamIsExist(conn)
+
+
+
+
+
+
 		assertTrue(isExist);
 
 	}
