@@ -11,6 +11,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-8.0.13.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
-	<classpathentry kind="lib" path="D:/Chrome/mockito-all-2.0.2-beta.jar"/>
+	<classpathentry kind="lib" path="lib/mockito-all-2.0.2-beta.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
