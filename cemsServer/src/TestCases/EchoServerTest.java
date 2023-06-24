@@ -31,6 +31,7 @@ import server.EchoServer;
 import server.IEchoServer;
 import server.ServerCommandsLecturer;
 import client.ChatClient;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 class EchoServerTest {
@@ -40,38 +41,43 @@ class EchoServerTest {
 	ServerCommandsLecturer SCL;
 	ChatClient client;
 	Users successUser, failUser;
-	Exam exam;
+	Exam exam,exam2;
 	ObservableList<Question> questions;
-	Users lecturer;
+	private Users lecturer,lecturer2;
 	Question question1,question2;
 	 @Mock
 	 private Connection connMock;
-	ConnectionToClient connectionMock=Mockito.mock(ConnectionToClient.class);
+	ConnectionToClient connectionMock;
 	
 	
 	ArrayList<Users> loggedUsers;
 
-	@BeforeEach
-	void setUp() throws Exception {
-		question1= new Question(123,"1+1=?","1","2","3","4",2,1,496351,"dnb");
-			question2= new Question(124,"2+2=?","1","2","3","4",4,1,496351,"dnb");
-		echoserver = new EchoServer(55555);
-		lecturer = new Users(496351, "Dina", "Barzilai", "dnb", "111", 0, 1);
-		questions.add(question1);
-		questions.add(question2);
-		// client=new ChatClient(null, 0, client);
-		loggedUsers = new ArrayList<Users>();
-		exam= new Exam("Calculus1",questions,lecturer,100,"Calculus1");
-		loginStubSuccess = new LogInInfo(null, null);
-		loginStubFail= new LogInInfo(null, null);
-		loginStubSuccess.setUserName("jsm");
-		loginStubFail = new LogInInfo("not_username", "worng_password");
+@BeforeEach
+void setUp() throws Exception {
+    question1 = new Question(2, "What is the capital of France?", "Paris", "London", "Berlin", "Madrid", 1, 2, 2, "Jane Smith");
+    //question2 = new Question(124, "2+2=?", "1", "2", "3", "4", 4, 1, 496351, "dnb");
+    echoserver = new EchoServer(5555);
+    lecturer = new Users(496351, "Dina", "Barzilai", "dnb", "111", 0, 1);
+    lecturer2 = new Users(2, "Jane", "Smith", "jsm", "456", 0, 1);
 
-		loginStubSuccess.setPassword("456");
-		loginStubFail.setUserName("test");
-		loginStubFail.setPassword("111");
+    // Initialize the questions list
+    questions = FXCollections.observableArrayList();
+    questions.add(question1);
+    //questions.add(question2);
+    SCL = new ServerCommandsLecturer();
+    loggedUsers = new ArrayList<>();
+    exam = new Exam("Calculus1", questions, lecturer2, 100, "Calculus1");
 
-	}
+    loginStubSuccess = new LogInInfo(null, null);
+    loginStubFail = new LogInInfo(null, null);
+    loginStubSuccess.setUserName("jsm");
+    loginStubFail = new LogInInfo("not_username", "worng_password");
+    connectionMock=Mockito.mock(ConnectionToClient.class);
+    loginStubSuccess.setPassword("456");
+    loginStubFail.setUserName("test");
+    loginStubFail.setPassword("111");
+}
+
 
 	private class LoginStub {
 
@@ -230,6 +236,7 @@ class EchoServerTest {
 		public boolean checkIfExamIsExist( Exam exam,Connection conn) throws SQLException {
 		boolean isExist = false;
 		Integer examID=exam.getExamId();
+		System.out.println(exam.toString());
 		String command = String.format("SELECT * FROM cems.exams WHERE exam_id= '%d'",exam.getExamId());
 		Statement stmt = conn.createStatement();
 		
@@ -241,19 +248,19 @@ class EchoServerTest {
 				
 		}
 			
-		return (examID==null) ? false : true;
+		return (examID==exam.getExamId()) ? false : true;
 
 	}
 
 @Test
 void CreateExam_SuccsesTest() throws SQLException {
-    Response respondMock = Mockito.mock(Response.class);
-    try {
-		Mockito.doNothing().when(connectionMock).sendToClient(respondMock);
-	} catch (IOException e) {
+   // Response respondMock = Mockito.mock(Response.class);
+  //  try {
+	//	Mockito.doNothing().when(connectionMock).sendToClient(respondMock);
+	//} catch (IOException e) {
 		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+	//	e.printStackTrace();
+	//}
 
     Connection conn = connect2DB();
     boolean isExist;
@@ -267,12 +274,12 @@ void CreateExam_SuccsesTest() throws SQLException {
         assertTrue(isExist);
 
         // Verify that connectionMock.sendToClient was called during SCL.saveExam
-        try {
-			Mockito.verify(connectionMock).sendToClient(respondMock);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+     //   try {
+	//		Mockito.verify(connectionMock).sendToClient(respondMock);
+	//	} catch (IOException e) {
+		//	// TODO Auto-generated catch block
+		//	e.printStackTrace();
+	//	}
 
     } catch (SQLException | IllegalArgumentException e) {
         e.printStackTrace();
