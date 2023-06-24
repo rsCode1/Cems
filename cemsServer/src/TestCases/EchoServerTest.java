@@ -235,8 +235,8 @@ void setUp() throws Exception {
 	}
 		public boolean checkIfExamIsExist( Exam exam,Connection conn) throws SQLException {
 		boolean isExist = false;
+		
 		Integer examID=exam.getExamId();
-		System.out.println(exam.toString());
 		String command = String.format("SELECT * FROM cems.exams WHERE exam_id= '%d'",exam.getExamId());
 		Statement stmt = conn.createStatement();
 		
@@ -252,15 +252,40 @@ void setUp() throws Exception {
 
 	}
 
+
+
+	public boolean CheckIfExamInserted( Exam exam,Connection conn) throws SQLException {
+		boolean isExist = false;
+		String command2 = String.format("SELECT LAST_INSERT_ID()");
+		Statement stmt2 = conn.createStatement();
+		ResultSet rs2 = stmt2.executeQuery(command2);
+        Integer examID=null;
+        while (rs2.next()) {
+			// get fields from resultSet
+			 examID = rs2.getInt("exam_id");
+			
+				
+		}
+
+		String command = String.format("SELECT * FROM cems.exams WHERE exam_id='%d'",examID);
+		Statement stmt = conn.createStatement();
+		
+		ResultSet rs = stmt.executeQuery(command);
+	
+		while (rs.next()) {
+			// get fields from resultSet
+			 examID = rs.getInt("exam_id");
+			
+				
+		}
+			
+		return (examID==exam.getExamId()) ? false : true;
+
+	}
+
 @Test
-void CreateExam_SuccsesTest() throws SQLException {
-   // Response respondMock = Mockito.mock(Response.class);
-  //  try {
-	//	Mockito.doNothing().when(connectionMock).sendToClient(respondMock);
-	//} catch (IOException e) {
-		// TODO Auto-generated catch block
-	//	e.printStackTrace();
-	//}
+void CreateExam_SuccsesTest() throws SQLException, InterruptedException {
+  
 
     Connection conn = connect2DB();
     boolean isExist;
@@ -270,16 +295,8 @@ void CreateExam_SuccsesTest() throws SQLException {
         assertFalse(isExist);
 
         SCL.saveExam(exam, connectionMock);
-        isExist = checkIfExamIsExist(exam, conn);
+        isExist = CheckIfExamInserted(exam, conn);
         assertTrue(isExist);
-
-        // Verify that connectionMock.sendToClient was called during SCL.saveExam
-     //   try {
-	//		Mockito.verify(connectionMock).sendToClient(respondMock);
-	//	} catch (IOException e) {
-		//	// TODO Auto-generated catch block
-		//	e.printStackTrace();
-	//	}
 
     } catch (SQLException | IllegalArgumentException e) {
         e.printStackTrace();
