@@ -256,7 +256,7 @@ void setUp() throws Exception {
 
 	public boolean CheckIfExamInserted( Exam exam,Connection conn) throws SQLException {
 		boolean isExist = false;
-		String command2 = String.format("SELECT LAST_INSERT_ID()");
+		String command2 = String.format("SELECT * FROM exams WHERE exam_id = (SELECT MAX(exam_id) FROM exams)");
 		Statement stmt2 = conn.createStatement();
 		ResultSet rs2 = stmt2.executeQuery(command2);
         Integer examID=null;
@@ -267,18 +267,7 @@ void setUp() throws Exception {
 				
 		}
 
-		String command = String.format("SELECT * FROM cems.exams WHERE exam_id='%d'",examID);
-		Statement stmt = conn.createStatement();
 		
-		ResultSet rs = stmt.executeQuery(command);
-	
-		while (rs.next()) {
-			// get fields from resultSet
-			 examID = rs.getInt("exam_id");
-			
-				
-		}
-			
 		return (examID==exam.getExamId()) ? false : true;
 
 	}
