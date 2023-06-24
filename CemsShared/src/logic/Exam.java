@@ -169,4 +169,14 @@ public class Exam implements Serializable {
         return studentsNumber;
     }
 
+    @Override
+    public String toString() {
+        return "Exam [examId=" + examId + ", courseName=" + courseName + ", subject=" + subject + ", questions="
+                + questions + ", lecturer=" + lecturer + ", testTime=" + testTime + ", lecturerComments="
+                + lecturerComments + ", studentComments=" + studentComments + ", code=" + code + ", time_remaning="
+                + time_remaning + ", lecturer_name=" + lecturer_name + ", studentId=" + studentId + ", grade=" + grade
+                + ", ChangeGradeReason=" + ChangeGradeReason + ", cheat=" + cheat + ", dateStart=" + dateStart
+                + ", dateEnd=" + dateEnd + ", studentsNumber=" + studentsNumber + "]";
+    }
+
 }
