@@ -1,8 +1,10 @@
 package TestCases;
 
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
+import org.junit.internal.runners.statements.Fail;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,16 +35,17 @@ import server.ServerCommandsLecturer;
 import client.ChatClient;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import junit.framework.Assert;
 
 class EchoServerTest {
 	LogInInfo loginStubSuccess;
-	LogInInfo loginStubFail;
+	LogInInfo loginStubFailNull,loginStubFailNotInDB;
 	EchoServer echoserver;
 	ServerCommandsLecturer SCL;
 	ChatClient client;
 	Users successUser, failUser;
-	Exam exam,exam2;
-	ObservableList<Question> questions;
+	Exam exam,exam2,exam3,exam4;
+	ObservableList<Question> questions,noQuestions;
 	private Users lecturer,lecturer2;
 	Question question1,question2;
 	 @Mock
@@ -55,79 +58,44 @@ class EchoServerTest {
 @BeforeEach
 void setUp() throws Exception {
     question1 = new Question(2, "What is the capital of France?", "Paris", "London", "Berlin", "Madrid", 1, 2, 2, "Jane Smith");
-    //question2 = new Question(124, "2+2=?", "1", "2", "3", "4", 4, 1, 496351, "dnb");
+    question2 = new Question(124, "2+2=?", "1", "2", "3", "4", 4, 1, 496351, "dnb");
     echoserver = new EchoServer(5555);
     lecturer = new Users(496351, "Dina", "Barzilai", "dnb", "111", 0, 1);
     lecturer2 = new Users(2, "Jane", "Smith", "jsm", "456", 0, 1);
-
+    noQuestions= FXCollections.observableArrayList();
     // Initialize the questions list
     questions = FXCollections.observableArrayList();
     questions.add(question1);
-    //questions.add(question2);
     SCL = new ServerCommandsLecturer();
     loggedUsers = new ArrayList<>();
     exam = new Exam("Calculus1", questions, lecturer2, 100, "Calculus1");
+	exam2 = new Exam("Calculus1", noQuestions, lecturer2, 100, "Calculus1");
+	exam3 = new Exam("Calculus1", questions, lecturer2, 0, "Calculus1");
 
-    loginStubSuccess = new LogInInfo(null, null);
-    loginStubFail = new LogInInfo(null, null);
-    loginStubSuccess.setUserName("jsm");
-    loginStubFail = new LogInInfo("not_username", "worng_password");
+    loginStubFailNull = new LogInInfo(null, null);
+    loginStubSuccess= new LogInInfo(null, null);
+	loginStubSuccess.setUserName("jsm");
+    loginStubFailNotInDB = new LogInInfo("not_username", "worng_password");
     connectionMock=Mockito.mock(ConnectionToClient.class);
     loginStubSuccess.setPassword("456");
-    loginStubFail.setUserName("test");
-    loginStubFail.setPassword("111");
+    loginStubFailNotInDB.setUserName("test");
+    loginStubFailNotInDB.setPassword("111");
 }
 
-
-	private class LoginStub {
-
-		private String usernamestub;
-		private String passwordStub;
-		private boolean isLogged;
-
-		public LoginStub(String usernamestub, String passwordStub, boolean isLogged) {
-			this.usernamestub = usernamestub;
-			this.passwordStub = passwordStub;
-			this.isLogged = isLogged;
-		}
-
-		public String getUsernamestub() {
-			return usernamestub;
-		}
-
-		public void setUsernamestub(String usernamestub) {
-			this.usernamestub = usernamestub;
-		}
-
-		public String getPasswordStub() {
-			return passwordStub;
-		}
-
-		public void setPasswordStub(String passwordStub) {
-			this.passwordStub = passwordStub;
-		}
-
-		public void setisLoggedStub(boolean isLogged) {
-			this.isLogged = isLogged;
-		}
-
-		public boolean getisLoggedStub() {
-			return this.isLogged;
-		}
-
-	}
-
+	//test login of username and passwords which are not in DB
+	//input loginStubFailNotInDB("not_username", "worng_password"),
+	//expected : user is not found in DB and not logged in. 
 	@Test
-	void testUnsuccessfulLogin_username_and_password_not_in_DB() {
+	void loginTest_username_and_password_not_in_DB() {
 		Connection conn = connect2DB();
 		boolean isLogged = false;
 		try {
-			isLogged = checkIfUserLoggedIn(loginStubFail, conn);
+			isLogged = checkIfUserLoggedIn(loginStubFailNotInDB, conn);
 			assertFalse(isLogged);
-			echoserver.checkUserLoginNoClient(loginStubFail);
-			isLogged = checkIfUserLoggedIn(loginStubFail, conn);
+			echoserver.checkUserLoginNoClient(loginStubFailNotInDB);
+			isLogged = checkIfUserLoggedIn(loginStubFailNotInDB, conn);
 			assertFalse(isLogged);
-		} catch (SQLException | IllegalArgumentException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			assertTrue(false);
 		}
@@ -135,8 +103,13 @@ void setUp() throws Exception {
 		
 	}
 
+
+
+	//test login of username and passwords which are not in DB
+	//input loginStubSuccess("jsm", "456"),
+	//expected : user is  found in DB and is able to log in. 
 	@Test
-	void LoginSuccessTest_correct_logininfo()
+	void loginTest_correct_logininfo()
 		throws SQLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
 		Connection conn = connect2DB();
@@ -152,47 +125,26 @@ void setUp() throws Exception {
 
 	}
 
+	//test login of username and passwords which are not in DB,only username is in DB
+	//input loginStubFailNotInDB("jsm", "worng_password"),
+	//expected : user is not found in DB and not logged in. 
 	@Test
-	void LoginFailTest_correct_username_and_incorrect_password() {
+	void loginTest_correct_username_and_incorrect_password() {
 
 		Connection conn = connect2DB();// check th
 		boolean isLogged = false;
-		loginStubFail.setUserName("jsm");
+		loginStubFailNotInDB.setUserName("jsm");
 		try {
-			isLogged = checkIfUserLoggedIn(loginStubFail, conn);
+			isLogged = checkIfUserLoggedIn(loginStubFailNotInDB, conn);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		assertFalse(isLogged);
-		echoserver.checkUserLoginNoClient(loginStubFail);
+		echoserver.checkUserLoginNoClient(loginStubFailNotInDB);
 		try {
 
-			isLogged = checkIfUserLoggedIn(loginStubFail, conn);
-		} catch (SQLException | IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		assertFalse(isLogged);
-
-	}
-	@Test
-	void LoginFailTest_incorrect_username_and_correct_password() {
-
-		Connection conn = connect2DB();// check th
-		boolean isLogged = false;
-		loginStubFail.setPassword("456");
-		try {
-			isLogged = checkIfUserLoggedIn(loginStubFail, conn);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		assertFalse(isLogged);
-		echoserver.checkUserLoginNoClient(loginStubFail);
-		try {
-
-			isLogged = checkIfUserLoggedIn(loginStubFail, conn);
+			isLogged = checkIfUserLoggedIn(loginStubFailNotInDB, conn);
 		} catch (SQLException | IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -201,6 +153,36 @@ void setUp() throws Exception {
 
 	}
 
+
+	//test login of username and passwords which are not in DB,only password is in DB
+	//input loginStubFailNotInDB("wrong username", "456"),
+	//expected : user is not found in DB and not logged in. 
+	@Test
+	void loginTest_incorrect_username_and_correct_password() {
+
+		Connection conn = connect2DB();// check th
+		boolean isLogged = false;
+		loginStubFailNotInDB.setPassword("456");
+		try {
+			isLogged = checkIfUserLoggedIn(loginStubFailNotInDB, conn);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		assertFalse(isLogged);
+		echoserver.checkUserLoginNoClient(loginStubFailNotInDB);
+		try {
+
+			isLogged = checkIfUserLoggedIn(loginStubFailNotInDB, conn);
+		} catch (SQLException | IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		assertFalse(isLogged);
+
+	}
+
+	//methode to handle connections
 	public Connection connect2DB() {
 		Connection conn;
 		try {
@@ -253,7 +235,7 @@ void setUp() throws Exception {
 	}
 
 
-
+    
 	public boolean CheckIfExamInserted( Exam exam,Connection conn) throws SQLException {
 		boolean isExist = false;
 		String command2 = String.format("SELECT * FROM exams WHERE exam_id = (SELECT MAX(exam_id) FROM exams)");
@@ -272,8 +254,11 @@ void setUp() throws Exception {
 
 	}
 
+	//test creat exam ,check if can successfuly add it the DB a valid Exam
+	//input Exam("Calculus1", questions, lecturer2, 100, "Calculus1");
+	//expected : Exam is successfuly added
 @Test
-void CreateExam_SuccsesTest() throws SQLException, InterruptedException {
+void CreateExamTest_Succses() throws SQLException, InterruptedException {
   
 
     Connection conn = connect2DB();
@@ -290,8 +275,63 @@ void CreateExam_SuccsesTest() throws SQLException, InterruptedException {
     } catch (SQLException | IllegalArgumentException e) {
         e.printStackTrace();
         fail("Exception thrown during test: " + e.getMessage());
+	}
     }
+
+
+	//test creat exam ,check if wrong exam with no questions is added
+	//input Exam("Calculus1",noQuestions(empty array), lecturer2, 100, "Calculus1");
+	//expected : Exam is not successfuly added,due to not having question
+@Test
+void CreateExamTest_FailNoQuestions() throws SQLException, InterruptedException {
+  
+
+    Connection conn = connect2DB();
+    boolean isExist;
+
+    try {
+        isExist = checkIfExamIsExist(exam2, conn);
+        assertFalse(isExist);
+
+        SCL.saveExam(exam2, connectionMock);
+        isExist = CheckIfExamInserted(exam2, conn);
+        assertTrue(isExist);
+
+    } catch (Exception e) {
+        assertEquals("Please add questions to the exam",e.getMessage());
+		e.printStackTrace();
+	}
+    }
+
+     //test creat exam ,check if exam without timer can be added
+	//input Exam("Calculus1", ObservableList<Question> questions,, lecturer2, 0, "Calculus1");
+	//expected : Exam is not successfuly added,due to not having time to complete
+@Test
+void CreateExamTest_FailNoTimer() throws SQLException, InterruptedException {
+  
+
+    Connection conn = connect2DB();
+    boolean isExist;
+
+    try {
+        isExist = checkIfExamIsExist(exam3, conn);
+        assertFalse(isExist);
+
+        SCL.saveExam(exam3, connectionMock);
+        isExist = CheckIfExamInserted(exam3, conn);
+        assertTrue(isExist);
+
+    } catch (Exception e) {
+        assertEquals("Please enter a valid time", e.getMessage());
+		e.printStackTrace();
+       
+    }
+
+
+
+
 }
+
 
 
 		
