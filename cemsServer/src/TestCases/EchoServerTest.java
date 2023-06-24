@@ -1,11 +1,15 @@
 package TestCases;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import static org.mockito.ArgumentMatcher.*;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
@@ -20,10 +24,12 @@ import org.junit.jupiter.api.Test;
 import logic.Exam;
 import logic.LogInInfo;
 import logic.Question;
+import logic.Response;
 import logic.Users;
 import ocsf.server.ConnectionToClient;
 import server.EchoServer;
 import server.IEchoServer;
+import server.ServerCommandsLecturer;
 import client.ChatClient;
 import javafx.collections.ObservableList;
 
@@ -31,6 +37,7 @@ class EchoServerTest {
 	LogInInfo loginStubSuccess;
 	LogInInfo loginStubFail;
 	EchoServer echoserver;
+	ServerCommandsLecturer SCL;
 	ChatClient client;
 	Users successUser, failUser;
 	Exam exam;
@@ -55,7 +62,6 @@ class EchoServerTest {
 		// client=new ChatClient(null, 0, client);
 		loggedUsers = new ArrayList<Users>();
 		exam= new Exam("Calculus1",questions,lecturer,100,"Calculus1");
-
 		loginStubSuccess = new LogInInfo(null, null);
 		loginStubFail= new LogInInfo(null, null);
 		loginStubSuccess.setUserName("jsm");
@@ -239,35 +245,44 @@ class EchoServerTest {
 
 	}
 
-	@Test
-	void CreateExam_SuccsesTest() {
+@Test
+void CreateExam_SuccsesTest() throws SQLException {
+    Response respondMock = Mockito.mock(Response.class);
+    try {
+		Mockito.doNothing().when(connectionMock).sendToClient(respondMock);
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 
-		Connection conn = connect2DB();// check th
-		boolean isExist;
-		
-		try {
+    Connection conn = connect2DB();
+    boolean isExist;
 
-			isExist = checkIfExamIsExist(exam,conn);
-			assertFalse(isExist);
+    try {
+        isExist = checkIfExamIsExist(exam, conn);
+        assertFalse(isExist);
 
-		} catch (SQLException | IllegalArgumentException e) {
+        SCL.saveExam(exam, connectionMock);
+        isExist = checkIfExamIsExist(exam, conn);
+        assertTrue(isExist);
+
+        // Verify that connectionMock.sendToClient was called during SCL.saveExam
+        try {
+			Mockito.verify(connectionMock).sendToClient(respondMock);
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//create exam and insert to DB 
-        saveExam(exam,conn);
+
+    } catch (SQLException | IllegalArgumentException e) {
+        e.printStackTrace();
+        fail("Exception thrown during test: " + e.getMessage());
+    }
+}
 
 
-
-		//call to checkIfExamIsExist(conn)
-
-
-
-
-
-
-		assertTrue(isExist);
+		
 
 	}
 
-}
+
