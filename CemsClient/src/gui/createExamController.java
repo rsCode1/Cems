@@ -121,7 +121,6 @@ public class createExamController implements Initializable {
 	void btnSelectProfession(ActionEvent event) {
 
 	}
-
 	@FXML
 	/**
 	 * this function will be called in the building exam process, lecturer will use it to

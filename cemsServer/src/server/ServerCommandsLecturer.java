@@ -246,6 +246,10 @@ public class ServerCommandsLecturer {
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cems?serverTimezone=IST", "root",
                     "Aa123456");
             System.out.println("SQL connection succeed");
+            if (exam.getQuestions().size()==0)
+                return;
+            if (exam.getTestTime()==0)
+                return;
             Statement stmt = conn.createStatement();
             String command = "INSERT INTO exams (course_name,lecturer_id,lecturer_comments,student_comments,test_time) VALUES ('"
                     + exam.getCourseName() + "','" + exam.getLecturer().getId() + "','" + exam.getLecturerComments()

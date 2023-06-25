@@ -2,6 +2,7 @@ package gui;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicReference;
 
 import client.ChatClient;
 import javafx.application.Platform;
@@ -30,7 +31,7 @@ import logic.Users;
 // screen based on the user's role and displays error messages if the login is unsuccessful.
 public class LoginScreenController {
 	private ChatClient client;
-
+	private String status="";
 	@FXML
 	private TextField userName;
 	@FXML
@@ -43,6 +44,9 @@ public class LoginScreenController {
 	private ImageView image;
 	@FXML
 	private Pane pane;
+
+	
+	
 
 	/**
 	 * This function sets the ChatClient and LoginScreenController objects and sets the controller on the
@@ -89,72 +93,91 @@ public class LoginScreenController {
 	 * @param user The user object represents the user who has just logged in and is being welcomed to the
 	 * system. It contains information about the user such as their role, first name, and last name.
 	 */
-	public void ShowUserWelcomeScreen(Users user) throws IOException {
-		Platform.runLater(() -> {
-			String Studentpath = "/gui/StudentPage.fxml";
-			String Lacturertpath = "/gui/LecturerPage.fxml";
-			String HDpath = "/gui/HDPage.fxml";
+public void ShowUserWelcomeScreen(Users user) throws IOException {
+    String Studentpath = "/gui/StudentPage.fxml";
+    String Lecturerpath = "/gui/LecturerPage.fxml";
+    String HDpath = "/gui/HDPage.fxml";
 
-			if (user == null) {
-				// show error text
-				loginStatus.setText("Username or password is incorrect, please try again!");
-			} else {
-				FXMLLoader loader = null;
-				loginStatus.setText("");
+    if (user == null) {
+        // show error text
+        status = "not found";
+        try {
+            loginStatus.setText("Username or password is incorrect, please try again!");
+        } catch(Exception e){
+            // handle exception
+        }
+    } else {
+        try {
+            loginStatus.setText("");
+        } catch(Exception e){
+            // handle exception
+        }
 
-				if (user.getRole() == 0) {
-					loader = new FXMLLoader(getClass().getResource(Studentpath));
-				}
-				if (user.getRole() == 1) {
-					loader = new FXMLLoader(getClass().getResource(Lacturertpath));
-				}
-				if (user.getRole() == 2) {
-					loader = new FXMLLoader(getClass().getResource(HDpath));
-				}
-				Parent root;
-				try {
-					root = loader.load();
-					Stage window = (Stage) getLoginBtn().getScene().getWindow();
-					StudentPageController studentController = null;
-					HDController hdccontroller = null;
-					if (user.getRole() == 1) {
-						// call lecturer conrtoller and use method
-						LecturerPageController controller = loader.getController();
-						controller.setLecturerAndClient(user, client);
-						client.setController(controller);
-						controller.getOngoingExamsTable();
+        AtomicReference<FXMLLoader> loader = new AtomicReference<>();
 
-					}
-					if (user.getRole() == 0) {
-						String welcomeMsg = "Welcome" + " " + user.getFirstName() + " " + user.getLastName();
-						studentController = loader.getController();
-						studentController.setStudentAndClient(user, client);
-						studentController.setWelcomeLabel(welcomeMsg);
-						client.setController(studentController);
-					}
-					if (user.getRole() == 2) {
-						hdccontroller = loader.getController();
-						hdccontroller.SetHeadOfDepartment(user, client);
-						hdccontroller.refreshTable1();
-						client.setController(hdccontroller);
+        if (user.getRole() == 0) {
+            status = "student";
+            loader.set(new FXMLLoader(getClass().getResource(Studentpath)));
+        }
+        if (user.getRole() == 1) {
+            status = "lecturer";
+            loader.set(new FXMLLoader(getClass().getResource(Lecturerpath)));
+        }
+        if (user.getRole() == 2) {
+            status = "head";
+            loader.set(new FXMLLoader(getClass().getResource(HDpath)));
+        }
+        
+        // Rest of the code wrapped in Platform.runLater()
+        Platform.runLater(() -> {
+            try {
+                Parent root = loader.get().load();
+                Stage window = (Stage) getLoginBtn().getScene().getWindow();
+                StudentPageController studentController = null;
+                HDController hdccontroller = null;
 
-					}
-					window.setScene(new Scene(root));
-					// Center the stage on the screen
-					double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
-					double screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
-					double stageWidth = window.getWidth();
-					double stageHeight = window.getHeight();
-					window.setX((screenWidth - stageWidth) / 2);
-					window.setY((screenHeight - stageHeight) / 2);
-					window.show();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+                // Further process based on user roles
+                if (user.getRole() == 1) {
+                    LecturerPageController controller = loader.get().getController();
+                    controller.setLecturerAndClient(user, client);
+                    client.setController(controller);
+                    controller.getOngoingExamsTable();
+                }
+                if (user.getRole() == 0) {
+                    String welcomeMsg = "Welcome" + " " + user.getFirstName() + " " + user.getLastName();
+                    studentController = loader.get().getController();
+                    studentController.setStudentAndClient(user, client);
+                    studentController.setWelcomeLabel(welcomeMsg);
+                    client.setController(studentController);
+                }
+                if (user.getRole() == 2) {
+                    hdccontroller = loader.get().getController();
+                    hdccontroller.SetHeadOfDepartment(user, client);
+                    hdccontroller.refreshTable1();
+                    client.setController(hdccontroller);
+                }
+
+                window.setScene(new Scene(root));
+
+                // Center the stage on the screen
+                double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
+                double screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
+                double stageWidth = window.getWidth();
+                double stageHeight = window.getHeight();
+
+                window.setX((screenWidth - stageWidth) / 2);
+                window.setY((screenHeight - stageHeight) / 2);
+                window.show();
+
+            } catch (IOException e) {
+                // Handle exception
+                e.printStackTrace();
+            }
+        });
+    }
+}
+
+
 
 	/**
 	 * The function returns the current instance of the LoginScreenController class.
@@ -208,6 +231,9 @@ public class LoginScreenController {
 	 */
 	public Label getLoginStatus() {
 		return loginStatus;
+	}
+	public String getStatus(){
+		return status;
 	}
 
 }
