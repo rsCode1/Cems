@@ -38,18 +38,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import junit.framework.Assert;
 
-class EchoServerTest {
-	LogInInfo loginStubSuccess;
-	LogInInfo loginStubFailNull, loginStubFailNotInDB;
+class CreatExamTest {
 	EchoServer echoserver;
 	ServerCommandsLecturer SCL;
 	ChatClient client;
-	Users successUser, failUser;
 	Exam exam, exam2, exam3, exam4;
 	ObservableList<Question> questions, noQuestions;
 	private Users lecturer, lecturer2;
 	Question question1, question2;
-	@Mock
 	private Connection connMock;
 	ConnectionToClient connectionMock;
 
@@ -75,114 +71,12 @@ class EchoServerTest {
 		exam2.setExamId(999);
 		exam3 = new Exam("Calculus1", questions, lecturer2, 0, "Calculus1");
 		exam3.setExamId(9999);
-
-		loginStubFailNull = new LogInInfo(null, null);
-		loginStubSuccess = new LogInInfo(null, null);
-		loginStubSuccess.setUserName("jsm");
-		loginStubFailNotInDB = new LogInInfo("not_username", "worng_password");
 		connectionMock = Mockito.mock(ConnectionToClient.class);
-		loginStubSuccess.setPassword("456");
-		loginStubFailNotInDB.setUserName("test");
-		loginStubFailNotInDB.setPassword("111");
-	}
-
-	// test login of username and passwords which are not in DB
-	// input loginStubFailNotInDB("not_username", "worng_password"),
-	// expected : user is not found in DB and not logged in.
-	@Test
-	void loginTest_username_and_password_not_in_DB() {
-		Connection conn = connect2DB();
-		boolean isLogged = false;
-		try {
-			isLogged = checkIfUserLoggedIn(loginStubFailNotInDB, conn);
-			assertFalse(isLogged);
-			echoserver.checkUserLoginNoClient(loginStubFailNotInDB);
-			isLogged = checkIfUserLoggedIn(loginStubFailNotInDB, conn);
-			assertFalse(isLogged);
-		} catch (Exception e) {
-			e.printStackTrace();
-			assertTrue(false);
-		}
 
 	}
 
-	// test login of username and passwords which are not in DB
-	// input loginStubSuccess("jsm", "456"),
-	// expected : user is found in DB and is able to log in.
-	@Test
-	void loginTest_correct_logininfo()
-			throws SQLException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
-		Connection conn = connect2DB();
-		boolean isLogged = checkIfUserLoggedIn(loginStubSuccess, conn);// check initial state for the isLogged field in
-																		// db
 
-		assertFalse(isLogged);// assert that the user isnt logged in yet
-		echoserver.checkUserLoginNoClient(loginStubSuccess);
-		isLogged = checkIfUserLoggedIn(loginStubSuccess, conn);// check that the user is logged in,we expect to get true
-																// because the user is now logged
-
-		assertTrue(isLogged);// assert value of isLogged
-
-	}
-
-	// test login of username and passwords which are not in DB,only username is in
-	// DB
-	// input loginStubFailNotInDB("jsm", "worng_password"),
-	// expected : user is not found in DB and not logged in.
-	@Test
-	void loginTest_correct_username_and_incorrect_password() {
-
-		Connection conn = connect2DB();// check th
-		boolean isLogged = false;
-		loginStubFailNotInDB.setUserName("jsm");
-		try {
-			isLogged = checkIfUserLoggedIn(loginStubFailNotInDB, conn);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		assertFalse(isLogged);
-		echoserver.checkUserLoginNoClient(loginStubFailNotInDB);
-		try {
-
-			isLogged = checkIfUserLoggedIn(loginStubFailNotInDB, conn);
-		} catch (SQLException | IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		assertFalse(isLogged);
-
-	}
-
-	// test login of username and passwords which are not in DB,only password is in
-	// DB
-	// input loginStubFailNotInDB("wrong username", "456"),
-	// expected : user is not found in DB and not logged in.
-	@Test
-	void loginTest_incorrect_username_and_correct_password() {
-
-		Connection conn = connect2DB();// check th
-		boolean isLogged = false;
-		loginStubFailNotInDB.setPassword("456");
-		try {
-			isLogged = checkIfUserLoggedIn(loginStubFailNotInDB, conn);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		assertFalse(isLogged);
-		echoserver.checkUserLoginNoClient(loginStubFailNotInDB);
-		try {
-
-			isLogged = checkIfUserLoggedIn(loginStubFailNotInDB, conn);
-		} catch (SQLException | IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		assertFalse(isLogged);
-
-	}
 
 	// test creat exam ,check if can successfuly add it the DB a valid Exam
 	// input Exam("Calculus1", questions, lecturer2, 100, "Calculus1");

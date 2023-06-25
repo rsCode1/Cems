@@ -23,7 +23,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import logic.Exam;
 import logic.LoggedUsers;
@@ -31,14 +30,14 @@ import logic.Question;
 import logic.Request;
 import logic.Users;
 
-/**
- * this class is the controller for the create exam page, witch will be used by the lecturers,
- * every time they want to create a new exam , qusetions for exams will be imported from data base.
- */
 public class createExamController implements Initializable {
 	private ChatClient client;
 	private Users lecturer;
+	private int scoreSum = 0;
+	private String testTime = "-1";
+
 	private ObservableList<Question> questions = FXCollections.observableArrayList();
+	public String status = "fail";
 
 	@FXML
 	private Button addQuestionBtn;
@@ -91,6 +90,14 @@ public class createExamController implements Initializable {
 	@FXML
 	private TextField setTimeTextField;
 
+	public TextField getSetTimeTextField() {
+		return setTimeTextField;
+	}
+
+	public void setSetTimeTextField(TextField setTimeTextField) {
+		this.setTimeTextField = setTimeTextField;
+	}
+
 	@FXML
 	private Button showQuestionView;
 
@@ -99,18 +106,6 @@ public class createExamController implements Initializable {
 
 	@FXML
 	private Label errLabel;
-	@FXML
-	private Text toolCreateExams;
-
-	@FXML
-	private Text toolGrade;
-
-	@FXML
-	private Text toolStatistics;
-
-
-	@FXML
-	private Text toolWriteQuestions;
 
 	@FXML
 	void btnSelectCourse(ActionEvent event) {
@@ -121,50 +116,55 @@ public class createExamController implements Initializable {
 	void btnSelectProfession(ActionEvent event) {
 
 	}
+
 	@FXML
-	/**
-	 * this function will be called in the building exam process, lecturer will use it to
-	 * to check if the exams which created is valid.
-	 * @param event
-	 */
 	public void reviewExam(ActionEvent event) {
+		System.out.println("a");
+		// review the exam
+		// check if the exam is valid
+		if (questions.size() == 0) {
+			errLabel.setText("Please add questions to the exam");
+			return;
+		}
+		System.out.println("a");
+		// setTimeTextField.setText(testTime);
+		testTime = setTimeTextField.getText();
+		if (setTimeTextField.getText().isEmpty()) {
+			errLabel.setText("Please set the time of the exam");
+			return;
+		}
+		System.out.println("a");
+		// check if the exam time is valid
+		if (!setTimeTextField.getText().matches("[0-9]+")) {
+			errLabel.setText("Please enter a valid time");
+			return;
+		}
+		System.out.println("a");
+		// check if the exam time is valid
+		if (Integer.parseInt(setTimeTextField.getText()) < 1) {
+			errLabel.setText("Please enter a valid time");
+			return;
+		}
+		System.out.println("a");
+		// check if the exam time is valid
+		if (Integer.parseInt(setTimeTextField.getText()) < 1) {
+			errLabel.setText("Please enter a valid time");
+			return;
+		}
+		System.out.println("a");
+		// check if the sum of question scores is 100
+
+		for (Question question : questions) {
+			scoreSum += question.getScore();
+		}
+
+		if (scoreSum != 100) {
+			errLabel.setText("The sum of question scores must be 100");
+			return;
+		}
+		System.out.println("a");
+		status = "The test is ready";
 		Platform.runLater(() -> {
-			// review the exam
-			// check if the exam is valid
-			if (questions.size() == 0) {
-				errLabel.setText("Please add questions to the exam");
-				return;
-			}
-			if (setTimeTextField.getText().isEmpty()) {
-				errLabel.setText("Please set the time of the exam");
-				return;
-			}
-			// check if the exam time is valid
-			if (!setTimeTextField.getText().matches("[0-9]+")) {
-				errLabel.setText("Please enter a valid time");
-				return;
-			}
-
-			// check if the exam time is valid
-			if (Integer.parseInt(setTimeTextField.getText()) < 1) {
-				errLabel.setText("Please enter a valid time");
-				return;
-			}
-			// check if the exam time is valid
-			if (Integer.parseInt(setTimeTextField.getText()) < 1) {
-
-				errLabel.setText("Please enter a valid time");
-				return;
-			}
-			// check if the sum of question scores is 100
-			int scoreSum = 0;
-			for (Question question : questions) {
-				scoreSum += question.getScore();
-			}
-			if (scoreSum != 100) {
-				errLabel.setText("The sum of question scores must be 100");
-				return;
-			}
 			Exam exam = new Exam(coursesComboBox.getValue(), questions, lecturer,
 					Integer.parseInt(setTimeTextField.getText()), professionsComboBox.getValue());
 
@@ -192,15 +192,22 @@ public class createExamController implements Initializable {
 			window.show();
 
 		});
+
+	}
+
+	public Label getErrLabel() {
+		return errLabel;
+	}
+
+	public void setErrLabel(Label errLabel) {
+		this.errLabel = errLabel;
+	}
+
+	public TextField getScoreTextField() {
+		return scoreTextField;
 	}
 
 	@FXML
-	/**
-	 * this function will be called in building exam process , lecturer will enter the score points
-	 * for certain question in the score field then click the button to set the score of the selected question.
-	 * and save it.
-	 * @param event
-	 */
 	public void setScoreQuestion(ActionEvent event) {
 		Platform.runLater(() -> {
 			// set the score of the selected question
@@ -220,11 +227,7 @@ public class createExamController implements Initializable {
 		});
 
 	}
-    /**
-	 * this function will be called in building exam process , lecturer will click on the question from screen
-	 * then on remove button to remove the question from the exam .
-	 * @param event
-	 */
+
 	@FXML
 	public void removeQuetsionFromExam(ActionEvent event) {
 
@@ -245,11 +248,6 @@ public class createExamController implements Initializable {
 	}
 
 	@FXML
-	 /**
-	 * this function will be called in building exam process , lecturer will click on the question from screen
-	 * then on add button to add the question to the exam .
-	 * @param event
-	 */
 	public void addToExamView(ActionEvent event) {
 		Platform.runLater(() -> {
 			// add the selected question to the exam view table
@@ -266,24 +264,12 @@ public class createExamController implements Initializable {
 
 	}
 
-	/**
-	 * This function sets the client and lecturer for a chat session.
-	 * 
-	 * @param client The ChatClient object that representsthe connection with the server.
-	 * @param lecturer The lecturer parameter is an instance of the Users class, which represents a user
-	 * in the  system.
-	 */
 	public void setClientAndLecturer(ChatClient client, Users lecturer) {
 		this.client = client;
 		this.lecturer = lecturer;
 	}
 
 	@FXML
-	/**
-     * this function will be called in lecturer screens , when back button is clicked, 
-     * the main screen will be displayed.
-     * @param event
-     */
 	void backToMainScreen(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LecturerPage.fxml")); // specify the path to the
 																								// main screen FXML file
@@ -309,12 +295,6 @@ public class createExamController implements Initializable {
 	}
 
 	@FXML
-	/**
-	 * this function will be called in building exam process , lecturer will choose a subject and course for the exam
-	 * he wants to create , then clicks on the show questions to import the questions which are connected to the subject 
-	 * from data base and show it the lecturer screen.
-	 * @param event
-	 */
 	public void showQuestionView(ActionEvent event) {
 		// show the question view table
 		try {
@@ -343,14 +323,6 @@ public class createExamController implements Initializable {
 		});
 
 	}
-
-	/**
-	 * this function will be called when loading create exam screen ,
-	 * it  will get the exams subjects from database
-	 * 
-	 * @param location
-	 * @param resources
-	 */
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -389,145 +361,9 @@ public class createExamController implements Initializable {
 		examViewIdColumn.setCellValueFactory(new PropertyValueFactory<>("questionID"));
 		examViewQuestioColumn.setCellValueFactory(new PropertyValueFactory<>("questionDescription"));
 		examViewScoreColumn.setCellValueFactory(new PropertyValueFactory<>("score"));
-		
-		toolWriteQuestions.setOnMouseClicked(e -> {
-			Platform.runLater(() -> {
-				questionTool();
-			});
-			
-		});
-		toolCreateExams.setOnMouseClicked(e -> {
-			Platform.runLater(() -> {
-				ExamsTool();
-			});
-			
-		});
-
-		toolGrade.setOnMouseClicked(e -> {
-			Platform.runLater(() -> {
-				GradeTool();
-			});
-		});
-		toolStatistics.setOnMouseClicked(e -> {
-			Platform.runLater(() -> {
-				StatisticsTool();
-			});
-			
-		});
 
 	}
-	// update all toolsBar
-	private void questionTool() {
 
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/write_question.fxml")); // specify
-
-		Parent parent = null;
-		try {
-			parent = loader.load();
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		Scene nextScene = new Scene(parent);
-
-		// Get the new scene's controller and pass the ChatClient instance to it
-		writeQuestionController controller = loader.getController();
-		controller.setClientAndLecturer(this.client, lecturer);
-		client.setController(controller);
-
-		// Get the Stage information
-		Stage window = (Stage) toolGrade.getScene().getWindow();
-		window.setScene(nextScene);
-		window.show();
-
-	}
-	private void GradeTool() {
-
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/lecturerApproval.fxml")); // specify
-
-		Parent parent = null;
-		try {
-			parent = loader.load();
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		Scene nextScene = new Scene(parent);
-
-		// Get the new scene's controller and pass the ChatClient instance to it
-		LecturerApprovalController controller = loader.getController();
-		controller.setClientAndLecturer(this.client, lecturer);
-		controller.getGrades();
-		client.setController(controller);
-
-		// Get the Stage information
-		Stage window = (Stage) toolGrade.getScene().getWindow();
-		window.setScene(nextScene);
-		window.show();
-
-	}
-	private void ExamsTool() {
-
-
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/create_exam.fxml")); // specify
-
-			Parent parent = null;
-			try {
-				parent = loader.load();
-
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-			Scene nextScene = new Scene(parent);
-
-			// Get the new scene's controller and pass the ChatClient instance to it
-			createExamController controller = loader.getController();
-			controller.setClientAndLecturer(this.client, lecturer);
-			client.setController(controller);
-
-			// Get the Stage information
-			Stage window = (Stage) toolGrade.getScene().getWindow();
-			window.setScene(nextScene);
-			window.show();
-	}
-
-	private void StatisticsTool() {
-		Platform.runLater(() -> {
-
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/lecturerStatistics.fxml")); // specify
-
-			Parent parent = null;
-			try {
-				parent = loader.load();
-
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-			Scene nextScene = new Scene(parent);
-
-			// Get the new scene's controller and pass the ChatClient instance to it
-			LecturerStatisticsController controller = loader.getController();
-			controller.setClientAndLecturer(this.client, lecturer);
-			controller.getExamsTable();
-			controller.getGrades();
-			client.setController(controller);
-
-			// Get the Stage information
-			Stage window = (Stage) toolGrade.getScene().getWindow();
-			window.setScene(nextScene);
-			window.show();
-		});
-	}
-	
-	// end toolsBar
-
-	/**
-	 * This function updates a table view with an ArrayList of Question objects.
-	 * 
-	 * @param questionsArray An ArrayList of Question objects that contains the updated set of questions
-	 * to be displayed in the questionViewTABLE. The method clears the current items in the table and adds
-	 * all the questions in the updated ArrayList to the table.
-	 */
 	public void upadteQuestionViewTable(ArrayList<Question> questionsArray) {
 
 		questionViewTABLE.getItems().clear();
@@ -535,13 +371,6 @@ public class createExamController implements Initializable {
 
 	}
 
-	/**
-	 * This function updates a JavaFX ComboBox with a list of subjects in a separate thread using the
-	 * Platform.runLater() method.
-	 * 
-	 * @param subjects An ArrayList of Strings representing the subjects that will be displayed in a
-	 * ComboBox.
-	 */
 	public void updateSubjectsComboBox(ArrayList<String> subjects) {
 		Platform.runLater(() -> {
 			ObservableList<String> list = FXCollections.observableArrayList(subjects);
@@ -549,13 +378,6 @@ public class createExamController implements Initializable {
 		});
 	}
 
-	/**
-	 * This function updates a JavaFX ComboBox with a list of courses in a separate thread using the
-	 * Platform.runLater() method.
-	 * 
-	 * @param courses An ArrayList of Strings representing the courses that will be displayed in a
-	 * ComboBox.
-	 */
 	public void updateCoursesComboBox(ArrayList<String> courses) {
 		Platform.runLater(() -> {
 			ObservableList<String> list = FXCollections.observableArrayList(courses);
@@ -564,4 +386,31 @@ public class createExamController implements Initializable {
 
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public ObservableList<Question> getQuestions() {
+		return questions;
+	}
+
+	public void setQuestions(ObservableList<Question> questions) {
+		this.questions = questions;
+	}
+
+	public String getTestTime() {
+		return testTime;
+	}
+
+	public void setTestTime(String testTime) {
+		this.testTime = testTime;
+	}
+
+	public int getScoreSum() {
+		return scoreSum;
+	}
+
+	public void setScoreSum(int scoreSum) {
+		this.scoreSum = scoreSum;
+	}
 }
