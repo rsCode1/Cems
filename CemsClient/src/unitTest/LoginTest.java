@@ -14,7 +14,11 @@ import javafx.embed.swing.JFXPanel;
 import logic.Users;
 
 public class LoginTest {
-
+ 
+    // testing login() ,check if existed student succeded to log in the the student screen
+    //if student succeded then loginScreenController.getStatus()=student , else loginScreenController.getStatus() = not found
+	// input (Users) student .
+	// expected : student logged in successfully and loginScreenController.getStatus()=student
     @Test
     public void testShowUserWelcomeScreen_student() {
         new JFXPanel();
@@ -37,6 +41,10 @@ public class LoginTest {
         assertEquals("student", loginScreenController.getStatus());
     }
 
+    // testing login() ,check if existed Lecturer succeded to get the lecturer screen
+    //if lecturer succeded then loginScreenController.getStatus()=lecturer, else loginScreenController.getStatus() = not found
+	// input (Users) lecturer .
+	// expected : lecturer logged in successfully and loginScreenController.getStatus()=lecturer
     @Test
     public void testShowUserWelcomeScreen_Lecturer() {
         new JFXPanel();
@@ -58,6 +66,11 @@ public class LoginTest {
         assertEquals("lecturer", loginScreenController.getStatus());
     }
 
+
+    // testing login() ,check if existed head of department succeded to get the head of department  screen
+    //if head of department  succeded then loginScreenController.getStatus()=head, else loginScreenController.getStatus() = not found
+	// input (Users) head of department  .
+	// expected : head of department  logged in successfully and loginScreenController.getStatus()=head
     @Test
     public void testShowUserWelcomeScreen_HeadOfDepartment() {
         new JFXPanel();
@@ -79,6 +92,10 @@ public class LoginTest {
         assertEquals("head", loginScreenController.getStatus());
     }
 
+    // testing login() ,check if not existed user trys to login
+    // loginScreenController.getStatus() should be equals to  not found 
+	// input (Users) null.
+	// expected :  logged failed and loginScreenController.getStatus()=head
     @Test
     public void testShowUserWelcomeScreen_NotFound() {
         new JFXPanel();
