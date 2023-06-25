@@ -33,7 +33,39 @@ import logic.Users;
 public class createExamController implements Initializable {
 	private ChatClient client;
 	private Users lecturer;
+	private 	int scoreSum = 0;
+	private String testTime="-1";
+	
+	public String getTestTime() {
+		return testTime;
+	}
+
+	public void setTestTime(String testTime) {
+		this.testTime = testTime;
+	}
+
+	public int getScoreSum() {
+		return scoreSum;
+	}
+
+	public void setScoreSum(int scoreSum) {
+		this.scoreSum = scoreSum;
+	}
+
 	private ObservableList<Question> questions = FXCollections.observableArrayList();
+	public String status="fail";
+
+	public String getStatus() {
+		return status;
+	}
+
+	public ObservableList<Question> getQuestions() {
+		return questions;
+	}
+
+	public void setQuestions(ObservableList<Question> questions) {
+		this.questions = questions;
+	}
 
 	@FXML
 	private Button addQuestionBtn;
@@ -86,6 +118,14 @@ public class createExamController implements Initializable {
 	@FXML
 	private TextField setTimeTextField;
 
+	public TextField getSetTimeTextField() {
+		return setTimeTextField;
+	}
+
+	public void setSetTimeTextField(TextField setTimeTextField) {
+		this.setTimeTextField = setTimeTextField;
+	}
+
 	@FXML
 	private Button showQuestionView;
 
@@ -107,42 +147,52 @@ public class createExamController implements Initializable {
 
 	@FXML
 	public void reviewExam(ActionEvent event) {
-		Platform.runLater(() -> {
+		System.out.println("a");
 			// review the exam
 			// check if the exam is valid
 			if (questions.size() == 0) {
 				errLabel.setText("Please add questions to the exam");
 				return;
 			}
+			System.out.println("a");
+			//setTimeTextField.setText(testTime);
+			testTime=setTimeTextField.getText();
 			if (setTimeTextField.getText().isEmpty()) {
 				errLabel.setText("Please set the time of the exam");
 				return;
 			}
+			System.out.println("a");
 			// check if the exam time is valid
 			if (!setTimeTextField.getText().matches("[0-9]+")) {
 				errLabel.setText("Please enter a valid time");
 				return;
 			}
-
+			System.out.println("a");
 			// check if the exam time is valid
 			if (Integer.parseInt(setTimeTextField.getText()) < 1) {
 				errLabel.setText("Please enter a valid time");
 				return;
 			}
+			System.out.println("a");
 			// check if the exam time is valid
 			if (Integer.parseInt(setTimeTextField.getText()) < 1) {
 				errLabel.setText("Please enter a valid time");
 				return;
 			}
+			System.out.println("a");
 			// check if the sum of question scores is 100
-			int scoreSum = 0;
+		
 			for (Question question : questions) {
 				scoreSum += question.getScore();
 			}
+			
 			if (scoreSum != 100) {
 				errLabel.setText("The sum of question scores must be 100");
 				return;
 			}
+			System.out.println("a");
+			status="The test is ready";
+			Platform.runLater(() -> {
 			Exam exam = new Exam(coursesComboBox.getValue(), questions, lecturer,
 					Integer.parseInt(setTimeTextField.getText()), professionsComboBox.getValue());
 
@@ -168,8 +218,26 @@ public class createExamController implements Initializable {
 			Stage window = (Stage) reviewExamBtn.getScene().getWindow();
 			window.setScene(mainScene);
 			window.show();
+			
 
 		});
+	
+	}
+	public void setSetTimeTextField(String Time) {
+		setTimeTextField.setText(Time);
+		
+	}
+
+	public Label getErrLabel() {
+		return errLabel;
+	}
+
+	public void setErrLabel(Label errLabel) {
+		this.errLabel = errLabel;
+	}
+
+	public TextField getScoreTextField() {
+		return scoreTextField;
 	}
 
 	@FXML
