@@ -293,21 +293,21 @@ public class HDController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		barChartCourse.setTitle("test course");
-		CategoryAxis xAxisCourse = (CategoryAxis) barChartCourse.getXAxis();
+		/*barChartCourse.setTitle("test course");
+		CategoryAxis xAxisCourse = (CategoryAxis) barChartStud.getXAxis();
 		xAxisCourse.setLabel("exam id");
 		NumberAxis yAxisCourse = (NumberAxis) barChartCourse.getYAxis();
 		yAxisCourse.setLabel("grade");
+*/
+		//IDColumn.setCellValueFactory(new PropertyValueFactory<>("requestID"));
 
-		IDColumn.setCellValueFactory(new PropertyValueFactory<>("requestID"));
+		//ExamIdColumn.setCellValueFactory(new PropertyValueFactory<>("examID"));
 
-		ExamIdColumn.setCellValueFactory(new PropertyValueFactory<>("examID"));
+		//RequestedByColumn.setCellValueFactory(new PropertyValueFactory<>("requestedBy"));
 
-		RequestedByColumn.setCellValueFactory(new PropertyValueFactory<>("requestedBy"));
+		//ExtraTimeColumn.setCellValueFactory(new PropertyValueFactory<>("extraTime"));
 
-		ExtraTimeColumn.setCellValueFactory(new PropertyValueFactory<>("extraTime"));
-
-		ReasonColumn.setCellValueFactory(new PropertyValueFactory<>("reason"));
+		//ReasonColumn.setCellValueFactory(new PropertyValueFactory<>("reason"));
 
 	}
 
@@ -988,6 +988,7 @@ public class HDController implements Initializable {
 		DecimalFormat decimalFormat = new DecimalFormat("#.00");
 		String formatNumber = decimalFormat.format(calculateStandardDeviation(msg));
 		sdlabelStudentnumber.setText(formatNumber);
+		NumberOfTestStudent.setText(String.valueOf(msg.size()));// show the number of test
 
 	}
 
